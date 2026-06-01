@@ -34,8 +34,8 @@ export default function Home() {
       {/* HERO */}
       <section className="relative min-h-[100vh] flex items-center overflow-hidden gradient-navy">
         <div className="absolute inset-0">
-          <img src="https://images.unsplash.com/photo-1543489816-c87b0f5f7dd4?crop=entropy&cs=srgb&fm=jpg&q=85&w=2000" alt="Infrastructure" className="w-full h-full object-cover opacity-30" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#050e1c] via-[#050e1c]/80 to-[#050e1c]/30" />
+          <img src="https://images.unsplash.com/photo-1543489816-c87b0f5f7dd4?crop=entropy&cs=srgb&fm=jpg&q=85&w=2000" alt="Infrastructure" className="hero-bg-img w-full h-full object-cover opacity-30" />
+          <div className="absolute inset-0 hero-overlay" />
           <div className="absolute inset-0 grid-pattern opacity-40" />
         </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 w-full">
@@ -210,7 +210,7 @@ export default function Home() {
       </section>
 
       {/* CTA */}
-      <section className="py-24 relative overflow-hidden" style={{background:'linear-gradient(135deg, #050e1c 0%, #102a4a 100%)'}}>
+      <section className="py-24 relative overflow-hidden section-dark">
         <div className="absolute inset-0 grid-pattern opacity-25" />
         <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass mb-6">

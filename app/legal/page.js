@@ -37,6 +37,7 @@ const DEFAULT_LEGAL_TEAM = [
 
 export default function Legal() {
   const [legalTeam, setLegalTeam] = useState(DEFAULT_LEGAL_TEAM);
+  const [showDisclaimer, setShowDisclaimer] = useState(true);
 
   useEffect(() => {
     fetch('/api/team').then(r => r.ok ? r.json() : null).then(d => {
@@ -81,7 +82,29 @@ export default function Legal() {
 
   return (
     <div>
-      <section className="pt-36 pb-24 relative overflow-hidden" style={{background:'linear-gradient(135deg, #1a1a1a 0%, #2d2517 50%, #0a1628 100%)'}}>
+      {/* DISCLAIMER POPUP */}
+      {showDisclaimer && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="bg-background rounded-2xl shadow-2xl max-w-lg w-full p-8 border border-amber-500/40">
+            <div className="flex items-start gap-4 mb-4">
+              <AlertTriangle className="w-7 h-7 text-amber-500 flex-shrink-0 mt-0.5" />
+              <h3 className="font-bold text-xl">Mandatory Disclaimer</h3>
+            </div>
+            <p className="text-foreground/75 leading-relaxed text-sm mb-6">
+              As per the rules of the Bar Council of India, advocates are not permitted to advertise or solicit work. By accessing this website, you acknowledge that you are seeking information about IndusVertex Law Firm on your own accord and that there has been no solicitation, advertisement, or inducement by the Firm or its members. The content available on this website is solely for informational purposes and should not be construed as legal advice or opinion. IndusVertex Law Firm shall not be responsible for any action taken based on the information provided herein.
+            </p>
+            <Button
+              className="w-full font-semibold"
+              style={{ backgroundColor: '#d4af37', color: '#0a1628', height: '48px' }}
+              onClick={() => setShowDisclaimer(false)}
+            >
+              I Understand, Proceed
+            </Button>
+          </div>
+        </div>
+      )}
+      <section className="pt-36 pb-24 relative overflow-hidden section-dark">
+
         <div className="absolute inset-0 grid-pattern opacity-20" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-white">
           <div className="flex items-center gap-3 mb-5">
@@ -169,19 +192,6 @@ export default function Legal() {
         </div>
       </section>
 
-      <section className="py-16 bg-muted/30">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Card className="p-7 border-l-4 border-amber-500">
-            <div className="flex items-start gap-4">
-              <AlertTriangle className="w-6 h-6 text-amber-500 flex-shrink-0 mt-0.5" />
-              <div>
-                <h3 className="font-bold text-lg mb-2">Mandatory Disclaimer</h3>
-                <p className="text-foreground/75 leading-relaxed text-sm">As per the rules of the Bar Council of India, advocates are not permitted to advertise or solicit work. By accessing this website, you acknowledge that you are seeking information about IndusVertex Law Firm on your own accord and that there has been no solicitation, advertisement, or inducement by the Firm or its members. The content available on this website is solely for informational purposes and should not be construed as legal advice or opinion. IndusVertex Law Firm shall not be responsible for any action taken based on the information provided herein.</p>
-              </div>
-            </div>
-          </Card>
-        </div>
-      </section>
     </div>
   );
 }

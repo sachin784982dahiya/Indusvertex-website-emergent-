@@ -97,4 +97,90 @@
     0% { transform: translateX(0); }
     100% { transform: translateX(-50%); }
   }
+
+  /* ── Hero overlay ── */
+  .hero-overlay {
+    background: linear-gradient(to right, #050e1c, rgba(5,14,28,0.80), rgba(5,14,28,0.30));
+  }
+
+  /* ── Theme-aware CTA/section class (replaces inline dark styles) ── */
+  .section-dark {
+    background: linear-gradient(135deg, #050e1c 0%, #102a4a 100%);
+  }
 }
+
+/* ═══════════════════════════════════════════════════════
+   LIGHT MODE OVERRIDES  (outside @layer so specificity
+   beats Tailwind utilities without needing !important
+   everywhere)
+   ═══════════════════════════════════════════════════════ */
+
+/* ── Gradient-navy sections become light ── */
+:root:not(.dark) .gradient-navy {
+  background: linear-gradient(135deg, #f0f5ff 0%, #e8eef8 50%, #dde8f5 100%) !important;
+}
+
+/* ── CTA / inline-dark sections ── */
+:root:not(.dark) .section-dark {
+  background: linear-gradient(135deg, #eef3ff 0%, #dde8f5 100%) !important;
+}
+
+/* ── Hero: hide bg image & overlay, show clean gradient ── */
+:root:not(.dark) .hero-bg-img   { display: none !important; }
+:root:not(.dark) .hero-overlay  { display: none !important; }
+
+/* ── All text inside dark sections → navy in light mode ── */
+:root:not(.dark) .gradient-navy *,
+:root:not(.dark) .section-dark  * {
+  color: #0a1628;
+}
+/* Preserve gold accent colour */
+:root:not(.dark) .gradient-navy .text-gold,
+:root:not(.dark) .section-dark  .text-gold { color: #b8860b !important; }
+/* Preserve gradient gold text */
+:root:not(.dark) .text-gradient-gold {
+  background: linear-gradient(135deg, #b8860b 0%, #d4af37 50%, #8b6914 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+/* Muted text */
+:root:not(.dark) .gradient-navy [class*="text-white/"],
+:root:not(.dark) .section-dark  [class*="text-white/"] { color: rgba(10,22,40,0.60) !important; }
+
+/* ── Buttons & borders inside dark sections ── */
+:root:not(.dark) .gradient-navy .border-white\/30,
+:root:not(.dark) .section-dark  .border-white\/30 { border-color: rgba(10,22,40,0.25) !important; }
+:root:not(.dark) .gradient-navy .bg-white\/5,
+:root:not(.dark) .gradient-navy .bg-white\/10,
+:root:not(.dark) .section-dark  .bg-white\/5,
+:root:not(.dark) .section-dark  .bg-white\/10 { background: rgba(10,22,40,0.05) !important; }
+
+/* ── Glass pill / badge in light mode ── */
+:root:not(.dark) .gradient-navy .glass,
+:root:not(.dark) .section-dark  .glass {
+  background: rgba(255,255,255,0.70) !important;
+  border-color: rgba(10,22,40,0.15) !important;
+  color: #0a1628 !important;
+}
+
+/* ── Grid pattern (white lines → dark lines in light mode) ── */
+:root:not(.dark) .gradient-navy .grid-pattern,
+:root:not(.dark) .section-dark  .grid-pattern {
+  background-image:
+    linear-gradient(rgba(10,22,40,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(10,22,40,0.04) 1px, transparent 1px) !important;
+}
+
+/* ── Navbar: transparent-state text on light hero ── */
+:root:not(.dark) header [class*="text-white"] { color: #0a1628 !important; }
+:root:not(.dark) header [class*="hover:text-white"]:hover { color: #0a1628 !important; }
+:root:not(.dark) header [class*="hover:bg-white"]:hover  { background: rgba(10,22,40,0.06) !important; }
+
+/* ── Footer stays dark (intentional design) ── */
+footer.gradient-navy,
+footer .gradient-navy {
+  background: linear-gradient(135deg, #050e1c 0%, #0a1628 40%, #102a4a 100%) !important;
+}
+footer.gradient-navy *,
+footer .gradient-navy * { color: inherit; }

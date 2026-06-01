@@ -4,13 +4,25 @@ import { motion } from 'framer-motion';
 import { Card } from '@/components/ui/card';
 import { Calendar, MapPin, Building2, Loader2 } from 'lucide-react';
 
+const SEED_PROJECTS = [
+  { id: '1', title: '20 MVA HT Substation - Telecom Hub', client: 'Bharti Airtel', location: 'Gurugram, Haryana', description: 'Design, supply, installation and CEIG approval of 20 MVA HT substation with redundant transformers, RMU and SCADA integration for a tier-1 telecom hub.', completionDate: '2024-08', category: 'Power Transmission', image: 'https://images.unsplash.com/photo-1543489816-c87b0f5f7dd4?crop=entropy&cs=srgb&fm=jpg&q=85&w=1200' },
+  { id: '2', title: 'Hyperscale Data Centre Build-Out', client: 'CtrlS Data Centers', location: 'Mumbai, MH', description: 'Greenfield 5 MW data hall with N+1 precision cooling, raised flooring, HAC containment and full O&M handover.', completionDate: '2024-11', category: 'Data Centre', image: 'https://images.pexels.com/photos/17489153/pexels-photo-17489153.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=1200' },
+  { id: '3', title: '2 MW Rooftop Solar + BESS', client: 'Paswara Paper Limited', location: 'Meerut, UP', description: 'Hybrid solar + BESS + DG integration with energy monitoring, achieving 38% reduction in grid dependency.', completionDate: '2024-05', category: 'Renewable Energy', image: 'https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?crop=entropy&cs=srgb&fm=jpg&q=85&w=1200' },
+  { id: '4', title: 'EV Charging Network Rollout', client: 'Sudhir Power Ltd', location: 'NCR Region', description: 'Public + fleet EV charging network across 24 sites with smart charging and grid integration.', completionDate: '2025-02', category: 'EV Infrastructure', image: 'https://images.unsplash.com/photo-1698223817307-29dc4bdcce1f?crop=entropy&cs=srgb&fm=jpg&q=85&w=1200' },
+  { id: '5', title: 'OFC Backbone - 180 KM', client: 'Tata Communications', location: 'UP & Uttarakhand', description: 'Long-haul optical fiber cabling with HDD, splicing, OTDR testing and end-to-end commissioning.', completionDate: '2024-03', category: 'IT Infrastructure', image: 'https://images.pexels.com/photos/17489163/pexels-photo-17489163.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=1200' },
+  { id: '6', title: 'ETP + OCEMS Compliance Setup', client: 'Cosmo Infra', location: 'Sahibabad, UP', description: 'ETP design, OCEMS integration and PCB compliance documentation for industrial cluster.', completionDate: '2024-09', category: 'Environmental', image: 'https://images.unsplash.com/photo-1485083269755-a7b559a4fe5e?crop=entropy&cs=srgb&fm=jpg&q=85&w=1200' },
+];
+
 export default function Projects() {
-  const [projects, setProjects] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [projects, setProjects] = useState(SEED_PROJECTS);
+  const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState('All');
 
   useEffect(() => {
-    fetch('/api/projects').then(r=>r.json()).then(d=>{ setProjects(d.projects || []); setLoading(false); }).catch(()=>setLoading(false));
+    fetch('/api/projects')
+      .then(r => r.ok ? r.json() : null)
+      .then(d => { if (d?.projects?.length) setProjects(d.projects); })
+      .catch(() => {});
   }, []);
 
   const cats = ['All', ...Array.from(new Set(projects.map(p => p.category)))];
