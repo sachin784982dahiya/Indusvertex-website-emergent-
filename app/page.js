@@ -139,7 +139,7 @@ export default function Home() {
               const Ic = ICONS[s.icon] || Zap;
               return (
                 <motion.div key={s.slug} initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.06 }}>
-                  <Link href={`/services#${s.slug}`} className="block group">
+                  <Link href={`/services/${s.slug}`} className="block group">
                     <div className="glass rounded-xl overflow-hidden hover:bg-white/10 transition-all h-full">
                       <div className="relative h-44 overflow-hidden">
                         <img src={s.image} alt={s.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />

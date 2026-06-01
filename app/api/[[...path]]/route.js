@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getDb } from '@/lib/mongodb';
 import { v4 as uuidv4 } from 'uuid';
+import { signToken, checkAdmin, getAuth } from '@/lib/auth';
 
 const json = (data, init = {}) => NextResponse.json(data, init);
 const err = (msg, status = 400) => NextResponse.json({ error: msg }, { status });
@@ -8,51 +9,63 @@ const err = (msg, status = 400) => NextResponse.json({ error: msg }, { status })
 async function readBody(req) {
   try { return await req.json(); } catch { return {}; }
 }
-
-function sanitize(doc) {
-  if (!doc) return doc;
-  const { _id, ...rest } = doc;
-  return rest;
-}
+function sanitize(doc) { if (!doc) return doc; const { _id, ...rest } = doc; return rest; }
+function requireAuth(req) { const u = getAuth(req); return u ? null : err('Unauthorized', 401); }
+function slugify(s) { return String(s || '').toLowerCase().replace(/[^a-z0-9\s-]/g, '').trim().replace(/\s+/g, '-').slice(0, 80); }
 
 async function handle(req, params) {
   const path = (params?.path || []).join('/');
   const method = req.method;
   const db = await getDb();
 
-  // Health
   if (path === '' || path === 'health') {
     return json({ ok: true, service: 'IndusVertex API', time: new Date().toISOString() });
   }
 
-  // ============= LEADS / CONTACT =============
-  // POST /api/contact   POST /api/consultation   POST /api/service-inquiry  POST /api/project-inquiry
+  // ============= AUTH =============
+  if (path === 'auth/login' && method === 'POST') {
+    const body = await readBody(req);
+    const { email, password } = body;
+    if (!checkAdmin(email, password)) return err('Invalid credentials', 401);
+    const token = signToken({ email, role: 'admin' });
+    return json({ success: true, token, user: { email, role: 'admin' } });
+  }
+  if (path === 'auth/me' && method === 'GET') {
+    const u = getAuth(req);
+    if (!u) return err('Unauthorized', 401);
+    return json({ user: { email: u.email, role: u.role } });
+  }
+
+  // ============= LEADS =============
   if (['contact', 'consultation', 'service-inquiry', 'project-inquiry'].includes(path) && method === 'POST') {
     const body = await readBody(req);
     const { name, email, phone, message } = body;
     if (!name || !email) return err('Name and email are required');
     const lead = {
-      id: uuidv4(),
-      type: path,
-      name, email, phone: phone || '', company: body.company || '',
-      service: body.service || '', subject: body.subject || '',
-      message: message || '',
-      status: 'new',
-      createdAt: new Date().toISOString(),
+      id: uuidv4(), type: path, name, email, phone: phone || '',
+      company: body.company || '', service: body.service || '', subject: body.subject || '',
+      message: message || '', status: 'new', createdAt: new Date().toISOString(),
     };
     await db.collection('leads').insertOne(lead);
     return json({ success: true, message: 'Thank you. Our team will contact you within 24 hours.', id: lead.id });
   }
-
-  if (path === 'leads' && method === 'GET') {
-    const docs = await db.collection('leads').find({}).sort({ createdAt: -1 }).limit(200).toArray();
-    return json({ leads: docs.map(sanitize) });
+  if (path === 'leads') {
+    if (method === 'GET') {
+      const unauthorized = requireAuth(req); if (unauthorized) return unauthorized;
+      const docs = await db.collection('leads').find({}).sort({ createdAt: -1 }).limit(500).toArray();
+      return json({ leads: docs.map(sanitize) });
+    }
+  }
+  if (path.startsWith('leads/') && method === 'DELETE') {
+    const unauthorized = requireAuth(req); if (unauthorized) return unauthorized;
+    const id = path.split('/')[1];
+    await db.collection('leads').deleteOne({ id });
+    return json({ success: true });
   }
 
   // ============= CAREERS =============
   if (path === 'careers' && method === 'GET') {
-    const jobs = await db.collection('jobs').find({}).sort({ createdAt: -1 }).toArray();
-    // Seed if empty
+    let jobs = await db.collection('jobs').find({}).sort({ createdAt: -1 }).toArray();
     if (!jobs.length) {
       const seed = [
         { id: uuidv4(), title: 'Senior Electrical Engineer', department: 'Engineering', location: 'Ghaziabad, UP', type: 'Full-time', experience: '5-8 years', description: 'Lead HT/LT power transmission projects including GSS/AIS design, CEIG approvals and commissioning.', createdAt: new Date().toISOString() },
@@ -62,30 +75,43 @@ async function handle(req, params) {
         { id: uuidv4(), title: 'Site Civil Engineer', department: 'Civil Infrastructure', location: 'Multiple Sites', type: 'Full-time', experience: '3-7 years', description: 'Execute industrial & commercial civil works, structural QA/QC and site coordination.', createdAt: new Date().toISOString() },
       ];
       await db.collection('jobs').insertMany(seed);
-      return json({ jobs: seed.map(sanitize) });
+      jobs = seed;
     }
     return json({ jobs: jobs.map(sanitize) });
   }
-
   if (path === 'careers' && method === 'POST') {
+    const unauthorized = requireAuth(req); if (unauthorized) return unauthorized;
     const body = await readBody(req);
     const job = { id: uuidv4(), ...body, createdAt: new Date().toISOString() };
     await db.collection('jobs').insertOne(job);
     return json({ success: true, job: sanitize(job) });
   }
-
+  if (path.startsWith('careers/')) {
+    const id = path.split('/')[1];
+    if (method === 'PUT') {
+      const unauthorized = requireAuth(req); if (unauthorized) return unauthorized;
+      const body = await readBody(req);
+      await db.collection('jobs').updateOne({ id }, { $set: { ...body, updatedAt: new Date().toISOString() } });
+      return json({ success: true });
+    }
+    if (method === 'DELETE') {
+      const unauthorized = requireAuth(req); if (unauthorized) return unauthorized;
+      await db.collection('jobs').deleteOne({ id });
+      return json({ success: true });
+    }
+  }
   if (path === 'career-application' && method === 'POST') {
     const body = await readBody(req);
     const { name, email, phone, jobTitle, experience, coverLetter, resumeUrl } = body;
     if (!name || !email || !jobTitle) return err('Name, email and job title are required');
-    const application = {
-      id: uuidv4(),
-      name, email, phone: phone || '', jobTitle,
-      experience: experience || '', coverLetter: coverLetter || '', resumeUrl: resumeUrl || '',
-      status: 'received', createdAt: new Date().toISOString(),
-    };
+    const application = { id: uuidv4(), name, email, phone: phone || '', jobTitle, experience: experience || '', coverLetter: coverLetter || '', resumeUrl: resumeUrl || '', status: 'received', createdAt: new Date().toISOString() };
     await db.collection('applications').insertOne(application);
     return json({ success: true, message: 'Application received. Our HR team will get back to you shortly.', id: application.id });
+  }
+  if (path === 'applications' && method === 'GET') {
+    const unauthorized = requireAuth(req); if (unauthorized) return unauthorized;
+    const docs = await db.collection('applications').find({}).sort({ createdAt: -1 }).toArray();
+    return json({ applications: docs.map(sanitize) });
   }
 
   // ============= PROJECTS =============
@@ -96,7 +122,7 @@ async function handle(req, params) {
         { id: uuidv4(), title: '20 MVA HT Substation - Telecom Hub', client: 'Bharti Airtel', location: 'Gurugram, Haryana', description: 'Design, supply, installation and CEIG approval of 20 MVA HT substation with redundant transformers, RMU and SCADA integration for a tier-1 telecom hub.', completionDate: '2024-08', category: 'Power Transmission', image: 'https://images.unsplash.com/photo-1543489816-c87b0f5f7dd4?crop=entropy&cs=srgb&fm=jpg&q=85&w=1200', createdAt: new Date().toISOString() },
         { id: uuidv4(), title: 'Hyperscale Data Centre Build-Out', client: 'CtrlS Data Centers', location: 'Mumbai, MH', description: 'Greenfield 5 MW data hall with N+1 precision cooling, raised flooring, HAC containment and full O&M handover.', completionDate: '2024-11', category: 'Data Centre', image: 'https://images.pexels.com/photos/17489153/pexels-photo-17489153.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=1200', createdAt: new Date().toISOString() },
         { id: uuidv4(), title: '2 MW Rooftop Solar + BESS', client: 'Paswara Paper Limited', location: 'Meerut, UP', description: 'Hybrid solar + BESS + DG integration with energy monitoring, achieving 38% reduction in grid dependency.', completionDate: '2024-05', category: 'Renewable Energy', image: 'https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?crop=entropy&cs=srgb&fm=jpg&q=85&w=1200', createdAt: new Date().toISOString() },
-        { id: uuidv4(), title: 'EV Charging Network Rollout', client: 'Sudhir Power Ltd', location: 'NCR Region', position: 'Lead EPC', description: 'Public + fleet EV charging network across 24 sites with smart charging and grid integration.', completionDate: '2025-02', category: 'EV Infrastructure', image: 'https://images.unsplash.com/photo-1698223817307-29dc4bdcce1f?crop=entropy&cs=srgb&fm=jpg&q=85&w=1200', createdAt: new Date().toISOString() },
+        { id: uuidv4(), title: 'EV Charging Network Rollout', client: 'Sudhir Power Ltd', location: 'NCR Region', description: 'Public + fleet EV charging network across 24 sites with smart charging and grid integration.', completionDate: '2025-02', category: 'EV Infrastructure', image: 'https://images.unsplash.com/photo-1698223817307-29dc4bdcce1f?crop=entropy&cs=srgb&fm=jpg&q=85&w=1200', createdAt: new Date().toISOString() },
         { id: uuidv4(), title: 'OFC Backbone - 180 KM', client: 'Tata Communications', location: 'UP & Uttarakhand', description: 'Long-haul optical fiber cabling with HDD, splicing, OTDR testing and end-to-end commissioning.', completionDate: '2024-03', category: 'IT Infrastructure', image: 'https://images.pexels.com/photos/17489163/pexels-photo-17489163.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=1200', createdAt: new Date().toISOString() },
         { id: uuidv4(), title: 'ETP + OCEMS Compliance Setup', client: 'Cosmo Infra', location: 'Sahibabad, UP', description: 'ETP design, OCEMS integration and PCB compliance documentation for industrial cluster.', completionDate: '2024-09', category: 'Environmental', image: 'https://images.unsplash.com/photo-1485083269755-a7b559a4fe5e?crop=entropy&cs=srgb&fm=jpg&q=85&w=1200', createdAt: new Date().toISOString() },
       ];
@@ -105,12 +131,88 @@ async function handle(req, params) {
     }
     return json({ projects: projects.map(sanitize) });
   }
-
   if (path === 'projects' && method === 'POST') {
+    const unauthorized = requireAuth(req); if (unauthorized) return unauthorized;
     const body = await readBody(req);
     const project = { id: uuidv4(), ...body, createdAt: new Date().toISOString() };
     await db.collection('projects').insertOne(project);
     return json({ success: true, project: sanitize(project) });
+  }
+  if (path.startsWith('projects/')) {
+    const id = path.split('/')[1];
+    if (method === 'PUT') {
+      const unauthorized = requireAuth(req); if (unauthorized) return unauthorized;
+      const body = await readBody(req);
+      await db.collection('projects').updateOne({ id }, { $set: { ...body, updatedAt: new Date().toISOString() } });
+      return json({ success: true });
+    }
+    if (method === 'DELETE') {
+      const unauthorized = requireAuth(req); if (unauthorized) return unauthorized;
+      await db.collection('projects').deleteOne({ id });
+      return json({ success: true });
+    }
+  }
+
+  // ============= BLOG =============
+  if (path === 'blogs' && method === 'GET') {
+    const url = new URL(req.url);
+    const q = (url.searchParams.get('q') || '').trim();
+    const cat = (url.searchParams.get('category') || '').trim();
+    const filter = { published: { $ne: false } };
+    if (cat) filter.category = cat;
+    if (q) filter.$or = [
+      { title: { $regex: q, $options: 'i' } },
+      { excerpt: { $regex: q, $options: 'i' } },
+      { content: { $regex: q, $options: 'i' } },
+      { tags: { $regex: q, $options: 'i' } },
+    ];
+    let docs = await db.collection('blogs').find(filter).sort({ createdAt: -1 }).toArray();
+    if (!docs.length && !q && !cat) {
+      const seed = [
+        { id: uuidv4(), slug: 'future-of-data-centre-design-in-india', title: 'The Future of Data Centre Design in India', excerpt: 'How hyperscale demand, sustainability and N+1/2N redundancy are reshaping data centre engineering across India.', content: '<p>India\'s data centre capacity is projected to triple by 2030. As hyperscalers expand and regulatory frameworks tighten, the design discipline is evolving rapidly — from precision cooling and HAC/CAC containment to N+1 / 2N power redundancy and ESG compliance.</p><p>At IndusVertex, our integrated approach combines design-build delivery with regulatory expertise to ensure projects go live on time, on spec and fully compliant.</p><h2>Key trends</h2><ul><li>Liquid cooling for AI workloads</li><li>Hybrid renewable integration (solar + BESS + grid)</li><li>OCEMS and environmental monitoring</li><li>Full lifecycle O&M contracts</li></ul>', category: 'Data Centres', tags: ['data centre','design','HVAC','sustainability'], author: 'Yogyata', image: 'https://images.pexels.com/photos/17489153/pexels-photo-17489153.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=1200', published: true, seoTitle: 'Future of Data Centre Design — IndusVertex', seoDescription: 'Hyperscale data centre design trends in India, N+1/2N redundancy, sustainability and integrated delivery.', createdAt: new Date().toISOString() },
+        { id: uuidv4(), slug: 'ceig-approvals-explained', title: 'CEIG Approvals: A Practical Playbook for HT Power Projects', excerpt: 'Common pitfalls and a step-by-step methodology to secure CEIG approvals for HT substations and industrial power infrastructure.', content: '<p>CEIG (Chief Electrical Inspector to Government) approvals are mandatory for HT installations. The process can stretch from 30 to 180 days depending on completeness of documentation and engineering compliance.</p><h2>Our 5-step methodology</h2><ol><li>Single-line diagram (SLD) verification</li><li>Earthing and lightning protection design</li><li>CEIG forms A1/A2 preparation</li><li>Site inspection coordination</li><li>Compliance certificate &amp; energisation</li></ol>', category: 'Compliance', tags: ['CEIG','HT','power','approvals'], author: 'Vivek Kumar', image: 'https://images.unsplash.com/photo-1543489816-c87b0f5f7dd4?crop=entropy&cs=srgb&fm=jpg&q=85&w=1200', published: true, seoTitle: 'CEIG Approvals Playbook — IndusVertex', seoDescription: 'Step-by-step CEIG approval methodology for HT power projects in India.', createdAt: new Date().toISOString() },
+        { id: uuidv4(), slug: 'solar-bess-roi-india-2025', title: 'Solar + BESS: ROI Realities for Indian Industries in 2025', excerpt: 'Why hybrid solar + battery storage is now ROI-positive for mid-corporate manufacturing units — with real-world numbers.', content: '<p>Battery prices have dropped 45% in 3 years. Combined with India\'s rising industrial tariffs and net-metering policies, hybrid solar + BESS installations now achieve payback in 4–6 years for most manufacturing units.</p><h2>Case study — Paswara Paper</h2><p>Our 2 MW rooftop solar + 1 MWh BESS installation reduced grid dependency by 38% and delivered ROI in 4.8 years.</p>', category: 'Renewable Energy', tags: ['solar','BESS','ROI','energy'], author: 'Prince Gaurav', image: 'https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?crop=entropy&cs=srgb&fm=jpg&q=85&w=1200', published: true, seoTitle: 'Solar BESS ROI 2025 — IndusVertex', seoDescription: 'ROI analysis for hybrid solar plus BESS deployment in Indian industries.', createdAt: new Date().toISOString() },
+        { id: uuidv4(), slug: 'ev-infrastructure-india-rollout', title: 'EV Infrastructure Rollout: Lessons from 24-Site Deployment', excerpt: 'Practical lessons from rolling out a multi-site public + fleet EV charging network across the NCR region.', content: '<p>Public + fleet EV charging requires a careful blend of site selection, grid coordination, smart payments and ongoing O&M. Here’s what we learned.</p>', category: 'EV Infrastructure', tags: ['EV','charging','infrastructure'], author: 'Vivek Kumar', image: 'https://images.unsplash.com/photo-1698223817307-29dc4bdcce1f?crop=entropy&cs=srgb&fm=jpg&q=85&w=1200', published: true, seoTitle: 'EV Charging Rollout Lessons — IndusVertex', seoDescription: 'Lessons from 24-site EV charging deployment in NCR.', createdAt: new Date().toISOString() },
+      ];
+      await db.collection('blogs').insertMany(seed);
+      docs = seed;
+    }
+    return json({ blogs: docs.map(sanitize) });
+  }
+  if (path.startsWith('blogs/') && method === 'GET') {
+    const slug = path.split('/')[1];
+    const doc = await db.collection('blogs').findOne({ slug });
+    if (!doc) return err('Not found', 404);
+    return json({ blog: sanitize(doc) });
+  }
+  if (path === 'blogs' && method === 'POST') {
+    const unauthorized = requireAuth(req); if (unauthorized) return unauthorized;
+    const body = await readBody(req);
+    const blog = {
+      id: uuidv4(),
+      slug: body.slug || slugify(body.title),
+      title: body.title, excerpt: body.excerpt || '', content: body.content || '',
+      category: body.category || 'General', tags: body.tags || [],
+      author: body.author || 'IndusVertex Team', image: body.image || '',
+      seoTitle: body.seoTitle || body.title, seoDescription: body.seoDescription || body.excerpt || '',
+      published: body.published !== false, createdAt: new Date().toISOString(),
+    };
+    await db.collection('blogs').insertOne(blog);
+    return json({ success: true, blog: sanitize(blog) });
+  }
+  if (path.startsWith('blogs/')) {
+    const id = path.split('/')[1];
+    if (method === 'PUT') {
+      const unauthorized = requireAuth(req); if (unauthorized) return unauthorized;
+      const body = await readBody(req);
+      await db.collection('blogs').updateOne({ id }, { $set: { ...body, updatedAt: new Date().toISOString() } });
+      return json({ success: true });
+    }
+    if (method === 'DELETE') {
+      const unauthorized = requireAuth(req); if (unauthorized) return unauthorized;
+      await db.collection('blogs').deleteOne({ id });
+      return json({ success: true });
+    }
   }
 
   // ============= TESTIMONIALS =============
@@ -127,6 +229,88 @@ async function handle(req, params) {
     }
     return json({ testimonials: t.map(sanitize) });
   }
+  if (path === 'testimonials' && method === 'POST') {
+    const unauthorized = requireAuth(req); if (unauthorized) return unauthorized;
+    const body = await readBody(req);
+    const t = { id: uuidv4(), ...body, createdAt: new Date().toISOString() };
+    await db.collection('testimonials').insertOne(t);
+    return json({ success: true, testimonial: sanitize(t) });
+  }
+  if (path.startsWith('testimonials/')) {
+    const id = path.split('/')[1];
+    if (method === 'PUT') {
+      const unauthorized = requireAuth(req); if (unauthorized) return unauthorized;
+      const body = await readBody(req);
+      await db.collection('testimonials').updateOne({ id }, { $set: body });
+      return json({ success: true });
+    }
+    if (method === 'DELETE') {
+      const unauthorized = requireAuth(req); if (unauthorized) return unauthorized;
+      await db.collection('testimonials').deleteOne({ id });
+      return json({ success: true });
+    }
+  }
+
+  // ============= TEAM =============
+  if (path === 'team' && method === 'GET') {
+    let t = await db.collection('team').find({}).sort({ order: 1 }).toArray();
+    if (!t.length) {
+      const seed = [
+        { id: uuidv4(), name: 'Yogyata', role: 'Director', creds: 'B.C.A', order: 1, bio: 'A dynamic professional with over 5 years of experience in education and computer training, complemented by 2+ years of hands-on exposure in data centre operations and automation systems.' },
+        { id: uuidv4(), name: 'Vivek Kumar', role: 'Director', creds: 'Diploma (Electrical) | ITI Fitter', order: 2, bio: 'A seasoned technical expert with 15+ years of rich experience in electrical systems, power transmission, operations & maintenance (O&M), and civil & infrastructure projects.' },
+        { id: uuidv4(), name: 'Prince Gaurav', role: 'Management, Planning & Execution', creds: 'B.Tech | MBA (Marketing & Finance)', order: 3, bio: 'A financial and strategic planning expert with over 12 years of experience in banking, specializing in working capital and project financing for MSME and mid-corporate sectors.' },
+        { id: uuidv4(), name: 'Pradeep Kumar', role: 'Associate Legal Counsel', creds: 'B.Tech (IT) | LL.B | LL.M (Silver Medalist)', order: 4, bio: 'A legal and compliance specialist with 10+ years of experience in IT and electrical infrastructure, along with 3+ years of expertise in regulatory and environmental compliance.' }
+      ];
+      await db.collection('team').insertMany(seed);
+      t = seed;
+    }
+    return json({ team: t.map(sanitize) });
+  }
+  if (path === 'team' && method === 'POST') {
+    const unauthorized = requireAuth(req); if (unauthorized) return unauthorized;
+    const body = await readBody(req);
+    const m = { id: uuidv4(), ...body, createdAt: new Date().toISOString() };
+    await db.collection('team').insertOne(m);
+    return json({ success: true, member: sanitize(m) });
+  }
+  if (path.startsWith('team/')) {
+    const id = path.split('/')[1];
+    if (method === 'PUT') {
+      const unauthorized = requireAuth(req); if (unauthorized) return unauthorized;
+      const body = await readBody(req);
+      await db.collection('team').updateOne({ id }, { $set: body });
+      return json({ success: true });
+    }
+    if (method === 'DELETE') {
+      const unauthorized = requireAuth(req); if (unauthorized) return unauthorized;
+      await db.collection('team').deleteOne({ id });
+      return json({ success: true });
+    }
+  }
+
+  // ============= CLIENTS =============
+  if (path === 'clients' && method === 'GET') {
+    let docs = await db.collection('clients').find({}).toArray();
+    if (!docs.length) {
+      const names = ['Tata Teleservices Limited','Tata Communications','Bharti Airtel','Bharti Foundation','Cosmo Infra','Paswara Paper Limited','Menor and Mews','Vodafone Idea Limited','Sudhir Power Ltd','Nitul Data','Green Power','Sharify Services Pvt Ltd','Nxtra Data','CtrlS Data Centers Ltd'];
+      docs = names.map((n, i) => ({ id: uuidv4(), name: n, order: i, logoUrl: '' }));
+      await db.collection('clients').insertMany(docs);
+    }
+    return json({ clients: docs.map(sanitize) });
+  }
+  if (path === 'clients' && method === 'POST') {
+    const unauthorized = requireAuth(req); if (unauthorized) return unauthorized;
+    const body = await readBody(req);
+    const c = { id: uuidv4(), ...body };
+    await db.collection('clients').insertOne(c);
+    return json({ success: true, client: sanitize(c) });
+  }
+  if (path.startsWith('clients/') && method === 'DELETE') {
+    const unauthorized = requireAuth(req); if (unauthorized) return unauthorized;
+    const id = path.split('/')[1];
+    await db.collection('clients').deleteOne({ id });
+    return json({ success: true });
+  }
 
   // ============= STATS =============
   if (path === 'stats' && method === 'GET') {
@@ -136,6 +320,26 @@ async function handle(req, params) {
         { label: 'Enterprise Clients', value: 50, suffix: '+' },
         { label: 'Years of Combined Experience', value: 40, suffix: '+' },
         { label: 'Regulatory Approvals', value: 200, suffix: '+' }
+      ]
+    });
+  }
+
+  // ============= SEARCH =============
+  if (path === 'search' && method === 'GET') {
+    const url = new URL(req.url);
+    const q = (url.searchParams.get('q') || '').trim();
+    if (!q) return json({ results: [] });
+    const rx = { $regex: q, $options: 'i' };
+    const [blogs, projects, jobs] = await Promise.all([
+      db.collection('blogs').find({ $or: [{ title: rx }, { excerpt: rx }, { tags: rx }] }).limit(5).toArray(),
+      db.collection('projects').find({ $or: [{ title: rx }, { description: rx }, { client: rx }, { category: rx }] }).limit(5).toArray(),
+      db.collection('jobs').find({ $or: [{ title: rx }, { department: rx }, { description: rx }] }).limit(5).toArray(),
+    ]);
+    return json({
+      results: [
+        ...blogs.map(b => ({ type: 'blog', title: b.title, excerpt: b.excerpt, url: `/blog/${b.slug}` })),
+        ...projects.map(p => ({ type: 'project', title: p.title, excerpt: `${p.client} · ${p.location}`, url: `/projects` })),
+        ...jobs.map(j => ({ type: 'job', title: j.title, excerpt: `${j.department} · ${j.location}`, url: `/careers` })),
       ]
     });
   }

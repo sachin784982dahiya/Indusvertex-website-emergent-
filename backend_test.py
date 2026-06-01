@@ -1,459 +1,805 @@
 #!/usr/bin/env python3
 """
-Backend API Test Suite for IndusVertex
-Tests all API endpoints at NEXT_PUBLIC_BASE_URL/api
+Backend API Testing for IndusVertex Phase 2
+Tests all authentication and protected endpoints
 """
-
 import requests
 import json
 import sys
-from typing import Dict, Any
 
-# Base URL from environment
 BASE_URL = "https://infrastructure-hub-53.preview.emergentagent.com/api"
+ADMIN_EMAIL = "admin@indusvertex.com"
+ADMIN_PASSWORD = "IndusVertex@2025"
 
-class Colors:
-    GREEN = '\033[92m'
-    RED = '\033[91m'
-    YELLOW = '\033[93m'
-    BLUE = '\033[94m'
-    END = '\033[0m'
+# Global token storage
+auth_token = None
+test_blog_id = None
+test_blog_slug = None
 
-def log_test(name: str):
-    print(f"\n{Colors.BLUE}{'='*80}{Colors.END}")
-    print(f"{Colors.BLUE}TEST: {name}{Colors.END}")
-    print(f"{Colors.BLUE}{'='*80}{Colors.END}")
+def print_test(name, passed, details=""):
+    status = "✅ PASS" if passed else "❌ FAIL"
+    print(f"{status}: {name}")
+    if details:
+        print(f"   {details}")
+    print()
 
-def log_success(msg: str):
-    print(f"{Colors.GREEN}✓ {msg}{Colors.END}")
-
-def log_error(msg: str):
-    print(f"{Colors.RED}✗ {msg}{Colors.END}")
-
-def log_info(msg: str):
-    print(f"{Colors.YELLOW}ℹ {msg}{Colors.END}")
-
-def test_health():
-    """Test GET /api/health"""
-    log_test("Health Check - GET /api/health")
+def test_auth_login_valid():
+    """Test 1: POST /api/auth/login with valid credentials"""
+    global auth_token
     try:
-        response = requests.get(f"{BASE_URL}/health", timeout=10)
-        log_info(f"Status: {response.status_code}")
-        log_info(f"Response: {response.text}")
+        response = requests.post(f"{BASE_URL}/auth/login", json={
+            "email": ADMIN_EMAIL,
+            "password": ADMIN_PASSWORD
+        }, timeout=10)
+        
+        data = response.json()
         
         if response.status_code == 200:
-            data = response.json()
-            if data.get('ok') == True and data.get('service') == 'IndusVertex API':
-                log_success("Health endpoint working correctly")
-                return True
-            else:
-                log_error(f"Unexpected response structure: {data}")
-                return False
-        else:
-            log_error(f"Expected 200, got {response.status_code}")
-            return False
-    except Exception as e:
-        log_error(f"Exception: {str(e)}")
-        return False
-
-def test_lead_capture_endpoints():
-    """Test POST /api/contact, /api/consultation, /api/service-inquiry, /api/project-inquiry"""
-    log_test("Lead Capture Endpoints")
-    
-    endpoints = ['contact', 'consultation', 'service-inquiry', 'project-inquiry']
-    all_passed = True
-    lead_ids = []
-    
-    for endpoint in endpoints:
-        log_info(f"\nTesting POST /api/{endpoint}")
-        
-        # Test valid submission
-        try:
-            payload = {
-                "name": "Rajesh Kumar",
-                "email": "rajesh.kumar@acmecorp.in",
-                "phone": "+91 98765 43210",
-                "company": "ACME Industries Pvt Ltd",
-                "subject": "Infrastructure Consultation",
-                "service": "Data Centre",
-                "message": "We need consultation for our upcoming data centre project in Bangalore."
-            }
-            
-            response = requests.post(f"{BASE_URL}/{endpoint}", json=payload, timeout=10)
-            log_info(f"Status: {response.status_code}")
-            log_info(f"Response: {response.text}")
-            
-            if response.status_code == 200:
-                data = response.json()
-                if data.get('success') == True and 'id' in data and 'message' in data:
-                    log_success(f"Valid submission to /{endpoint} successful")
-                    lead_ids.append(data['id'])
-                else:
-                    log_error(f"Unexpected response structure: {data}")
-                    all_passed = False
-            else:
-                log_error(f"Expected 200, got {response.status_code}")
-                all_passed = False
-        except Exception as e:
-            log_error(f"Exception on valid submission: {str(e)}")
-            all_passed = False
-        
-        # Test validation (missing name)
-        try:
-            invalid_payload = {
-                "email": "test@example.com",
-                "message": "Test"
-            }
-            
-            response = requests.post(f"{BASE_URL}/{endpoint}", json=invalid_payload, timeout=10)
-            log_info(f"Validation test status: {response.status_code}")
-            log_info(f"Validation response: {response.text}")
-            
-            if response.status_code == 400:
-                data = response.json()
-                if 'error' in data and 'Name and email are required' in data['error']:
-                    log_success(f"Validation working correctly for /{endpoint}")
-                else:
-                    log_error(f"Unexpected error message: {data}")
-                    all_passed = False
-            else:
-                log_error(f"Expected 400 for validation error, got {response.status_code}")
-                all_passed = False
-        except Exception as e:
-            log_error(f"Exception on validation test: {str(e)}")
-            all_passed = False
-    
-    return all_passed, lead_ids
-
-def test_get_leads():
-    """Test GET /api/leads"""
-    log_test("Get Leads - GET /api/leads")
-    try:
-        response = requests.get(f"{BASE_URL}/leads", timeout=10)
-        log_info(f"Status: {response.status_code}")
-        
-        if response.status_code == 200:
-            data = response.json()
-            if 'leads' in data and isinstance(data['leads'], list):
-                log_info(f"Found {len(data['leads'])} leads")
-                if len(data['leads']) > 0:
-                    log_info(f"Sample lead: {json.dumps(data['leads'][0], indent=2)}")
-                log_success("GET /api/leads working correctly")
-                return True
-            else:
-                log_error(f"Unexpected response structure: {data}")
-                return False
-        else:
-            log_error(f"Expected 200, got {response.status_code}")
-            return False
-    except Exception as e:
-        log_error(f"Exception: {str(e)}")
-        return False
-
-def test_careers_get():
-    """Test GET /api/careers (should auto-seed 5 jobs on first call)"""
-    log_test("Get Careers - GET /api/careers")
-    try:
-        response = requests.get(f"{BASE_URL}/careers", timeout=10)
-        log_info(f"Status: {response.status_code}")
-        
-        if response.status_code == 200:
-            data = response.json()
-            if 'jobs' in data and isinstance(data['jobs'], list):
-                jobs = data['jobs']
-                log_info(f"Found {len(jobs)} jobs")
-                
-                if len(jobs) >= 5:
-                    log_success(f"Auto-seeding working - found {len(jobs)} jobs")
-                    
-                    # Verify job structure
-                    sample_job = jobs[0]
-                    required_fields = ['id', 'title', 'department', 'location', 'type', 'experience', 'description', 'createdAt']
-                    missing_fields = [f for f in required_fields if f not in sample_job]
-                    
-                    if not missing_fields:
-                        log_success("Job structure is correct")
-                        log_info(f"Sample job: {json.dumps(sample_job, indent=2)}")
-                        return True
-                    else:
-                        log_error(f"Missing fields in job: {missing_fields}")
-                        return False
-                else:
-                    log_error(f"Expected at least 5 jobs, got {len(jobs)}")
-                    return False
-            else:
-                log_error(f"Unexpected response structure: {data}")
-                return False
-        else:
-            log_error(f"Expected 200, got {response.status_code}")
-            return False
-    except Exception as e:
-        log_error(f"Exception: {str(e)}")
-        return False
-
-def test_careers_post():
-    """Test POST /api/careers"""
-    log_test("Create Job - POST /api/careers")
-    try:
-        payload = {
-            "title": "QA Automation Engineer",
-            "department": "Quality Assurance",
-            "location": "Remote",
-            "type": "Full-time",
-            "experience": "2-4 years",
-            "description": "Develop and maintain automated test suites for our enterprise applications."
-        }
-        
-        response = requests.post(f"{BASE_URL}/careers", json=payload, timeout=10)
-        log_info(f"Status: {response.status_code}")
-        log_info(f"Response: {response.text}")
-        
-        if response.status_code == 200:
-            data = response.json()
-            if data.get('success') == True and 'job' in data:
-                log_success("Job creation successful")
-                log_info(f"Created job: {json.dumps(data['job'], indent=2)}")
-                return True
-            else:
-                log_error(f"Unexpected response structure: {data}")
-                return False
-        else:
-            log_error(f"Expected 200, got {response.status_code}")
-            return False
-    except Exception as e:
-        log_error(f"Exception: {str(e)}")
-        return False
-
-def test_career_application():
-    """Test POST /api/career-application"""
-    log_test("Career Application - POST /api/career-application")
-    
-    # Test valid application
-    try:
-        payload = {
-            "name": "Priya Sharma",
-            "email": "priya.sharma@gmail.com",
-            "phone": "+91 98765 12345",
-            "jobTitle": "Senior Electrical Engineer",
-            "experience": "6 years in HT/LT power systems",
-            "coverLetter": "I am excited to apply for the Senior Electrical Engineer position. With 6 years of experience in power transmission projects...",
-            "resumeUrl": "https://example.com/resumes/priya-sharma.pdf"
-        }
-        
-        response = requests.post(f"{BASE_URL}/career-application", json=payload, timeout=10)
-        log_info(f"Status: {response.status_code}")
-        log_info(f"Response: {response.text}")
-        
-        if response.status_code == 200:
-            data = response.json()
-            if data.get('success') == True and 'id' in data:
-                log_success("Valid application submission successful")
-            else:
-                log_error(f"Unexpected response structure: {data}")
-                return False
-        else:
-            log_error(f"Expected 200, got {response.status_code}")
-            return False
-    except Exception as e:
-        log_error(f"Exception on valid application: {str(e)}")
-        return False
-    
-    # Test validation (missing jobTitle)
-    try:
-        invalid_payload = {
-            "name": "Test User",
-            "email": "test@example.com",
-            "phone": "+91 1234567890"
-        }
-        
-        response = requests.post(f"{BASE_URL}/career-application", json=invalid_payload, timeout=10)
-        log_info(f"Validation test status: {response.status_code}")
-        log_info(f"Validation response: {response.text}")
-        
-        if response.status_code == 400:
-            data = response.json()
-            if 'error' in data:
-                log_success("Validation working correctly for career application")
-                return True
-            else:
-                log_error(f"Unexpected error structure: {data}")
-                return False
-        else:
-            log_error(f"Expected 400 for validation error, got {response.status_code}")
-            return False
-    except Exception as e:
-        log_error(f"Exception on validation test: {str(e)}")
-        return False
-
-def test_projects():
-    """Test GET /api/projects (should auto-seed 6 projects on first call)"""
-    log_test("Get Projects - GET /api/projects")
-    try:
-        response = requests.get(f"{BASE_URL}/projects", timeout=10)
-        log_info(f"Status: {response.status_code}")
-        
-        if response.status_code == 200:
-            data = response.json()
-            if 'projects' in data and isinstance(data['projects'], list):
-                projects = data['projects']
-                log_info(f"Found {len(projects)} projects")
-                
-                if len(projects) >= 6:
-                    log_success(f"Auto-seeding working - found {len(projects)} projects")
-                    
-                    # Verify project structure
-                    sample_project = projects[0]
-                    required_fields = ['id', 'title', 'client', 'location', 'description', 'completionDate', 'category', 'image', 'createdAt']
-                    missing_fields = [f for f in required_fields if f not in sample_project]
-                    
-                    if not missing_fields:
-                        log_success("Project structure is correct")
-                        log_info(f"Sample project: {json.dumps(sample_project, indent=2)}")
-                        return True
-                    else:
-                        log_error(f"Missing fields in project: {missing_fields}")
-                        return False
-                else:
-                    log_error(f"Expected at least 6 projects, got {len(projects)}")
-                    return False
-            else:
-                log_error(f"Unexpected response structure: {data}")
-                return False
-        else:
-            log_error(f"Expected 200, got {response.status_code}")
-            return False
-    except Exception as e:
-        log_error(f"Exception: {str(e)}")
-        return False
-
-def test_testimonials():
-    """Test GET /api/testimonials (should auto-seed 3 testimonials on first call)"""
-    log_test("Get Testimonials - GET /api/testimonials")
-    try:
-        response = requests.get(f"{BASE_URL}/testimonials", timeout=10)
-        log_info(f"Status: {response.status_code}")
-        
-        if response.status_code == 200:
-            data = response.json()
-            if 'testimonials' in data and isinstance(data['testimonials'], list):
-                testimonials = data['testimonials']
-                log_info(f"Found {len(testimonials)} testimonials")
-                
-                if len(testimonials) >= 3:
-                    log_success(f"Auto-seeding working - found {len(testimonials)} testimonials")
-                    log_info(f"Sample testimonial: {json.dumps(testimonials[0], indent=2)}")
+            if data.get("success") and data.get("token") and data.get("user"):
+                user = data.get("user", {})
+                if user.get("email") == ADMIN_EMAIL and user.get("role") == "admin":
+                    auth_token = data.get("token")
+                    print_test("Auth Login Valid", True, f"Token received: {auth_token[:20]}...")
                     return True
                 else:
-                    log_error(f"Expected at least 3 testimonials, got {len(testimonials)}")
+                    print_test("Auth Login Valid", False, f"User data incorrect: {user}")
                     return False
             else:
-                log_error(f"Unexpected response structure: {data}")
+                print_test("Auth Login Valid", False, f"Missing fields in response: {data}")
                 return False
         else:
-            log_error(f"Expected 200, got {response.status_code}")
+            print_test("Auth Login Valid", False, f"Status {response.status_code}: {data}")
             return False
     except Exception as e:
-        log_error(f"Exception: {str(e)}")
+        print_test("Auth Login Valid", False, f"Exception: {str(e)}")
         return False
 
-def test_stats():
-    """Test GET /api/stats"""
-    log_test("Get Stats - GET /api/stats")
+def test_auth_login_invalid():
+    """Test 2: POST /api/auth/login with wrong password"""
     try:
-        response = requests.get(f"{BASE_URL}/stats", timeout=10)
-        log_info(f"Status: {response.status_code}")
-        log_info(f"Response: {response.text}")
+        response = requests.post(f"{BASE_URL}/auth/login", json={
+            "email": ADMIN_EMAIL,
+            "password": "WrongPassword123"
+        }, timeout=10)
+        
+        data = response.json()
+        
+        if response.status_code == 401 and data.get("error") == "Invalid credentials":
+            print_test("Auth Login Invalid Password", True, "Correctly rejected with 401")
+            return True
+        else:
+            print_test("Auth Login Invalid Password", False, f"Status {response.status_code}: {data}")
+            return False
+    except Exception as e:
+        print_test("Auth Login Invalid Password", False, f"Exception: {str(e)}")
+        return False
+
+def test_auth_me_with_token():
+    """Test 3: GET /api/auth/me with valid token"""
+    try:
+        headers = {"Authorization": f"Bearer {auth_token}"}
+        response = requests.get(f"{BASE_URL}/auth/me", headers=headers, timeout=10)
+        
+        data = response.json()
         
         if response.status_code == 200:
-            data = response.json()
-            if 'stats' in data and isinstance(data['stats'], list):
-                stats = data['stats']
-                if len(stats) == 4:
-                    # Verify each stat has label, value, suffix
-                    all_valid = all('label' in s and 'value' in s and 'suffix' in s for s in stats)
-                    if all_valid:
-                        log_success("Stats endpoint working correctly")
-                        log_info(f"Stats: {json.dumps(stats, indent=2)}")
-                        return True
-                    else:
-                        log_error("Some stats missing required fields")
-                        return False
-                else:
-                    log_error(f"Expected 4 stats, got {len(stats)}")
-                    return False
-            else:
-                log_error(f"Unexpected response structure: {data}")
-                return False
-        else:
-            log_error(f"Expected 200, got {response.status_code}")
-            return False
-    except Exception as e:
-        log_error(f"Exception: {str(e)}")
-        return False
-
-def test_404():
-    """Test GET /api/unknown-path (should return 404)"""
-    log_test("404 Handling - GET /api/unknown-path")
-    try:
-        response = requests.get(f"{BASE_URL}/unknown-path-xyz-123", timeout=10)
-        log_info(f"Status: {response.status_code}")
-        log_info(f"Response: {response.text}")
-        
-        if response.status_code == 404:
-            data = response.json()
-            if 'error' in data and data['error'] == 'Not found':
-                log_success("404 handling working correctly")
+            user = data.get("user", {})
+            if user.get("email") == ADMIN_EMAIL and user.get("role") == "admin":
+                print_test("Auth /me With Token", True, f"User: {user}")
                 return True
             else:
-                log_error(f"Unexpected error message: {data}")
+                print_test("Auth /me With Token", False, f"User data incorrect: {user}")
                 return False
         else:
-            log_error(f"Expected 404, got {response.status_code}")
+            print_test("Auth /me With Token", False, f"Status {response.status_code}: {data}")
             return False
     except Exception as e:
-        log_error(f"Exception: {str(e)}")
+        print_test("Auth /me With Token", False, f"Exception: {str(e)}")
         return False
 
+def test_auth_me_without_token():
+    """Test 4: GET /api/auth/me without token"""
+    try:
+        response = requests.get(f"{BASE_URL}/auth/me", timeout=10)
+        data = response.json()
+        
+        if response.status_code == 401:
+            print_test("Auth /me Without Token", True, "Correctly rejected with 401")
+            return True
+        else:
+            print_test("Auth /me Without Token", False, f"Status {response.status_code}: {data}")
+            return False
+    except Exception as e:
+        print_test("Auth /me Without Token", False, f"Exception: {str(e)}")
+        return False
+
+def test_auth_me_malformed_token():
+    """Test 5: GET /api/auth/me with malformed token"""
+    try:
+        headers = {"Authorization": "Bearer invalid.token.here"}
+        response = requests.get(f"{BASE_URL}/auth/me", headers=headers, timeout=10)
+        data = response.json()
+        
+        if response.status_code == 401:
+            print_test("Auth /me Malformed Token", True, "Correctly rejected with 401")
+            return True
+        else:
+            print_test("Auth /me Malformed Token", False, f"Status {response.status_code}: {data}")
+            return False
+    except Exception as e:
+        print_test("Auth /me Malformed Token", False, f"Exception: {str(e)}")
+        return False
+
+def test_leads_with_token():
+    """Test 6: GET /api/leads with token"""
+    try:
+        headers = {"Authorization": f"Bearer {auth_token}"}
+        response = requests.get(f"{BASE_URL}/leads", headers=headers, timeout=10)
+        data = response.json()
+        
+        if response.status_code == 200 and "leads" in data:
+            print_test("GET /leads With Token", True, f"Retrieved {len(data['leads'])} leads")
+            return True
+        else:
+            print_test("GET /leads With Token", False, f"Status {response.status_code}: {data}")
+            return False
+    except Exception as e:
+        print_test("GET /leads With Token", False, f"Exception: {str(e)}")
+        return False
+
+def test_leads_without_token():
+    """Test 6b: GET /api/leads without token"""
+    try:
+        response = requests.get(f"{BASE_URL}/leads", timeout=10)
+        data = response.json()
+        
+        if response.status_code == 401:
+            print_test("GET /leads Without Token", True, "Correctly rejected with 401")
+            return True
+        else:
+            print_test("GET /leads Without Token", False, f"Status {response.status_code}: {data}")
+            return False
+    except Exception as e:
+        print_test("GET /leads Without Token", False, f"Exception: {str(e)}")
+        return False
+
+def test_applications_with_token():
+    """Test 7: GET /api/applications with token"""
+    try:
+        headers = {"Authorization": f"Bearer {auth_token}"}
+        response = requests.get(f"{BASE_URL}/applications", headers=headers, timeout=10)
+        data = response.json()
+        
+        if response.status_code == 200 and "applications" in data:
+            print_test("GET /applications With Token", True, f"Retrieved {len(data['applications'])} applications")
+            return True
+        else:
+            print_test("GET /applications With Token", False, f"Status {response.status_code}: {data}")
+            return False
+    except Exception as e:
+        print_test("GET /applications With Token", False, f"Exception: {str(e)}")
+        return False
+
+def test_applications_without_token():
+    """Test 7b: GET /api/applications without token"""
+    try:
+        response = requests.get(f"{BASE_URL}/applications", timeout=10)
+        data = response.json()
+        
+        if response.status_code == 401:
+            print_test("GET /applications Without Token", True, "Correctly rejected with 401")
+            return True
+        else:
+            print_test("GET /applications Without Token", False, f"Status {response.status_code}: {data}")
+            return False
+    except Exception as e:
+        print_test("GET /applications Without Token", False, f"Exception: {str(e)}")
+        return False
+
+def test_blogs_list():
+    """Test 8: GET /api/blogs - should return at least 4 seeded blogs"""
+    try:
+        response = requests.get(f"{BASE_URL}/blogs", timeout=10)
+        data = response.json()
+        
+        if response.status_code == 200 and "blogs" in data:
+            blogs = data["blogs"]
+            if len(blogs) >= 4:
+                # Check structure of first blog
+                blog = blogs[0]
+                required_fields = ["id", "slug", "title", "excerpt", "content", "category", "tags", "author", "image", "createdAt"]
+                missing = [f for f in required_fields if f not in blog]
+                
+                if not missing:
+                    # Check for specific seeded blogs
+                    titles = [b.get("title", "") for b in blogs]
+                    expected_titles = [
+                        "The Future of Data Centre Design in India",
+                        "CEIG Approvals",
+                        "Solar + BESS",
+                        "EV Infrastructure"
+                    ]
+                    found = sum(1 for exp in expected_titles if any(exp in t for t in titles))
+                    
+                    print_test("GET /blogs List", True, f"Found {len(blogs)} blogs with correct structure, {found}/4 expected titles")
+                    return True
+                else:
+                    print_test("GET /blogs List", False, f"Missing fields: {missing}")
+                    return False
+            else:
+                print_test("GET /blogs List", False, f"Only {len(blogs)} blogs, expected >= 4")
+                return False
+        else:
+            print_test("GET /blogs List", False, f"Status {response.status_code}: {data}")
+            return False
+    except Exception as e:
+        print_test("GET /blogs List", False, f"Exception: {str(e)}")
+        return False
+
+def test_blogs_search():
+    """Test 9: GET /api/blogs?q=data - search filter"""
+    try:
+        response = requests.get(f"{BASE_URL}/blogs?q=data", timeout=10)
+        data = response.json()
+        
+        if response.status_code == 200 and "blogs" in data:
+            blogs = data["blogs"]
+            if len(blogs) > 0:
+                # Check if results contain 'data' in title/excerpt/content/tags
+                blog = blogs[0]
+                text = f"{blog.get('title','')} {blog.get('excerpt','')} {blog.get('content','')} {' '.join(blog.get('tags',[]))}".lower()
+                if "data" in text:
+                    print_test("GET /blogs Search", True, f"Found {len(blogs)} blogs matching 'data'")
+                    return True
+                else:
+                    print_test("GET /blogs Search", False, f"Results don't contain 'data': {blog.get('title')}")
+                    return False
+            else:
+                print_test("GET /blogs Search", False, "No results for 'data' search")
+                return False
+        else:
+            print_test("GET /blogs Search", False, f"Status {response.status_code}: {data}")
+            return False
+    except Exception as e:
+        print_test("GET /blogs Search", False, f"Exception: {str(e)}")
+        return False
+
+def test_blogs_category():
+    """Test 10: GET /api/blogs?category=Compliance"""
+    try:
+        response = requests.get(f"{BASE_URL}/blogs?category=Compliance", timeout=10)
+        data = response.json()
+        
+        if response.status_code == 200 and "blogs" in data:
+            blogs = data["blogs"]
+            if len(blogs) > 0:
+                # Check if all results are Compliance category
+                all_compliance = all(b.get("category") == "Compliance" for b in blogs)
+                if all_compliance:
+                    print_test("GET /blogs Category Filter", True, f"Found {len(blogs)} Compliance blogs")
+                    return True
+                else:
+                    print_test("GET /blogs Category Filter", False, "Results contain non-Compliance blogs")
+                    return False
+            else:
+                print_test("GET /blogs Category Filter", False, "No Compliance blogs found")
+                return False
+        else:
+            print_test("GET /blogs Category Filter", False, f"Status {response.status_code}: {data}")
+            return False
+    except Exception as e:
+        print_test("GET /blogs Category Filter", False, f"Exception: {str(e)}")
+        return False
+
+def test_blogs_by_slug():
+    """Test 11: GET /api/blogs/future-of-data-centre-design-in-india"""
+    try:
+        response = requests.get(f"{BASE_URL}/blogs/future-of-data-centre-design-in-india", timeout=10)
+        data = response.json()
+        
+        if response.status_code == 200 and "blog" in data:
+            blog = data["blog"]
+            if blog.get("slug") == "future-of-data-centre-design-in-india":
+                print_test("GET /blogs By Slug", True, f"Retrieved blog: {blog.get('title')}")
+                return True
+            else:
+                print_test("GET /blogs By Slug", False, f"Wrong slug: {blog.get('slug')}")
+                return False
+        else:
+            print_test("GET /blogs By Slug", False, f"Status {response.status_code}: {data}")
+            return False
+    except Exception as e:
+        print_test("GET /blogs By Slug", False, f"Exception: {str(e)}")
+        return False
+
+def test_blogs_nonexistent_slug():
+    """Test 12: GET /api/blogs/nonexistent-slug-12345"""
+    try:
+        response = requests.get(f"{BASE_URL}/blogs/nonexistent-slug-12345", timeout=10)
+        data = response.json()
+        
+        if response.status_code == 404 and data.get("error") == "Not found":
+            print_test("GET /blogs Nonexistent Slug", True, "Correctly returned 404")
+            return True
+        else:
+            print_test("GET /blogs Nonexistent Slug", False, f"Status {response.status_code}: {data}")
+            return False
+    except Exception as e:
+        print_test("GET /blogs Nonexistent Slug", False, f"Exception: {str(e)}")
+        return False
+
+def test_blogs_post_without_auth():
+    """Test 13: POST /api/blogs without auth"""
+    try:
+        response = requests.post(f"{BASE_URL}/blogs", json={
+            "title": "Test Blog",
+            "excerpt": "Test excerpt",
+            "content": "<p>Test content</p>",
+            "category": "Test"
+        }, timeout=10)
+        data = response.json()
+        
+        if response.status_code == 401:
+            print_test("POST /blogs Without Auth", True, "Correctly rejected with 401")
+            return True
+        else:
+            print_test("POST /blogs Without Auth", False, f"Status {response.status_code}: {data}")
+            return False
+    except Exception as e:
+        print_test("POST /blogs Without Auth", False, f"Exception: {str(e)}")
+        return False
+
+def test_blogs_post_with_auth():
+    """Test 14: POST /api/blogs with auth"""
+    global test_blog_id, test_blog_slug
+    try:
+        headers = {"Authorization": f"Bearer {auth_token}"}
+        response = requests.post(f"{BASE_URL}/blogs", headers=headers, json={
+            "title": "Test Blog",
+            "excerpt": "Test excerpt",
+            "content": "<p>hello</p>",
+            "category": "Test",
+            "tags": ["a", "b"]
+        }, timeout=10)
+        data = response.json()
+        
+        if response.status_code == 200 and data.get("success"):
+            blog = data.get("blog", {})
+            test_blog_id = blog.get("id")
+            test_blog_slug = blog.get("slug")
+            
+            if test_blog_slug == "test-blog":
+                print_test("POST /blogs With Auth", True, f"Created blog with slug: {test_blog_slug}, id: {test_blog_id}")
+                return True
+            else:
+                print_test("POST /blogs With Auth", False, f"Slug not auto-generated correctly: {test_blog_slug}")
+                return False
+        else:
+            print_test("POST /blogs With Auth", False, f"Status {response.status_code}: {data}")
+            return False
+    except Exception as e:
+        print_test("POST /blogs With Auth", False, f"Exception: {str(e)}")
+        return False
+
+def test_blogs_get_created():
+    """Test 15: GET /api/blogs/test-blog after creation"""
+    try:
+        response = requests.get(f"{BASE_URL}/blogs/{test_blog_slug}", timeout=10)
+        data = response.json()
+        
+        if response.status_code == 200 and "blog" in data:
+            blog = data["blog"]
+            if blog.get("title") == "Test Blog":
+                print_test("GET /blogs Created Blog", True, f"Retrieved created blog: {blog.get('title')}")
+                return True
+            else:
+                print_test("GET /blogs Created Blog", False, f"Wrong title: {blog.get('title')}")
+                return False
+        else:
+            print_test("GET /blogs Created Blog", False, f"Status {response.status_code}: {data}")
+            return False
+    except Exception as e:
+        print_test("GET /blogs Created Blog", False, f"Exception: {str(e)}")
+        return False
+
+def test_blogs_put():
+    """Test 16: PUT /api/blogs/<id> with auth"""
+    try:
+        headers = {"Authorization": f"Bearer {auth_token}"}
+        response = requests.put(f"{BASE_URL}/blogs/{test_blog_id}", headers=headers, json={
+            "title": "Updated Test Blog"
+        }, timeout=10)
+        data = response.json()
+        
+        if response.status_code == 200 and data.get("success"):
+            print_test("PUT /blogs With Auth", True, f"Updated blog {test_blog_id}")
+            return True
+        else:
+            print_test("PUT /blogs With Auth", False, f"Status {response.status_code}: {data}")
+            return False
+    except Exception as e:
+        print_test("PUT /blogs With Auth", False, f"Exception: {str(e)}")
+        return False
+
+def test_blogs_delete():
+    """Test 17: DELETE /api/blogs/<id> with auth"""
+    try:
+        headers = {"Authorization": f"Bearer {auth_token}"}
+        response = requests.delete(f"{BASE_URL}/blogs/{test_blog_id}", headers=headers, timeout=10)
+        data = response.json()
+        
+        if response.status_code == 200 and data.get("success"):
+            print_test("DELETE /blogs With Auth", True, f"Deleted blog {test_blog_id}")
+            return True
+        else:
+            print_test("DELETE /blogs With Auth", False, f"Status {response.status_code}: {data}")
+            return False
+    except Exception as e:
+        print_test("DELETE /blogs With Auth", False, f"Exception: {str(e)}")
+        return False
+
+def test_team_list():
+    """Test 18: GET /api/team - should return at least 4 seeded members"""
+    try:
+        response = requests.get(f"{BASE_URL}/team", timeout=10)
+        data = response.json()
+        
+        if response.status_code == 200 and "team" in data:
+            team = data["team"]
+            if len(team) >= 4:
+                print_test("GET /team List", True, f"Found {len(team)} team members")
+                return True
+            else:
+                print_test("GET /team List", False, f"Only {len(team)} members, expected >= 4")
+                return False
+        else:
+            print_test("GET /team List", False, f"Status {response.status_code}: {data}")
+            return False
+    except Exception as e:
+        print_test("GET /team List", False, f"Exception: {str(e)}")
+        return False
+
+def test_clients_list():
+    """Test 19: GET /api/clients - should return 14 seeded clients"""
+    try:
+        response = requests.get(f"{BASE_URL}/clients", timeout=10)
+        data = response.json()
+        
+        if response.status_code == 200 and "clients" in data:
+            clients = data["clients"]
+            if len(clients) >= 14:
+                print_test("GET /clients List", True, f"Found {len(clients)} clients")
+                return True
+            else:
+                print_test("GET /clients List", False, f"Only {len(clients)} clients, expected >= 14")
+                return False
+        else:
+            print_test("GET /clients List", False, f"Status {response.status_code}: {data}")
+            return False
+    except Exception as e:
+        print_test("GET /clients List", False, f"Exception: {str(e)}")
+        return False
+
+def test_testimonials_list():
+    """Test 20: GET /api/testimonials - should return at least 3"""
+    try:
+        response = requests.get(f"{BASE_URL}/testimonials", timeout=10)
+        data = response.json()
+        
+        if response.status_code == 200 and "testimonials" in data:
+            testimonials = data["testimonials"]
+            if len(testimonials) >= 3:
+                print_test("GET /testimonials List", True, f"Found {len(testimonials)} testimonials")
+                return True
+            else:
+                print_test("GET /testimonials List", False, f"Only {len(testimonials)} testimonials, expected >= 3")
+                return False
+        else:
+            print_test("GET /testimonials List", False, f"Status {response.status_code}: {data}")
+            return False
+    except Exception as e:
+        print_test("GET /testimonials List", False, f"Exception: {str(e)}")
+        return False
+
+def test_team_post_without_auth():
+    """Test 21a: POST /api/team without auth"""
+    try:
+        response = requests.post(f"{BASE_URL}/team", json={
+            "name": "Test Person",
+            "role": "Test Role",
+            "bio": "Test bio"
+        }, timeout=10)
+        data = response.json()
+        
+        if response.status_code == 401:
+            print_test("POST /team Without Auth", True, "Correctly rejected with 401")
+            return True
+        else:
+            print_test("POST /team Without Auth", False, f"Status {response.status_code}: {data}")
+            return False
+    except Exception as e:
+        print_test("POST /team Without Auth", False, f"Exception: {str(e)}")
+        return False
+
+def test_team_post_with_auth():
+    """Test 21b: POST /api/team with auth"""
+    try:
+        headers = {"Authorization": f"Bearer {auth_token}"}
+        response = requests.post(f"{BASE_URL}/team", headers=headers, json={
+            "name": "Test Person",
+            "role": "Test Role",
+            "bio": "Test bio"
+        }, timeout=10)
+        data = response.json()
+        
+        if response.status_code == 200 and data.get("success"):
+            print_test("POST /team With Auth", True, "Created team member")
+            return True
+        else:
+            print_test("POST /team With Auth", False, f"Status {response.status_code}: {data}")
+            return False
+    except Exception as e:
+        print_test("POST /team With Auth", False, f"Exception: {str(e)}")
+        return False
+
+def test_projects_post_without_auth():
+    """Test 22: POST /api/projects without auth"""
+    try:
+        response = requests.post(f"{BASE_URL}/projects", json={
+            "title": "Test Project",
+            "client": "Test Client",
+            "description": "Test description"
+        }, timeout=10)
+        data = response.json()
+        
+        if response.status_code == 401:
+            print_test("POST /projects Without Auth", True, "Correctly rejected with 401")
+            return True
+        else:
+            print_test("POST /projects Without Auth", False, f"Status {response.status_code}: {data}")
+            return False
+    except Exception as e:
+        print_test("POST /projects Without Auth", False, f"Exception: {str(e)}")
+        return False
+
+def test_projects_post_with_auth():
+    """Test 22b: POST /api/projects with auth"""
+    global test_project_id
+    try:
+        headers = {"Authorization": f"Bearer {auth_token}"}
+        response = requests.post(f"{BASE_URL}/projects", headers=headers, json={
+            "title": "Test Project",
+            "client": "Test Client",
+            "description": "Test description"
+        }, timeout=10)
+        data = response.json()
+        
+        if response.status_code == 200 and data.get("success"):
+            test_project_id = data.get("project", {}).get("id")
+            print_test("POST /projects With Auth", True, f"Created project {test_project_id}")
+            return True
+        else:
+            print_test("POST /projects With Auth", False, f"Status {response.status_code}: {data}")
+            return False
+    except Exception as e:
+        print_test("POST /projects With Auth", False, f"Exception: {str(e)}")
+        return False
+
+def test_careers_post_without_auth():
+    """Test 23: POST /api/careers without auth"""
+    try:
+        response = requests.post(f"{BASE_URL}/careers", json={
+            "title": "Test Job",
+            "department": "Test Dept",
+            "description": "Test description"
+        }, timeout=10)
+        data = response.json()
+        
+        if response.status_code == 401:
+            print_test("POST /careers Without Auth", True, "Correctly rejected with 401")
+            return True
+        else:
+            print_test("POST /careers Without Auth", False, f"Status {response.status_code}: {data}")
+            return False
+    except Exception as e:
+        print_test("POST /careers Without Auth", False, f"Exception: {str(e)}")
+        return False
+
+def test_careers_post_with_auth():
+    """Test 23b: POST /api/careers with auth"""
+    try:
+        headers = {"Authorization": f"Bearer {auth_token}"}
+        response = requests.post(f"{BASE_URL}/careers", headers=headers, json={
+            "title": "Test Job",
+            "department": "Test Dept",
+            "description": "Test description"
+        }, timeout=10)
+        data = response.json()
+        
+        if response.status_code == 200 and data.get("success"):
+            print_test("POST /careers With Auth", True, "Created job")
+            return True
+        else:
+            print_test("POST /careers With Auth", False, f"Status {response.status_code}: {data}")
+            return False
+    except Exception as e:
+        print_test("POST /careers With Auth", False, f"Exception: {str(e)}")
+        return False
+
+def test_projects_delete_without_auth():
+    """Test 24a: DELETE /api/projects/<id> without auth"""
+    try:
+        # Use a dummy ID
+        response = requests.delete(f"{BASE_URL}/projects/dummy-id", timeout=10)
+        data = response.json()
+        
+        if response.status_code == 401:
+            print_test("DELETE /projects Without Auth", True, "Correctly rejected with 401")
+            return True
+        else:
+            print_test("DELETE /projects Without Auth", False, f"Status {response.status_code}: {data}")
+            return False
+    except Exception as e:
+        print_test("DELETE /projects Without Auth", False, f"Exception: {str(e)}")
+        return False
+
+def test_projects_delete_with_auth():
+    """Test 24b: DELETE /api/projects/<id> with auth"""
+    try:
+        headers = {"Authorization": f"Bearer {auth_token}"}
+        # Use the project ID from earlier test
+        response = requests.delete(f"{BASE_URL}/projects/{test_project_id}", headers=headers, timeout=10)
+        data = response.json()
+        
+        if response.status_code == 200 and data.get("success"):
+            print_test("DELETE /projects With Auth", True, f"Deleted project {test_project_id}")
+            return True
+        else:
+            print_test("DELETE /projects With Auth", False, f"Status {response.status_code}: {data}")
+            return False
+    except Exception as e:
+        print_test("DELETE /projects With Auth", False, f"Exception: {str(e)}")
+        return False
+
+def test_search_with_query():
+    """Test 25: GET /api/search?q=data"""
+    try:
+        response = requests.get(f"{BASE_URL}/search?q=data", timeout=10)
+        data = response.json()
+        
+        if response.status_code == 200 and "results" in data:
+            results = data["results"]
+            if len(results) > 0:
+                # Check structure
+                result = results[0]
+                required_fields = ["type", "title", "excerpt", "url"]
+                missing = [f for f in required_fields if f not in result]
+                
+                if not missing:
+                    print_test("GET /search With Query", True, f"Found {len(results)} results with correct structure")
+                    return True
+                else:
+                    print_test("GET /search With Query", False, f"Missing fields: {missing}")
+                    return False
+            else:
+                print_test("GET /search With Query", False, "No results for 'data' search")
+                return False
+        else:
+            print_test("GET /search With Query", False, f"Status {response.status_code}: {data}")
+            return False
+    except Exception as e:
+        print_test("GET /search With Query", False, f"Exception: {str(e)}")
+        return False
+
+def test_search_empty_query():
+    """Test 26: GET /api/search?q= (empty query)"""
+    try:
+        response = requests.get(f"{BASE_URL}/search?q=", timeout=10)
+        data = response.json()
+        
+        if response.status_code == 200 and "results" in data:
+            results = data["results"]
+            if len(results) == 0:
+                print_test("GET /search Empty Query", True, "Correctly returned empty results")
+                return True
+            else:
+                print_test("GET /search Empty Query", False, f"Expected empty results, got {len(results)}")
+                return False
+        else:
+            print_test("GET /search Empty Query", False, f"Status {response.status_code}: {data}")
+            return False
+    except Exception as e:
+        print_test("GET /search Empty Query", False, f"Exception: {str(e)}")
+        return False
+
+# Global variable for project ID
+test_project_id = None
+
 def main():
-    print(f"\n{Colors.BLUE}{'='*80}{Colors.END}")
-    print(f"{Colors.BLUE}IndusVertex Backend API Test Suite{Colors.END}")
-    print(f"{Colors.BLUE}Base URL: {BASE_URL}{Colors.END}")
-    print(f"{Colors.BLUE}{'='*80}{Colors.END}")
+    print("=" * 80)
+    print("IndusVertex Phase 2 Backend API Testing")
+    print("=" * 80)
+    print()
     
-    results = {}
+    results = []
     
-    # Run all tests
-    results['health'] = test_health()
-    results['lead_capture'], lead_ids = test_lead_capture_endpoints()
-    results['get_leads'] = test_get_leads()
-    results['careers_get'] = test_careers_get()
-    results['careers_post'] = test_careers_post()
-    results['career_application'] = test_career_application()
-    results['projects'] = test_projects()
-    results['testimonials'] = test_testimonials()
-    results['stats'] = test_stats()
-    results['404'] = test_404()
+    # AUTH TESTS
+    print("=" * 80)
+    print("AUTH TESTS")
+    print("=" * 80)
+    results.append(test_auth_login_valid())
+    results.append(test_auth_login_invalid())
+    results.append(test_auth_me_with_token())
+    results.append(test_auth_me_without_token())
+    results.append(test_auth_me_malformed_token())
     
-    # Summary
-    print(f"\n{Colors.BLUE}{'='*80}{Colors.END}")
-    print(f"{Colors.BLUE}TEST SUMMARY{Colors.END}")
-    print(f"{Colors.BLUE}{'='*80}{Colors.END}")
+    # PROTECTED ENDPOINTS
+    print("=" * 80)
+    print("PROTECTED ENDPOINTS TESTS")
+    print("=" * 80)
+    results.append(test_leads_with_token())
+    results.append(test_leads_without_token())
+    results.append(test_applications_with_token())
+    results.append(test_applications_without_token())
     
-    passed = sum(1 for v in results.values() if v)
+    # BLOG TESTS
+    print("=" * 80)
+    print("BLOG TESTS")
+    print("=" * 80)
+    results.append(test_blogs_list())
+    results.append(test_blogs_search())
+    results.append(test_blogs_category())
+    results.append(test_blogs_by_slug())
+    results.append(test_blogs_nonexistent_slug())
+    results.append(test_blogs_post_without_auth())
+    results.append(test_blogs_post_with_auth())
+    results.append(test_blogs_get_created())
+    results.append(test_blogs_put())
+    results.append(test_blogs_delete())
+    
+    # TEAM / CLIENTS / TESTIMONIALS
+    print("=" * 80)
+    print("TEAM / CLIENTS / TESTIMONIALS TESTS")
+    print("=" * 80)
+    results.append(test_team_list())
+    results.append(test_clients_list())
+    results.append(test_testimonials_list())
+    results.append(test_team_post_without_auth())
+    results.append(test_team_post_with_auth())
+    
+    # PROJECTS / CAREERS WRITE PROTECTION
+    print("=" * 80)
+    print("PROJECTS / CAREERS WRITE PROTECTION TESTS")
+    print("=" * 80)
+    results.append(test_projects_post_without_auth())
+    results.append(test_projects_post_with_auth())
+    results.append(test_careers_post_without_auth())
+    results.append(test_careers_post_with_auth())
+    results.append(test_projects_delete_without_auth())
+    results.append(test_projects_delete_with_auth())
+    
+    # SEARCH
+    print("=" * 80)
+    print("SEARCH TESTS")
+    print("=" * 80)
+    results.append(test_search_with_query())
+    results.append(test_search_empty_query())
+    
+    # SUMMARY
+    print("=" * 80)
+    print("TEST SUMMARY")
+    print("=" * 80)
+    passed = sum(results)
     total = len(results)
-    
-    for test_name, result in results.items():
-        status = f"{Colors.GREEN}PASS{Colors.END}" if result else f"{Colors.RED}FAIL{Colors.END}"
-        print(f"{test_name}: {status}")
-    
-    print(f"\n{Colors.BLUE}Total: {passed}/{total} tests passed{Colors.END}")
+    print(f"Passed: {passed}/{total}")
+    print(f"Failed: {total - passed}/{total}")
     
     if passed == total:
-        print(f"{Colors.GREEN}All tests passed!{Colors.END}")
-        return 0
+        print("\n✅ ALL TESTS PASSED!")
+        sys.exit(0)
     else:
-        print(f"{Colors.RED}Some tests failed!{Colors.END}")
-        return 1
+        print(f"\n❌ {total - passed} TESTS FAILED")
+        sys.exit(1)
 
 if __name__ == "__main__":
-    sys.exit(main())
+    main()

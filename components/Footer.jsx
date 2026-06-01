@@ -1,8 +1,12 @@
+'use client';
 import Link from 'next/link';
-import { Mail, Phone, MapPin, Linkedin, Facebook, Instagram } from 'lucide-react';
+import { usePathname } from 'next/navigation';
+import { Mail, Phone, MapPin, Linkedin, Facebook, Instagram, Download } from 'lucide-react';
 import { COMPANY, SERVICES } from '@/lib/services-data';
 
 export default function Footer() {
+  const pathname = usePathname();
+  if (pathname?.startsWith('/admin')) return null;
   return (
     <footer className="gradient-navy text-white relative overflow-hidden">
       <div className="absolute inset-0 grid-pattern opacity-30" />
@@ -11,7 +15,7 @@ export default function Footer() {
           <div className="lg:col-span-2">
             <div className="flex items-center gap-3 mb-5">
               <div className="w-11 h-11 rounded-lg gradient-gold flex items-center justify-center">
-                <span className="text-navy font-black text-lg tracking-tighter">IV</span>
+                <span className="font-black text-lg tracking-tighter" style={{color:'#0a1628'}}>IV</span>
               </div>
               <div>
                 <div className="font-bold text-lg">IndusVertex</div>
@@ -26,6 +30,7 @@ export default function Footer() {
               <div className="flex items-center gap-3 text-white/80"><Phone className="w-4 h-4 text-gold" /><a href={`tel:${COMPANY.phoneRaw}`} className="hover:text-white">{COMPANY.phone}</a></div>
               <div className="flex items-center gap-3 text-white/80"><Mail className="w-4 h-4 text-gold" /><a href={`mailto:${COMPANY.emails.info}`} className="hover:text-white">{COMPANY.emails.info}</a></div>
             </div>
+            <a href="/company-profile.html" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 mt-6 px-4 py-2.5 rounded-lg gradient-gold text-sm font-semibold" style={{color:'#0a1628'}}><Download className="w-4 h-4" />Download Company Profile</a>
           </div>
 
           <div>
@@ -35,6 +40,7 @@ export default function Footer() {
               <li><Link href="/team" className="hover:text-white">Leadership</Link></li>
               <li><Link href="/projects" className="hover:text-white">Projects</Link></li>
               <li><Link href="/clients" className="hover:text-white">Clients</Link></li>
+              <li><Link href="/blog" className="hover:text-white">Blog</Link></li>
               <li><Link href="/careers" className="hover:text-white">Careers</Link></li>
               <li><Link href="/contact" className="hover:text-white">Contact</Link></li>
             </ul>
@@ -44,7 +50,7 @@ export default function Footer() {
             <h4 className="text-xs uppercase tracking-[0.18em] text-gold mb-4 font-semibold">Core Services</h4>
             <ul className="space-y-2.5 text-sm text-white/70">
               {SERVICES.slice(0, 7).map(s => (
-                <li key={s.slug}><Link href={`/services#${s.slug}`} className="hover:text-white">{s.title.split('&')[0].trim()}</Link></li>
+                <li key={s.slug}><Link href={`/services/${s.slug}`} className="hover:text-white">{s.title.split('&')[0].trim()}</Link></li>
               ))}
             </ul>
           </div>
@@ -55,6 +61,7 @@ export default function Footer() {
               <li><Link href="/legal" className="hover:text-white">IndusVertex Law Firm</Link></li>
               <li><a href={`mailto:${COMPANY.emails.business}`} className="hover:text-white">Business Inquiry</a></li>
               <li><a href={`mailto:${COMPANY.emails.legal}`} className="hover:text-white">Legal Inquiry</a></li>
+              <li><Link href="/admin" className="hover:text-white">Admin Login</Link></li>
             </ul>
             <div className="flex items-center gap-3 mt-5">
               <a href="#" aria-label="LinkedIn" className="w-9 h-9 rounded-md border border-white/15 flex items-center justify-center hover:bg-white/10"><Linkedin className="w-4 h-4" /></a>
