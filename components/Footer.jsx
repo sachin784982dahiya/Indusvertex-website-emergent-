@@ -14,8 +14,8 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
           <div className="lg:col-span-2">
             <div className="flex items-center gap-3 mb-5">
-              <div className="w-11 h-11 rounded-lg gradient-gold flex items-center justify-center">
-                <span className="font-black text-lg tracking-tighter" style={{color:'#0a1628'}}>IV</span>
+              <div className="w-12 h-12 rounded-lg bg-white shadow-md flex items-center justify-center p-1.5 ring-1 ring-white/20">
+                <img src="/assets/logo-symbol.png" alt="IndusVertex" className="w-full h-full object-contain" />
               </div>
               <div>
                 <div className="font-bold text-lg">IndusVertex</div>

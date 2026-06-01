@@ -55,9 +55,9 @@ export default function Navbar() {
       )}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
-            <Link href="/" className="flex items-center gap-2 group">
-              <div className="relative w-10 h-10 rounded-lg gradient-gold flex items-center justify-center shadow-lg">
-                <span className="text-navy font-black text-lg tracking-tighter" style={{color:'#0a1628'}}>IV</span>
+            <Link href="/" className="flex items-center gap-2.5 group">
+              <div className="relative w-11 h-11 rounded-lg bg-white shadow-md flex items-center justify-center p-1 ring-1 ring-black/5">
+                <img src="/assets/logo-symbol.png" alt="IndusVertex" className="w-full h-full object-contain" />
               </div>
               <div className="flex flex-col leading-tight">
                 <span className={cn('font-bold text-base tracking-tight', transparent ? 'text-white' : 'text-foreground')}>IndusVertex</span>
