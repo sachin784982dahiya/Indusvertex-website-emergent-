@@ -6,6 +6,7 @@ import { ArrowRight, CheckCircle2, ShieldCheck, Award, Zap, BatteryCharging, Ser
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { SERVICES, CLIENTS, COMPANY } from '@/lib/services-data';
+import ClientLogo from '@/components/ClientLogo';
 
 const ICONS = { Zap, BatteryCharging, Server, Building2, Cpu, Plug, ShieldAlert, Leaf, ClipboardCheck, Network, Scale };
 
@@ -171,8 +172,8 @@ export default function Home() {
         <div className="relative">
           <div className="flex marquee whitespace-nowrap">
             {[...CLIENTS, ...CLIENTS].map((c, i) => (
-              <div key={i} className="inline-flex items-center justify-center px-10 py-4 mx-2 min-w-[220px] border border-border rounded-lg bg-card text-foreground/70 font-semibold tracking-wide">
-                {c}
+              <div key={i} className="inline-flex items-center justify-center gap-3 px-8 py-5 mx-2 min-w-[240px] h-24 border border-border rounded-lg bg-card">
+                <ClientLogo client={c} variant="inline" size="md" />
               </div>
             ))}
           </div>
