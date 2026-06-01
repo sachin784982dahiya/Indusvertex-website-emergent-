@@ -1,11 +1,63 @@
+'use client';
+import { useEffect, useState } from 'react';
 import { Card } from '@/components/ui/card';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Scale, Gavel, FileText, Building, ShieldCheck, AlertTriangle, CheckCircle2, ArrowRight } from 'lucide-react';
+import PersonAvatar from '@/components/PersonAvatar';
+import { Scale, Gavel, FileText, Building, ShieldCheck, AlertTriangle, CheckCircle2, ArrowRight, Award, Briefcase, Mail, Linkedin } from 'lucide-react';
 
-export const metadata = { title: 'IndusVertex Law Firm — Legal Advisory Services' };
+// Default legal team displayed on the legal page. Admin can override / add more via team CRUD
+// by giving role containing "Legal" or "Counsel".
+const DEFAULT_LEGAL_TEAM = [
+  {
+    name: 'Adv. Pradeep Kumar',
+    role: 'Associate Legal Counsel',
+    creds: 'B.Tech (IT) | LL.B | LL.M (Silver Medalist)',
+    bio: 'A legal and compliance specialist with 10+ years of experience in IT and electrical infrastructure, along with 3+ years of expertise in regulatory and environmental compliance. He is actively engaged in civil and criminal practice, supporting corporate and public sector matters.',
+    practice: ['Corporate', 'Regulatory', 'Environmental', 'IT Infrastructure'],
+  },
+  {
+    name: 'Senior Counsel',
+    role: 'Senior Counsel — Banking & SARFAESI',
+    creds: 'LL.M | Bar Council of India',
+    bio: 'Leads banking, financial recovery and SARFAESI matters for the firm — representing leading banks and NBFCs in commercial litigation and asset recovery proceedings.',
+    practice: ['Banking', 'SARFAESI', 'Recovery', 'Commercial Litigation'],
+    placeholder: true,
+  },
+  {
+    name: 'Litigation Counsel',
+    role: 'Litigation Counsel — Real Estate & RERA',
+    creds: 'LL.M | Property Law Specialist',
+    bio: 'Specialises in property due diligence, RERA matters, land acquisition and real-estate dispute resolution — supporting both corporate and individual clients.',
+    practice: ['RERA', 'Real Estate', 'Property Due Diligence', 'Land Acquisition'],
+    placeholder: true,
+  },
+];
 
 export default function Legal() {
+  const [legalTeam, setLegalTeam] = useState(DEFAULT_LEGAL_TEAM);
+
+  useEffect(() => {
+    fetch('/api/team').then(r => r.ok ? r.json() : null).then(d => {
+      const lawyers = (d?.team || []).filter(t => /legal|counsel|advoc/i.test(t.role || ''));
+      if (lawyers.length) {
+        // Merge: any admin-edited members override defaults by name match
+        const merged = DEFAULT_LEGAL_TEAM.map(def => {
+          const fromDb = lawyers.find(l => (l.name || '').toLowerCase().includes('pradeep') && def.name.toLowerCase().includes('pradeep'));
+          return fromDb ? { ...def, ...fromDb } : def;
+        });
+        // Append additional lawyers from DB that aren't in defaults
+        lawyers.forEach(l => {
+          if (!merged.some(m => (m.name || '').toLowerCase() === (l.name || '').toLowerCase()) &&
+              !(l.name || '').toLowerCase().includes('pradeep')) {
+            merged.push({ ...l, practice: l.practice || [] });
+          }
+        });
+        setLegalTeam(merged);
+      }
+    }).catch(() => {});
+  }, []);
+
   const services = [
     'Legal Advisory for Corporate & Industrial Compliance',
     'Property Verification, Title Search & Due Diligence',
@@ -49,7 +101,7 @@ export default function Legal() {
 
       <section className="py-20 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-3 gap-6 mb-14">
+          <div className="grid md:grid-cols-3 gap-6 mb-16">
             {[
               { icon: Building, title:'Corporate & Banking', text:'Advisory across corporate compliance, SARFAESI matters and financial recovery for banks, NBFCs and corporates.' },
               { icon: Gavel, title:'Litigation & Dispute Resolution', text:'Civil, commercial and corporate litigation with MSME and vendor dispute resolution capabilities.' },
@@ -63,6 +115,46 @@ export default function Legal() {
             ))}
           </div>
 
+          {/* LEGAL TEAM */}
+          <div className="mb-8">
+            <div className="text-xs uppercase tracking-[0.2em] text-accent font-semibold mb-3">Our Legal Counsel</div>
+            <h2 className="text-3xl lg:text-4xl font-bold">Meet the lawyers behind IndusVertex Law Firm</h2>
+            <p className="text-foreground/70 mt-3 max-w-3xl">Multi-disciplinary legal expertise across corporate, banking, real estate, regulatory and litigation matters.</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-6 mb-16">
+            {legalTeam.map((m, i) => (
+              <Card key={m.id || m.name + i} className="p-7 hover:shadow-xl transition-all border-border/60">
+                <div className="flex flex-col items-center text-center">
+                  <PersonAvatar name={m.name} imageUrl={m.imageUrl || m.image} size="lg" shape="circle" />
+                  <div className="mt-5 w-full">
+                    <h3 className="text-xl font-bold leading-tight">{m.name}</h3>
+                    <div className="flex items-center justify-center gap-1.5 mt-1.5">
+                      <Briefcase className="w-3.5 h-3.5 text-accent" />
+                      <div className="text-accent font-semibold text-sm">{m.role}</div>
+                    </div>
+                    <div className="flex items-center justify-center gap-1.5 mt-1">
+                      <Award className="w-3.5 h-3.5 text-muted-foreground" />
+                      <div className="text-[11px] text-muted-foreground uppercase tracking-wider">{m.creds}</div>
+                    </div>
+                    <p className="mt-4 text-sm text-foreground/75 leading-relaxed">{m.bio}</p>
+                    {Array.isArray(m.practice) && m.practice.length > 0 && (
+                      <div className="mt-4 flex flex-wrap justify-center gap-1.5">
+                        {m.practice.map(p => (
+                          <span key={p} className="text-[11px] px-2.5 py-1 rounded-full bg-muted text-foreground/70 font-medium">{p}</span>
+                        ))}
+                      </div>
+                    )}
+                    <div className="flex justify-center gap-2 mt-5">
+                      <a href="#" className="w-9 h-9 rounded-md border border-border flex items-center justify-center hover:bg-muted hover:border-accent transition-colors"><Linkedin className="w-4 h-4" /></a>
+                      <a href="mailto:legal@indusvertex.com" className="w-9 h-9 rounded-md border border-border flex items-center justify-center hover:bg-muted hover:border-accent transition-colors"><Mail className="w-4 h-4" /></a>
+                    </div>
+                  </div>
+                </div>
+              </Card>
+            ))}
+          </div>
+
+          {/* PRACTICE AREAS */}
           <div className="text-xs uppercase tracking-[0.2em] text-accent font-semibold mb-3">Practice Areas</div>
           <h2 className="text-3xl lg:text-4xl font-bold mb-8">Full-spectrum legal services</h2>
           <div className="grid md:grid-cols-2 gap-3">

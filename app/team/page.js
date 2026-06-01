@@ -1,11 +1,20 @@
+'use client';
+import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import { Card } from '@/components/ui/card';
-import { TEAM } from '@/lib/services-data';
-import { Linkedin, Mail } from 'lucide-react';
-
-export const metadata = { title: 'Leadership Team — IndusVertex' };
+import { TEAM as STATIC_TEAM } from '@/lib/services-data';
+import PersonAvatar from '@/components/PersonAvatar';
+import { Linkedin, Mail, Award, Briefcase } from 'lucide-react';
 
 export default function Team() {
-  const initials = (n) => n.split(' ').map(w=>w[0]).slice(0,2).join('');
+  const [team, setTeam] = useState(STATIC_TEAM);
+
+  useEffect(() => {
+    fetch('/api/team').then(r => r.ok ? r.json() : null).then(d => {
+      if (d?.team?.length) setTeam(d.team);
+    }).catch(() => {});
+  }, []);
+
   return (
     <div>
       <section className="pt-36 pb-20 gradient-navy text-white relative overflow-hidden">
@@ -18,26 +27,47 @@ export default function Team() {
       </section>
 
       <section className="py-20 bg-background">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-7">
-          {TEAM.map((m) => (
-            <Card key={m.name} className="p-8 hover:shadow-2xl transition-shadow border-border/60">
-              <div className="flex items-start gap-5">
-                <div className="w-20 h-20 rounded-2xl gradient-navy flex items-center justify-center flex-shrink-0 shadow-lg">
-                  <span className="text-2xl font-bold text-gold">{initials(m.name)}</span>
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-2xl font-bold">{m.name}</h3>
-                  <div className="text-accent font-semibold text-sm mt-0.5">{m.role}</div>
-                  <div className="text-xs text-muted-foreground mt-1 uppercase tracking-wider">{m.creds}</div>
-                  <p className="mt-4 text-foreground/75 leading-relaxed">{m.bio}</p>
-                  <div className="flex gap-2 mt-5">
-                    <a href="#" className="w-9 h-9 rounded-md border border-border flex items-center justify-center hover:bg-muted"><Linkedin className="w-4 h-4" /></a>
-                    <a href="mailto:info@indusvertex.com" className="w-9 h-9 rounded-md border border-border flex items-center justify-center hover:bg-muted"><Mail className="w-4 h-4" /></a>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-7">
+            {team.map((m, i) => (
+              <motion.div
+                key={m.id || m.name}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.08 }}
+              >
+                <Card className="p-8 hover:shadow-2xl transition-all border-border/60 h-full group">
+                  <div className="flex items-start gap-6">
+                    <PersonAvatar name={m.name} imageUrl={m.imageUrl || m.image} size="lg" shape="square" />
+                    <div className="flex-1">
+                      <h3 className="text-2xl font-bold leading-tight">{m.name}</h3>
+                      <div className="flex items-center gap-1.5 mt-1.5">
+                        <Briefcase className="w-3.5 h-3.5 text-accent" />
+                        <div className="text-accent font-semibold text-sm">{m.role}</div>
+                      </div>
+                      <div className="flex items-center gap-1.5 mt-1">
+                        <Award className="w-3.5 h-3.5 text-muted-foreground" />
+                        <div className="text-xs text-muted-foreground uppercase tracking-wider">{m.creds}</div>
+                      </div>
+                      <p className="mt-4 text-foreground/75 leading-relaxed text-sm">{m.bio}</p>
+                      <div className="flex gap-2 mt-5">
+                        <a href={m.linkedin || '#'} target="_blank" rel="noreferrer" className="w-9 h-9 rounded-md border border-border flex items-center justify-center hover:bg-muted hover:border-accent transition-colors"><Linkedin className="w-4 h-4" /></a>
+                        <a href={`mailto:info@indusvertex.com`} className="w-9 h-9 rounded-md border border-border flex items-center justify-center hover:bg-muted hover:border-accent transition-colors"><Mail className="w-4 h-4" /></a>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            </Card>
-          ))}
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-16 bg-muted/30">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl lg:text-4xl font-bold mb-4">Want to know more about our team?</h2>
+          <p className="text-foreground/70 max-w-2xl mx-auto">Reach out for a confidential discussion about engineering, infrastructure, compliance or legal advisory — our leadership will respond personally.</p>
         </div>
       </section>
     </div>

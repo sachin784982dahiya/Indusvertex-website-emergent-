@@ -232,6 +232,8 @@ export default function Dashboard() {
               {modal.type === 'team' && (<>
                 <div className="grid grid-cols-2 gap-3"><div><Label>Name</Label><Input value={form.name||''} onChange={e=>setForm({...form,name:e.target.value})} /></div><div><Label>Role</Label><Input value={form.role||''} onChange={e=>setForm({...form,role:e.target.value})} /></div></div>
                 <div className="grid grid-cols-2 gap-3"><div><Label>Credentials</Label><Input value={form.creds||''} onChange={e=>setForm({...form,creds:e.target.value})} /></div><div><Label>Order</Label><Input type="number" value={form.order||''} onChange={e=>setForm({...form,order:Number(e.target.value)})} /></div></div>
+                <div><Label>Photo URL (optional)</Label><Input value={form.imageUrl||''} onChange={e=>setForm({...form,imageUrl:e.target.value})} placeholder="https://..." /></div>
+                <div><Label>LinkedIn URL (optional)</Label><Input value={form.linkedin||''} onChange={e=>setForm({...form,linkedin:e.target.value})} placeholder="https://linkedin.com/in/..." /></div>
                 <div><Label>Bio</Label><Textarea rows={5} value={form.bio||''} onChange={e=>setForm({...form,bio:e.target.value})} /></div>
               </>)}
               {modal.type === 'testimonial' && (<>
