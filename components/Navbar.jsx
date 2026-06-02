@@ -17,8 +17,6 @@ const nav = [
   { href: '/clients', label: 'Clients' },
   { href: '/legal', label: 'Legal' },
   { href: '/team', label: 'Team' },
-  { href: '/blog', label: 'Blog' },
-  { href: '/careers', label: 'Careers' },
   { href: '/contact', label: 'Contact' }
 ];
 
