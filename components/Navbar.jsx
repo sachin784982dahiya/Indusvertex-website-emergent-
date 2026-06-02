@@ -2,21 +2,21 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
-import { Menu, X, Moon, Sun, ChevronDown } from 'lucide-react';
+import { Menu, X, Moon, Sun, ChevronDown, Home, Info, Briefcase, FolderOpen, Users, Scale, UserCircle, Phone, ArrowRight } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { SERVICES } from '@/lib/services-data';
 
 const nav = [
-  { href: '/', label: 'Home' },
-  { href: '/about', label: 'About' },
-  { href: '/services', label: 'Services', mega: true },
-  { href: '/projects', label: 'Projects' },
-  { href: '/clients', label: 'Clients' },
-  { href: '/legal', label: 'Legal' },
-  { href: '/team', label: 'Team' },
-  { href: '/contact', label: 'Contact' }
+  { href: '/', label: 'Home', icon: Home },
+  { href: '/about', label: 'About', icon: Info },
+  { href: '/services', label: 'Services', icon: Briefcase, mega: true },
+  { href: '/projects', label: 'Projects', icon: FolderOpen },
+  { href: '/clients', label: 'Clients', icon: Users },
+  { href: '/legal', label: 'Legal', icon: Scale },
+  { href: '/team', label: 'Team', icon: UserCircle },
+  { href: '/contact', label: 'Contact', icon: Phone },
 ];
 
 export default function Navbar() {
@@ -122,44 +122,56 @@ export default function Navbar() {
 
       {/* Mobile slide-in drawer */}
       <div className={cn(
-        'lg:hidden fixed top-0 right-0 h-full w-72 z-50 bg-background shadow-2xl border-l border-border transition-transform duration-300 ease-in-out flex flex-col',
+        'lg:hidden fixed top-0 right-0 h-full w-[280px] z-50 shadow-2xl transition-transform duration-300 ease-in-out flex flex-col',
+        'bg-[#0a1628]',
         open ? 'translate-x-0' : 'translate-x-full'
       )}>
         {/* Drawer header */}
-        <div className="flex items-center justify-between px-5 py-5 border-b border-border">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-md bg-white shadow flex items-center justify-center p-1 ring-1 ring-black/5">
+        <div className="flex items-center justify-between px-5 pt-6 pb-5 border-b border-white/10">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-lg bg-white shadow flex items-center justify-center p-1">
               <img src="/assets/logo-symbol.png" alt="IndusVertex" className="w-full h-full object-contain" />
             </div>
-            <span className="font-bold text-sm">IndusVertex</span>
+            <div>
+              <div className="text-white font-bold text-sm leading-tight">IndusVertex</div>
+              <div className="text-white/40 text-[10px] uppercase tracking-widest">Private Limited</div>
+            </div>
           </div>
-          <button onClick={() => setOpen(false)} className="p-1.5 rounded-md hover:bg-muted text-foreground">
-            <X className="w-5 h-5" />
+          <button onClick={() => setOpen(false)} className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white transition-colors">
+            <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Nav links */}
-        <nav className="flex-1 overflow-y-auto px-4 py-4 flex flex-col gap-1">
-          {nav.map(item => (
-            <Link key={item.href} href={item.href}
-              className={cn(
-                'px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
-                pathname === item.href
-                  ? 'bg-accent/10 text-accent font-semibold'
-                  : 'text-foreground/80 hover:bg-muted hover:text-foreground'
-              )}>
-              {item.label}
-            </Link>
-          ))}
+        <nav className="flex-1 overflow-y-auto px-3 py-4 flex flex-col gap-0.5">
+          {nav.map(item => {
+            const Icon = item.icon;
+            const active = pathname === item.href;
+            return (
+              <Link key={item.href} href={item.href} onClick={() => setOpen(false)}
+                className={cn(
+                  'flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all',
+                  active
+                    ? 'bg-[#d4af37] text-[#0a1628] font-semibold shadow-lg'
+                    : 'text-white/70 hover:bg-white/10 hover:text-white'
+                )}>
+                <Icon className="w-4 h-4 flex-shrink-0" />
+                {item.label}
+                {active && <ArrowRight className="w-3.5 h-3.5 ml-auto" />}
+              </Link>
+            );
+          })}
         </nav>
 
         {/* CTA */}
-        <div className="px-4 py-5 border-t border-border">
+        <div className="px-4 py-5 border-t border-white/10">
           <Link href="/contact" onClick={() => setOpen(false)}>
-            <Button className="w-full font-semibold" style={{backgroundColor:'#d4af37', color:'#0a1628'}}>
-              Request Consultation
-            </Button>
+            <button className="w-full py-3 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 transition-all hover:opacity-90"
+              style={{backgroundColor:'#d4af37', color:'#0a1628'}}>
+              Request Consultation <ArrowRight className="w-4 h-4" />
+            </button>
           </Link>
+          <p className="text-center text-white/30 text-[11px] mt-3">Precision Engineering & Sustainable Solutions</p>
         </div>
       </div>
     </>
