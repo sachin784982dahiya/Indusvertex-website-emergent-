@@ -111,19 +111,57 @@ export default function Navbar() {
           </div>
         </div>
 
-        {open && (
-          <div className="lg:hidden bg-background border-t border-border">
-            <nav className="px-4 py-3 flex flex-col">
-              {nav.map(item => (
-                <Link key={item.href} href={item.href} className={cn('py-2.5 text-sm font-medium border-b border-border/40 last:border-0', pathname === item.href ? 'text-primary' : 'text-foreground/80')}>{item.label}</Link>
-              ))}
-              <Link href="/contact" className="mt-3">
-                <Button className="w-full font-semibold" style={{backgroundColor:'#d4af37', color:'#0a1628'}}>Request Consultation</Button>
-              </Link>
-            </nav>
-          </div>
-        )}
       </header>
+
+      {/* Mobile drawer overlay */}
+      {open && (
+        <div className="lg:hidden fixed inset-0 z-40" onClick={() => setOpen(false)}>
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
+        </div>
+      )}
+
+      {/* Mobile slide-in drawer */}
+      <div className={cn(
+        'lg:hidden fixed top-0 right-0 h-full w-72 z-50 bg-background shadow-2xl border-l border-border transition-transform duration-300 ease-in-out flex flex-col',
+        open ? 'translate-x-0' : 'translate-x-full'
+      )}>
+        {/* Drawer header */}
+        <div className="flex items-center justify-between px-5 py-5 border-b border-border">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-md bg-white shadow flex items-center justify-center p-1 ring-1 ring-black/5">
+              <img src="/assets/logo-symbol.png" alt="IndusVertex" className="w-full h-full object-contain" />
+            </div>
+            <span className="font-bold text-sm">IndusVertex</span>
+          </div>
+          <button onClick={() => setOpen(false)} className="p-1.5 rounded-md hover:bg-muted text-foreground">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Nav links */}
+        <nav className="flex-1 overflow-y-auto px-4 py-4 flex flex-col gap-1">
+          {nav.map(item => (
+            <Link key={item.href} href={item.href}
+              className={cn(
+                'px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
+                pathname === item.href
+                  ? 'bg-accent/10 text-accent font-semibold'
+                  : 'text-foreground/80 hover:bg-muted hover:text-foreground'
+              )}>
+              {item.label}
+            </Link>
+          ))}
+        </nav>
+
+        {/* CTA */}
+        <div className="px-4 py-5 border-t border-border">
+          <Link href="/contact" onClick={() => setOpen(false)}>
+            <Button className="w-full font-semibold" style={{backgroundColor:'#d4af37', color:'#0a1628'}}>
+              Request Consultation
+            </Button>
+          </Link>
+        </div>
+      </div>
     </>
   );
 }
