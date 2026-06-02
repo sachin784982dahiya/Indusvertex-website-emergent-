@@ -2,12 +2,11 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
-import { Menu, X, Moon, Sun, ChevronDown, Search } from 'lucide-react';
+import { Menu, X, Moon, Sun, ChevronDown } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { SERVICES } from '@/lib/services-data';
-import SearchDialog from '@/components/SearchDialog';
 
 const nav = [
   { href: '/', label: 'Home' },
@@ -25,7 +24,6 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
   const { theme, setTheme } = useTheme();
   const pathname = usePathname();
 
@@ -37,7 +35,7 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  useEffect(() => { setOpen(false); setServicesOpen(false); setSearchOpen(false); }, [pathname]);
+  useEffect(() => { setOpen(false); setServicesOpen(false); }, [pathname]);
 
   // Hide on admin routes
   if (pathname?.startsWith('/admin')) return null;
@@ -100,8 +98,7 @@ export default function Navbar() {
             </nav>
 
             <div className="flex items-center gap-1">
-              <button onClick={()=>setSearchOpen(true)} className={cn('p-2 rounded-md transition-colors', transparent ? 'text-white hover:bg-white/10' : 'text-foreground hover:bg-muted')} aria-label="Search"><Search className="w-4 h-4" /></button>
-              <button onClick={() => mounted && setTheme(theme === 'dark' ? 'light' : 'dark')} className={cn('p-2 rounded-md transition-colors', transparent ? 'text-white hover:bg-white/10' : 'text-foreground hover:bg-muted')} aria-label="Toggle theme">
+<button onClick={() => mounted && setTheme(theme === 'dark' ? 'light' : 'dark')} className={cn('p-2 rounded-md transition-colors', transparent ? 'text-white hover:bg-white/10' : 'text-foreground hover:bg-muted')} aria-label="Toggle theme">
                 {mounted && theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
               </button>
               <Link href="/contact" className="hidden md:block ml-1">
@@ -127,7 +124,6 @@ export default function Navbar() {
           </div>
         )}
       </header>
-      <SearchDialog open={searchOpen} onClose={()=>setSearchOpen(false)} />
     </>
   );
 }
