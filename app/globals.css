@@ -125,9 +125,11 @@
   background: linear-gradient(135deg, #eef3ff 0%, #dde8f5 100%) !important;
 }
 
-/* ── Hero: hide bg image & overlay, show clean gradient ── */
-:root:not(.dark) .hero-bg-img   { display: none !important; }
-:root:not(.dark) .hero-overlay  { display: none !important; }
+/* ── Hero: show image subtly in light mode with a light overlay ── */
+:root:not(.dark) .hero-bg-img   { opacity: 0.15 !important; }
+:root:not(.dark) .hero-overlay  {
+  background: linear-gradient(to right, rgba(240,245,255,0.88), rgba(232,238,248,0.70), rgba(221,232,245,0.35)) !important;
+}
 
 /* ── All text inside dark sections → navy in light mode ── */
 :root:not(.dark) .gradient-navy *,

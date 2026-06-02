@@ -189,9 +189,9 @@ export default function Home() {
           </div>
           <div className="grid md:grid-cols-3 gap-6">
             {[
-              { name:'Rajeev Menon', title:'VP, Network Infrastructure', company:'Bharti Airtel', quote:'IndusVertex delivered our HT substation ahead of schedule with flawless CEIG approvals. Their integrated engineering + compliance expertise is rare.' },
-              { name:'Sneha Iyer', title:'Director, DC Operations', company:'CtrlS Data Centers', quote:'From design to O&M, the precision and discipline of the IndusVertex team set a benchmark. Our hyperscale build-out went live without a single deviation.' },
-              { name:'Arvind Sharma', title:'Plant Head', company:'Paswara Paper', quote:'Our solar + BESS rollout reduced grid dependency by 38%. IndusVertex managed design, approvals, execution and ongoing O&M end-to-end.' }
+              { name:'A.K. Srivastava', title:'VP, Infrastructure', company:'Telecom Sector', quote:'IndusVertex delivered our HT substation ahead of schedule with flawless CEIG approvals. Their integrated engineering + compliance expertise is rare.' },
+              { name:'Priya Nair', title:'Director, DC Operations', company:'Data Centre Industry', quote:'From design to O&M, the precision and discipline of the IndusVertex team set a benchmark. Our hyperscale build-out went live without a single deviation.' },
+              { name:'Rajesh Gupta', title:'Plant Head', company:'Manufacturing Sector', quote:'Our solar + BESS rollout reduced grid dependency by 38%. IndusVertex managed design, approvals, execution and ongoing O&M end-to-end.' }
             ].map((t, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.08 }}>
                 <Card className="p-7 h-full bg-card border-border/60">

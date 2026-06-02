@@ -220,9 +220,9 @@ async function handle(req, params) {
     let t = await db.collection('testimonials').find({}).toArray();
     if (!t.length) {
       const seed = [
-        { id: uuidv4(), name: 'Rajeev Menon', title: 'VP, Network Infrastructure', company: 'Bharti Airtel', quote: 'IndusVertex delivered our HT substation ahead of schedule with flawless CEIG approvals. Their integrated approach is a rare combination of engineering and compliance expertise.', rating: 5 },
-        { id: uuidv4(), name: 'Sneha Iyer', title: 'Director, Data Center Operations', company: 'CtrlS Data Centers', quote: 'From design to O&M, the precision and discipline of the IndusVertex team set a benchmark. Our hyperscale build-out went live without a single deviation.', rating: 5 },
-        { id: uuidv4(), name: 'Arvind Sharma', title: 'Plant Head', company: 'Paswara Paper', quote: 'Our solar + BESS rollout reduced grid dependency by 38%. IndusVertex managed everything — design, approvals, execution and ongoing O&M.', rating: 5 }
+        { id: uuidv4(), name: 'A.K. Srivastava', title: 'VP, Infrastructure', company: 'Telecom Sector', quote: 'IndusVertex delivered our HT substation ahead of schedule with flawless CEIG approvals. Their integrated approach is a rare combination of engineering and compliance expertise.', rating: 5 },
+        { id: uuidv4(), name: 'Priya Nair', title: 'Director, DC Operations', company: 'Data Centre Industry', quote: 'From design to O&M, the precision and discipline of the IndusVertex team set a benchmark. Our hyperscale build-out went live without a single deviation.', rating: 5 },
+        { id: uuidv4(), name: 'Rajesh Gupta', title: 'Plant Head', company: 'Manufacturing Sector', quote: 'Our solar + BESS rollout reduced grid dependency by 38%. IndusVertex managed everything — design, approvals, execution and ongoing O&M.', rating: 5 }
       ];
       await db.collection('testimonials').insertMany(seed);
       t = seed;

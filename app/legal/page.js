@@ -11,7 +11,7 @@ import { Scale, Gavel, FileText, Building, ShieldCheck, AlertTriangle, CheckCirc
 const DEFAULT_LEGAL_TEAM = [
   {
     name: 'Adv. Pradeep Kumar',
-    role: 'Associate Legal Counsel',
+    role: 'Director & Associate Legal Counsel',
     creds: 'B.Tech (IT) | LL.B | LL.M (Silver Medalist)',
     imageUrl: '/assets/adv-pradeep.png',
     bio: 'A legal and compliance specialist with 10+ years of experience in IT and electrical infrastructure, along with 3+ years of expertise in regulatory and environmental compliance. He is actively engaged in civil and criminal practice, supporting corporate and public sector matters.',
