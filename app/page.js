@@ -161,11 +161,11 @@ export default function Home() {
       </section>
 
       {/* ── WHY CHOOSE US ── */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-gray-50 dark:bg-[#0d1f3c]">
         <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6">
           <div className="text-center max-w-3xl mx-auto mb-14">
             <div className="text-xs uppercase tracking-[0.2em] text-[#16a34a] font-semibold mb-3">Why Choose IndusVertex</div>
-            <h2 className="text-4xl lg:text-5xl font-bold text-[#0a1628] leading-tight">A single, accountable partner from concept to commissioning.</h2>
+            <h2 className="text-4xl lg:text-5xl font-bold text-[#0a1628] dark:text-white leading-tight">A single, accountable partner from concept to commissioning.</h2>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
@@ -175,12 +175,12 @@ export default function Home() {
               { icon: Scale, title: 'Integrated Legal Coordination', text: 'IndusVertex Law Firm handles end-to-end legal and compliance coordination.' }
             ].map((f, i) => (
               <motion.div key={f.title} initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.08 }}>
-                <Card className="p-6 h-full hover:shadow-xl hover:-translate-y-1 transition-all border-border/60 bg-white">
+                <Card className="p-6 h-full hover:shadow-xl hover:-translate-y-1 transition-all border-border/60 bg-white dark:bg-[#0a1628] dark:border-white/10">
                   <div className="w-12 h-12 rounded-xl bg-[#0a1628] flex items-center justify-center mb-4">
                     <f.icon className="w-6 h-6 text-[#d4af37]" />
                   </div>
-                  <h3 className="font-bold text-lg mb-2 text-[#0a1628]">{f.title}</h3>
-                  <p className="text-sm text-gray-500 leading-relaxed">{f.text}</p>
+                  <h3 className="font-bold text-lg mb-2 text-[#0a1628] dark:text-white">{f.title}</h3>
+                  <p className="text-sm text-gray-500 dark:text-white/60 leading-relaxed">{f.text}</p>
                 </Card>
               </motion.div>
             ))}
@@ -189,16 +189,16 @@ export default function Home() {
       </section>
 
       {/* ── APPROACH ── */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-white dark:bg-[#081020]">
         <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6">
           <div className="text-center max-w-3xl mx-auto mb-12">
             <div className="text-xs uppercase tracking-[0.2em] text-[#16a34a] font-semibold mb-3">Our Approach</div>
-            <h2 className="text-4xl lg:text-5xl font-bold text-[#0a1628]">From idea to operations — in seven disciplined stages.</h2>
+            <h2 className="text-4xl lg:text-5xl font-bold text-[#0a1628] dark:text-white">From idea to operations — in seven disciplined stages.</h2>
           </div>
           <div className="flex flex-wrap justify-center gap-2 lg:gap-3">
             {['Concept','Feasibility','Approval','Design','Execution','Compliance','O&M'].map((step, i, arr) => (
               <div key={step} className="flex items-center">
-                <div className="px-5 py-3 rounded-full bg-white border-2 border-gray-200 font-semibold text-sm hover:border-[#16a34a] hover:text-[#16a34a] transition-colors text-[#0a1628]">
+                <div className="px-5 py-3 rounded-full bg-white dark:bg-[#0a1628] border-2 border-gray-200 dark:border-white/10 font-semibold text-sm hover:border-[#16a34a] hover:text-[#16a34a] transition-colors text-[#0a1628] dark:text-white">
                   <span className="text-[#d4af37] mr-2 font-mono font-bold">0{i+1}</span>{step}
                 </div>
                 {i < arr.length - 1 && <ArrowRight className="w-4 h-4 mx-1 text-gray-300 hidden sm:block" />}
@@ -252,7 +252,7 @@ export default function Home() {
       </section>
 
       {/* ── CLIENTS MARQUEE ── */}
-      <section className="py-16 bg-white border-y border-gray-100 overflow-hidden">
+      <section className="py-16 bg-white dark:bg-[#0a1628] border-y border-gray-100 dark:border-white/10 overflow-hidden">
         <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6 mb-10">
           <div className="text-center">
             <div className="text-xs uppercase tracking-[0.2em] text-[#16a34a] font-semibold mb-3">Trusted By Industry Leaders</div>
@@ -262,7 +262,7 @@ export default function Home() {
         <div className="relative">
           <div className="flex marquee whitespace-nowrap">
             {[...CLIENTS, ...CLIENTS].map((c, i) => (
-              <div key={i} className="inline-flex items-center justify-center gap-3 px-8 py-5 mx-2 min-w-[240px] h-24 border border-gray-100 rounded-xl bg-white shadow-sm">
+              <div key={i} className="inline-flex items-center justify-center gap-3 px-8 py-5 mx-2 min-w-[240px] h-24 border border-gray-100 dark:border-white/10 rounded-xl bg-white dark:bg-white/5 shadow-sm">
                 <ClientLogo client={c} variant="inline" size="md" />
               </div>
             ))}
@@ -271,11 +271,11 @@ export default function Home() {
       </section>
 
       {/* ── TESTIMONIALS ── */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-gray-50 dark:bg-[#0d1f3c]">
         <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6">
           <div className="text-center mb-12">
             <div className="text-xs uppercase tracking-[0.2em] text-[#16a34a] font-semibold mb-3">Client Voices</div>
-            <h2 className="text-4xl lg:text-5xl font-bold text-[#0a1628]">What our clients say</h2>
+            <h2 className="text-4xl lg:text-5xl font-bold text-[#0a1628] dark:text-white">What our clients say</h2>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
             {[
@@ -284,13 +284,13 @@ export default function Home() {
               { name:'Rajesh Gupta', title:'Plant Head', company:'Manufacturing Sector', quote:'Our solar + BESS rollout reduced grid dependency by 38%. IndusVertex managed design, approvals, execution and ongoing O&M end-to-end.' }
             ].map((t, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.08 }}>
-                <Card className="p-7 h-full bg-white border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                <Card className="p-7 h-full bg-white dark:bg-[#0a1628] border-gray-100 dark:border-white/10 shadow-sm hover:shadow-md transition-shadow">
                   <Quote className="w-8 h-8 text-[#16a34a] mb-4" />
-                  <p className="text-gray-600 leading-relaxed mb-5 italic">"{t.quote}"</p>
+                  <p className="text-gray-600 dark:text-white/70 leading-relaxed mb-5 italic">"{t.quote}"</p>
                   <div className="flex gap-1 mb-3">{[...Array(5)].map((_,j)=><Star key={j} className="w-4 h-4 fill-[#d4af37] text-[#d4af37]" />)}</div>
-                  <div className="border-t border-gray-100 pt-3">
-                    <div className="font-bold text-[#0a1628]">{t.name}</div>
-                    <div className="text-sm text-gray-500">{t.title} · {t.company}</div>
+                  <div className="border-t border-gray-100 dark:border-white/10 pt-3">
+                    <div className="font-bold text-[#0a1628] dark:text-white">{t.name}</div>
+                    <div className="text-sm text-gray-500 dark:text-white/50">{t.title} · {t.company}</div>
                   </div>
                 </Card>
               </motion.div>
