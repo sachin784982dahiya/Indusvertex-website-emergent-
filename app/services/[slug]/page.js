@@ -37,13 +37,13 @@ export default function ServiceDetail() {
 
   return (
     <div>
-      <section className="pt-32 pb-16 relative overflow-hidden gradient-navy text-white">
+      <section className="min-h-[65vh] flex items-center relative overflow-hidden gradient-navy text-white">
         <div className="absolute inset-0">
-          <img src={service.image} alt={service.title} className="w-full h-full object-cover opacity-30" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#050e1c] via-[#050e1c]/85 to-[#050e1c]/40" />
+          <img src={service.image} alt={service.title} className="hero-bg-img w-full h-full object-cover opacity-30" />
+          <div className="absolute inset-0 hero-overlay" />
           <div className="absolute inset-0 grid-pattern opacity-30" />
         </div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6 pt-24 pb-16">
           <Link href="/services" className="inline-flex items-center gap-1.5 text-xs text-white/70 hover:text-white mb-5"><ArrowLeft className="w-3.5 h-3.5" />All services</Link>
           <div className="flex items-center gap-4 mb-5">
             <div className="w-14 h-14 rounded-xl gradient-gold flex items-center justify-center"><Ic className="w-7 h-7" style={{color:'#0a1628'}} /></div>
@@ -55,7 +55,7 @@ export default function ServiceDetail() {
       </section>
 
       <section className="py-16 bg-background">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-3 gap-10">
+        <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6 grid lg:grid-cols-3 gap-10">
           <div className="lg:col-span-2 space-y-10">
             <div>
               <div className="text-xs uppercase tracking-[0.2em] text-accent font-semibold mb-3">Overview</div>
@@ -117,7 +117,7 @@ export default function ServiceDetail() {
       </section>
 
       <section className="py-16 bg-muted/30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6">
           <div className="text-xs uppercase tracking-[0.2em] text-accent font-semibold mb-3">Related Services</div>
           <h2 className="text-3xl font-bold mb-8">Explore related capabilities</h2>
           <div className="grid md:grid-cols-3 gap-6">

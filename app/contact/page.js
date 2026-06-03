@@ -26,9 +26,9 @@ export default function Contact() {
 
   return (
     <div>
-      <section className="pt-36 pb-20 gradient-navy text-white relative overflow-hidden">
+      <section className="min-h-[65vh] flex items-center gradient-navy text-white relative overflow-hidden">
         <div className="absolute inset-0 grid-pattern opacity-30" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6 pt-24 pb-16">
           <div className="text-xs uppercase tracking-[0.2em] text-gold font-semibold mb-3">Get in Touch</div>
           <h1 className="text-5xl lg:text-6xl font-bold max-w-4xl leading-tight">Let’s build something exceptional together.</h1>
           <p className="mt-6 text-lg text-white/75 max-w-3xl">Whether it’s a new project, regulatory advisory, or a partnership opportunity — our team will respond within 24 hours.</p>
@@ -36,7 +36,7 @@ export default function Contact() {
       </section>
 
       <section className="py-20 bg-background">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-5 gap-10">
+        <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6 grid lg:grid-cols-5 gap-10">
           <div className="lg:col-span-2 space-y-5">
             {[
               { icon: MapPin, title:'Head Office', text: COMPANY.address },

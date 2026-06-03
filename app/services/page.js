@@ -29,9 +29,9 @@ export default function Services() {
 
   return (
     <div>
-      <section className="pt-36 pb-20 gradient-navy text-white relative overflow-hidden">
+      <section className="min-h-[65vh] flex items-center gradient-navy text-white relative overflow-hidden">
         <div className="absolute inset-0 grid-pattern opacity-30" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6 pt-24 pb-16">
           <div className="text-xs uppercase tracking-[0.2em] text-gold font-semibold mb-3">Our Services</div>
           <h1 className="text-5xl lg:text-6xl font-bold max-w-4xl leading-tight">Integrated engineering, infrastructure & compliance solutions.</h1>
           <p className="mt-6 text-lg text-white/75 max-w-3xl">11 service verticals — delivered end-to-end with single-partner accountability across the entire project lifecycle.</p>
@@ -39,7 +39,7 @@ export default function Services() {
       </section>
 
       <section className="py-20 bg-background">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-20">
+        <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6 space-y-20">
           {SERVICES.map((s, idx) => {
             const Ic = ICONS[s.icon] || Zap;
             const reverse = idx % 2 === 1;
@@ -48,7 +48,7 @@ export default function Services() {
                 <div className={`grid lg:grid-cols-2 gap-10 items-center ${reverse ? 'lg:[&>*:first-child]:order-2' : ''}`}>
                   <div className="relative rounded-2xl overflow-hidden h-80 lg:h-96 shadow-2xl">
                     <img src={s.image} alt={s.title} className="w-full h-full object-cover" />
-                    <div className="absolute inset-0 bg-gradient-to-tr from-[#050e1c]/85 via-transparent to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-tr from-black/60 via-transparent to-transparent" />
                     <div className="absolute bottom-5 left-5 right-5">
                       <div className="w-14 h-14 rounded-xl gradient-gold flex items-center justify-center mb-3"><Ic className="w-7 h-7 text-navy" style={{color:'#0a1628'}} /></div>
                       <div className="text-xs uppercase tracking-[0.2em] text-gold font-semibold">Service 0{idx+1}</div>
@@ -75,7 +75,7 @@ export default function Services() {
       </section>
 
       <section id="inquiry" className="py-24 bg-muted/30">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-6">
           <div className="text-center mb-10">
             <div className="text-xs uppercase tracking-[0.2em] text-accent font-semibold mb-3">Service Inquiry</div>
             <h2 className="text-4xl lg:text-5xl font-bold">Tell us about your project</h2>

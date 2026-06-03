@@ -106,7 +106,7 @@ export default function Legal() {
       <section className="pt-36 pb-24 relative overflow-hidden section-dark">
 
         <div className="absolute inset-0 grid-pattern opacity-20" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-white">
+        <div className="relative max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6 text-white">
           <div className="flex items-center gap-3 mb-5">
             <div className="w-14 h-14 rounded-xl gradient-gold flex items-center justify-center"><Scale className="w-7 h-7" style={{color:'#0a1628'}} /></div>
             <div>
@@ -124,7 +124,7 @@ export default function Legal() {
       </section>
 
       <section className="py-20 bg-background">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6">
           <div className="grid md:grid-cols-3 gap-6 mb-16">
             {[
               { icon: Building, title:'Corporate & Banking', text:'Advisory across corporate compliance, SARFAESI matters and financial recovery for banks, NBFCs and corporates.' },

@@ -17,9 +17,9 @@ export default function Team() {
 
   return (
     <div>
-      <section className="pt-36 pb-20 gradient-navy text-white relative overflow-hidden">
+      <section className="min-h-[65vh] flex items-center gradient-navy text-white relative overflow-hidden">
         <div className="absolute inset-0 grid-pattern opacity-30" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6 pt-24 pb-16">
           <div className="text-xs uppercase tracking-[0.2em] text-gold font-semibold mb-3">Leadership & Team</div>
           <h1 className="text-5xl lg:text-6xl font-bold max-w-4xl leading-tight">The minds engineering IndusVertex.</h1>
           <p className="mt-6 text-lg text-white/75 max-w-3xl">A multi-disciplinary team of engineers, financial strategists and legal experts with decades of combined experience across power, infrastructure and regulatory domains.</p>
@@ -27,7 +27,7 @@ export default function Team() {
       </section>
 
       <section className="py-20 bg-background">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6">
           <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-7">
             {team.map((m, i) => (
               <motion.div
@@ -65,7 +65,7 @@ export default function Team() {
       </section>
 
       <section className="py-16 bg-muted/30">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-6 text-center">
           <h2 className="text-3xl lg:text-4xl font-bold mb-4">Want to know more about our team?</h2>
           <p className="text-foreground/70 max-w-2xl mx-auto">Reach out for a confidential discussion about engineering, infrastructure, compliance or legal advisory — our leadership will respond personally.</p>
         </div>

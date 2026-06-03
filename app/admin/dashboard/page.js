@@ -108,7 +108,7 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-muted/20 pt-24">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6 py-8">
         <div className="flex justify-between items-center mb-8">
           <div>
             <div className="text-xs uppercase tracking-[0.18em] text-accent font-semibold">Admin Console</div>

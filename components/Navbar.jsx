@@ -14,7 +14,7 @@ const nav = [
   { href: '/services', label: 'Services', icon: Briefcase, mega: true },
   { href: '/projects', label: 'Projects', icon: FolderOpen },
   { href: '/clients', label: 'Clients', icon: Users },
-  { href: '/legal', label: 'Legal', icon: Scale },
+  // { href: '/legal', label: 'Legal', icon: Scale }, // temporarily hidden
   { href: '/team', label: 'Team', icon: UserCircle },
   { href: '/contact', label: 'Contact', icon: Phone },
 ];
@@ -49,15 +49,17 @@ export default function Navbar() {
         'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
         transparent ? 'bg-transparent' : 'bg-background/85 backdrop-blur-xl border-b border-border shadow-sm'
       )}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6">
           <div className="flex items-center justify-between h-20">
             <Link href="/" className="flex items-center gap-2.5 group">
-              <div className="relative w-11 h-11 rounded-lg bg-white shadow-md flex items-center justify-center p-1 ring-1 ring-black/5">
+              <div className="relative w-12 h-12 bg-white rounded-xl shadow-md flex items-center justify-center p-1 ring-1 ring-black/5 flex-shrink-0">
                 <img src="/assets/logo-symbol.png" alt="IndusVertex" className="w-full h-full object-contain" />
               </div>
               <div className="flex flex-col leading-tight">
-                <span className={cn('font-bold text-base tracking-tight', transparent ? 'text-white' : 'text-foreground')}>IndusVertex</span>
-                <span className={cn('text-[10px] uppercase tracking-[0.18em]', transparent ? 'text-white/70' : 'text-muted-foreground')}>Private Limited</span>
+                <span className="font-bold text-lg tracking-tight">
+                  <span className="text-[#0a1628] dark:text-white">Indus</span><span className="text-[#16a34a]">Vertex</span>
+                </span>
+                <span className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">Private Limited</span>
               </div>
             </Link>
 

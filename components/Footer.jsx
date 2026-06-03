@@ -10,7 +10,7 @@ export default function Footer() {
   return (
     <footer className="gradient-navy text-white relative overflow-hidden">
       <div className="absolute inset-0 grid-pattern opacity-30" />
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-8">
+      <div className="relative max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6 pt-16 pb-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
           <div className="lg:col-span-2">
             <div className="flex items-center gap-3 mb-5">
@@ -56,7 +56,7 @@ export default function Footer() {
           <div>
             <h4 className="text-xs uppercase tracking-[0.18em] text-gold mb-4 font-semibold">Connect</h4>
             <ul className="space-y-2.5 text-sm text-white/70">
-              <li><Link href="/legal" className="hover:text-white">IndusVertex Law Firm</Link></li>
+              {/* <li><Link href="/legal" className="hover:text-white">IndusVertex Law Firm</Link></li> */}
               <li><a href={`mailto:${COMPANY.emails.business}`} className="hover:text-white">Business Inquiry</a></li>
               <li><a href={`mailto:${COMPANY.emails.legal}`} className="hover:text-white">Legal Inquiry</a></li>
               <li><Link href="/admin" className="hover:text-white">Admin Login</Link></li>

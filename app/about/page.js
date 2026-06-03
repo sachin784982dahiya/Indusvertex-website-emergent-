@@ -16,9 +16,9 @@ export default function About() {
 
   return (
     <div>
-      <section className="pt-36 pb-20 gradient-navy text-white relative overflow-hidden">
+      <section className="min-h-[65vh] flex items-center gradient-navy text-white relative overflow-hidden">
         <div className="absolute inset-0 grid-pattern opacity-30" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6 pt-24 pb-16">
           <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
             <div className="text-xs uppercase tracking-[0.2em] text-gold font-semibold mb-3">About IndusVertex</div>
             <h1 className="text-5xl lg:text-6xl font-bold max-w-4xl leading-tight">An integrated engineering, infrastructure & advisory company — built for scale.</h1>
@@ -28,7 +28,7 @@ export default function About() {
       </section>
 
       <section className="py-20 bg-background">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-5 gap-12 items-start">
+        <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6 grid lg:grid-cols-5 gap-12 items-start">
           <div className="lg:col-span-3">
             <div className="text-xs uppercase tracking-[0.2em] text-accent font-semibold mb-3">Company Overview</div>
             <h2 className="text-3xl lg:text-4xl font-bold leading-tight mb-6">A single-point partner for complex infrastructure & compliance.</h2>
@@ -52,7 +52,7 @@ export default function About() {
       </section>
 
       <section className="py-20 bg-muted/30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6">
           <div className="max-w-3xl mb-12">
             <div className="text-xs uppercase tracking-[0.2em] text-accent font-semibold mb-3">Core Strengths</div>
             <h2 className="text-4xl lg:text-5xl font-bold leading-tight">What makes IndusVertex different.</h2>
@@ -76,7 +76,7 @@ export default function About() {
       </section>
 
       <section className="py-24 bg-background">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6">
           <div className="text-center max-w-3xl mx-auto mb-14">
             <div className="text-xs uppercase tracking-[0.2em] text-accent font-semibold mb-3">Our Business Approach</div>
             <h2 className="text-4xl lg:text-5xl font-bold">From idea to operations — a disciplined seven-stage methodology.</h2>
@@ -95,7 +95,7 @@ export default function About() {
       </section>
 
       <section className="py-20 bg-muted/30">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-6 text-center">
           <Users className="w-12 h-12 mx-auto text-accent mb-4" />
           <h2 className="text-3xl lg:text-4xl font-bold mb-4">Meet the leadership behind IndusVertex</h2>
           <p className="text-foreground/70 mb-8 max-w-2xl mx-auto">A team of engineers, financial strategists and legal experts — with decades of combined experience across power, infrastructure and regulatory domains.</p>

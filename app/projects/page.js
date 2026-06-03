@@ -30,9 +30,9 @@ export default function Projects() {
 
   return (
     <div>
-      <section className="pt-36 pb-20 gradient-navy text-white relative overflow-hidden">
+      <section className="min-h-[65vh] flex items-center gradient-navy text-white relative overflow-hidden">
         <div className="absolute inset-0 grid-pattern opacity-30" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6 pt-24 pb-16">
           <div className="text-xs uppercase tracking-[0.2em] text-gold font-semibold mb-3">Featured Projects</div>
           <h1 className="text-5xl lg:text-6xl font-bold max-w-4xl leading-tight">Engineering excellence — delivered at scale.</h1>
           <p className="mt-6 text-lg text-white/75 max-w-3xl">A curated selection of projects across power, data centres, renewable energy, EV infrastructure, environmental and IT.</p>
@@ -40,7 +40,7 @@ export default function Projects() {
       </section>
 
       <section className="py-16 bg-background">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6">
           <div className="flex flex-wrap gap-2 mb-8">
             {cats.map(c => (
               <button key={c} onClick={()=>setFilter(c)} className={`px-4 py-2 rounded-full text-sm font-semibold border-2 transition-colors ${filter===c ? 'bg-foreground text-background border-foreground' : 'bg-card border-border hover:border-accent'}`}>{c}</button>
