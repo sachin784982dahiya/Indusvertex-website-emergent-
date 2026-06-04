@@ -118,7 +118,7 @@ export default function ServicesWheel() {
                     transform: 'scale(1)',
                   }}>
                   {/* Background image */}
-                  <img src={s.image} alt={s.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                  <img src={s.image.replace('q=85','q=55').replace('q=80','q=55')} alt={s.title} loading="lazy" decoding="async" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
 
                   {/* Base dark overlay */}
                   <div className="absolute inset-0" style={{ background: 'rgba(8,18,36,0.42)' }} />

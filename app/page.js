@@ -117,15 +117,15 @@ export default function Home() {
 
           {/* Left — city skyline image */}
           <div className="absolute left-0 top-0 bottom-0" style={{ width: '38%', overflow: 'hidden' }}>
-            <img src="https://images.unsplash.com/photo-1486325212027-8081e485255e?crop=entropy&cs=srgb&fm=jpg&q=80&w=800"
-              className="w-full h-full object-cover object-center" style={{ opacity: 0.65 }} />
+            <img src="https://images.unsplash.com/photo-1486325212027-8081e485255e?crop=entropy&cs=srgb&fm=jpg&q=55&w=800"
+              loading="lazy" decoding="async" className="w-full h-full object-cover object-center" style={{ opacity: 0.65 }} />
             <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, transparent 60%, white 100%)' }} />
           </div>
 
           {/* Right — solar/wind energy image */}
           <div className="absolute right-0 top-0 bottom-0" style={{ width: '38%', overflow: 'hidden' }}>
-            <img src="https://images.unsplash.com/photo-1509391366360-2e959784a276?crop=entropy&cs=srgb&fm=jpg&q=80&w=800"
-              className="w-full h-full object-cover object-center" style={{ opacity: 0.65 }} />
+            <img src="https://images.unsplash.com/photo-1509391366360-2e959784a276?crop=entropy&cs=srgb&fm=jpg&q=55&w=800"
+              loading="lazy" decoding="async" className="w-full h-full object-cover object-center" style={{ opacity: 0.65 }} />
             <div className="absolute inset-0" style={{ background: 'linear-gradient(to left, transparent 60%, white 100%)' }} />
           </div>
 
@@ -231,7 +231,7 @@ export default function Home() {
                   <Link href={`/services/${s.slug}`} className="block group">
                     <div className="rounded-xl overflow-hidden bg-white/5 border border-white/10 hover:bg-white/10 transition-all h-full">
                       <div className="relative h-44 overflow-hidden">
-                        <img src={s.image} alt={s.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                        <img src={s.image} alt={s.title} loading="lazy" decoding="async" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
                         <div className="absolute top-4 left-4 w-10 h-10 rounded-lg bg-[#d4af37] flex items-center justify-center">
                           <Ic className="w-5 h-5" style={{ color: '#0a1628' }} />
