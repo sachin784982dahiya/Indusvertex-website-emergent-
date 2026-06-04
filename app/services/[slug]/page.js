@@ -39,18 +39,18 @@ export default function ServiceDetail() {
     <div>
       <section className="min-h-[65vh] flex items-center relative overflow-hidden gradient-navy text-white">
         <div className="absolute inset-0">
-          <img src={service.image} alt={service.title} className="hero-bg-img w-full h-full object-cover opacity-30" />
-          <div className="absolute inset-0 hero-overlay" />
+          <img src={service.image} alt={service.title} className="hero-bg-img w-full h-full object-cover opacity-60" />
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(10,22,40,0.80) 0%, rgba(10,22,40,0.50) 100%)' }} />
           <div className="absolute inset-0 grid-pattern opacity-30" />
         </div>
         <div className="relative max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6 pt-24 pb-16">
-          <Link href="/services" className="inline-flex items-center gap-1.5 text-xs text-white/70 hover:text-white mb-5"><ArrowLeft className="w-3.5 h-3.5" />All services</Link>
+          <Link href="/services" className="inline-flex items-center gap-1.5 text-xs hover:text-white mb-5" style={{ color: 'rgba(255,255,255,0.80)' }}><ArrowLeft className="w-3.5 h-3.5" />All services</Link>
           <div className="flex items-center gap-4 mb-5">
             <div className="w-14 h-14 rounded-xl gradient-gold flex items-center justify-center"><Ic className="w-7 h-7" style={{color:'#0a1628'}} /></div>
             <div className="text-xs uppercase tracking-[0.2em] text-gold font-semibold">IndusVertex Service</div>
           </div>
-          <h1 className="text-4xl lg:text-6xl font-bold max-w-4xl leading-tight">{service.title}</h1>
-          <p className="mt-6 text-lg text-white/75 max-w-3xl">{service.short}</p>
+          <h1 className="text-4xl lg:text-6xl font-bold max-w-4xl leading-tight" style={{ color: '#ffffff' }}>{service.title}</h1>
+          <p className="mt-6 text-lg max-w-3xl" style={{ color: 'rgba(255,255,255,0.85)' }}>{service.short}</p>
         </div>
       </section>
 

@@ -30,7 +30,16 @@ export default function Services() {
   return (
     <div>
       <section className="min-h-[65vh] flex items-center gradient-navy text-white relative overflow-hidden">
-        <div className="absolute inset-0 grid-pattern opacity-30" />
+        {/* Background image */}
+        <img
+          src="https://images.unsplash.com/photo-1486325212027-8081e485255e?crop=entropy&cs=srgb&fm=jpg&q=70&w=1800"
+          alt="Services background"
+          className="absolute inset-0 w-full h-full object-cover object-center"
+          style={{ opacity: 0.35 }}
+        />
+        {/* Dark gradient overlay for text readability */}
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(10,22,40,0.85) 0%, rgba(10,22,40,0.55) 100%)' }} />
+        <div className="absolute inset-0 grid-pattern opacity-20" />
         <div className="relative max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6 pt-24 pb-16">
           <div className="text-xs uppercase tracking-[0.2em] text-gold font-semibold mb-3">Our Services</div>
           <h1 className="text-5xl lg:text-6xl font-bold max-w-4xl leading-tight">Integrated engineering, infrastructure & compliance solutions.</h1>
