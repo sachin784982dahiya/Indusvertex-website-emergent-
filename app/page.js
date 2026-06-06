@@ -71,15 +71,6 @@ export default function Home() {
                 Empowering industries with end-to-end infrastructure, advanced technology, and environmental responsibility to build a smarter and sustainable future.
               </p>
 
-              {/* CTA buttons */}
-              <div className="flex flex-wrap gap-3 mb-10">
-                <Link href="/contact">
-                  <Button size="lg" className="font-semibold px-7" style={{ backgroundColor: '#0a1628', color: '#fff', height: '52px' }}>
-                    Request Consultation <ArrowRight className="ml-2 w-4 h-4" />
-                  </Button>
-                </Link>
-              </div>
-
               {/* 4 badges */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 {[
@@ -172,7 +163,7 @@ export default function Home() {
               { icon: Zap, title: 'Technical Engineering Excellence', text: 'Multi-disciplinary expertise across power, HVAC, civil, IT and automation.' },
               { icon: ShieldCheck, title: 'Regulatory & Compliance Expertise', text: 'CEIG, CTE/CTO, PCB, Fire NOC and statutory clearances under one roof.' },
               { icon: ClipboardCheck, title: 'Strong Project Execution & O&M', text: 'Rigorous delivery discipline with long-term operations and maintenance support.' },
-              { icon: Scale, title: 'Integrated Legal Coordination', text: 'IndusVertex Law Firm handles end-to-end legal and compliance coordination.' }
+              { icon: Leaf, title: 'Sustainable & Green Engineering', text: 'Eco-conscious designs integrating solar, BESS and environmental compliance from day one.' }
             ].map((f, i) => (
               <div key={f.title}>
                 <Card className="p-6 h-full hover:shadow-xl hover:-translate-y-1 transition-all border-border/60 bg-white dark:bg-[#0a1628] dark:border-white/10">
@@ -259,14 +250,29 @@ export default function Home() {
             <h2 className="text-3xl lg:text-4xl font-bold text-[#0a1628]">Partnering with India's leading enterprises</h2>
           </div>
         </div>
-        <div className="relative">
-          <div className="flex marquee whitespace-nowrap">
-            {[...CLIENTS, ...CLIENTS].map((c, i) => (
-              <div key={i} className="inline-flex items-center justify-center gap-3 px-8 py-5 mx-2 min-w-[240px] h-24 border border-gray-100 dark:border-white/10 rounded-xl bg-white dark:bg-white/5 shadow-sm">
+        <div className="relative px-4">
+          {/* Left arrow */}
+          <button
+            onClick={() => document.getElementById('clients-scroll').scrollBy({ left: -280, behavior: 'smooth' })}
+            className="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white dark:bg-[#0a1628] border border-gray-200 dark:border-white/20 shadow-md flex items-center justify-center hover:scale-110 transition-all">
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-[#0a1628] dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+          </button>
+
+          {/* Scrollable row */}
+          <div id="clients-scroll" className="flex overflow-x-auto gap-3 px-10 pb-2 scroll-smooth" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+            {CLIENTS.map((c, i) => (
+              <div key={i} className="inline-flex flex-shrink-0 items-center justify-center gap-3 px-8 py-5 min-w-[240px] h-24 border border-gray-100 dark:border-white/10 rounded-xl bg-white dark:bg-white/5 shadow-sm">
                 <ClientLogo client={c} variant="inline" size="md" />
               </div>
             ))}
           </div>
+
+          {/* Right arrow */}
+          <button
+            onClick={() => document.getElementById('clients-scroll').scrollBy({ left: 280, behavior: 'smooth' })}
+            className="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white dark:bg-[#0a1628] border border-gray-200 dark:border-white/20 shadow-md flex items-center justify-center hover:scale-110 transition-all">
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-[#0a1628] dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+          </button>
         </div>
       </section>
 
