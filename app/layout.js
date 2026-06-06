@@ -9,6 +9,12 @@ import FloatingButtons from '@/components/FloatingButtons';
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
 const playfair = Playfair_Display({ subsets: ['latin'], variable: '--font-playfair', display: 'swap' });
 
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+};
+
 export const metadata = {
   title: 'IndusVertex Private Limited — Transforming Vision into Infrastructure Reality',
   description: 'IndusVertex Private Limited is an integrated engineering, infrastructure, compliance, legal advisory, and technology solutions company delivering end-to-end services across power infrastructure, renewable energy, data centers, EV infrastructure, civil construction, environmental solutions, automation, compliance, and project management.',

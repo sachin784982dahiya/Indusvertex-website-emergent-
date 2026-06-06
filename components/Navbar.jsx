@@ -78,7 +78,7 @@ export default function Navbar() {
                       {servicesOpen && (
                         <div className="absolute top-full left-1/2 -translate-x-1/2 pt-3 w-[640px]">
                           <div className="bg-popover border border-border rounded-xl shadow-2xl p-3 grid grid-cols-2 gap-1">
-                            {SERVICES.map(s => (
+                            {SERVICES.filter(s => s.slug !== 'legal-advisory').map(s => (
                               <Link key={s.slug} href={`/services/${s.slug}`} className="text-sm px-3 py-2 rounded-md hover:bg-muted text-foreground/80 hover:text-foreground transition-colors">
                                 {s.title}
                               </Link>

@@ -2,12 +2,12 @@
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
-import { ArrowRight, CheckCircle2, ShieldCheck, Award, Zap, BatteryCharging, Server, Building2, Cpu, Plug, ShieldAlert, Leaf, ClipboardCheck, Network, Scale, Star, Quote, Users, Handshake, PackageCheck } from 'lucide-react';
+import { ArrowRight, ShieldCheck, Zap, BatteryCharging, Server, Building2, Cpu, Plug, ShieldAlert, Leaf, ClipboardCheck, Network, Scale, Star, Quote, Users, PackageCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { SERVICES, CLIENTS, COMPANY } from '@/lib/services-data';
 import ClientLogo from '@/components/ClientLogo';
-import ServicesWheel from '@/components/ServicesWheel';
+import HeroCarousel from '@/components/HeroCarousel';
 
 const ICONS = { Zap, BatteryCharging, Server, Building2, Cpu, Plug, ShieldAlert, Leaf, ClipboardCheck, Network, Scale };
 
@@ -43,7 +43,7 @@ export default function Home() {
         </div>
 
         <div className="relative max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6 pt-12 pb-48 w-full">
-          <div className="grid lg:grid-cols-[1fr_1.1fr] gap-8 xl:gap-10 items-center">
+          <div className="grid lg:grid-cols-2 gap-8 xl:gap-12 items-center">
 
             {/* LEFT — Text */}
             <motion.div initial={{ opacity: 0, x: -40 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.7 }}>
@@ -103,8 +103,8 @@ export default function Home() {
               transition={{ duration: 0.7, delay: 0.2 }}
               className="hidden lg:flex items-center justify-center pr-4"
               style={{ minWidth: 0 }}>
-              <div className="w-full max-w-[640px]">
-                <ServicesWheel />
+              <div className="w-full max-w-[580px]">
+                <HeroCarousel />
               </div>
             </motion.div>
           </div>
@@ -151,10 +151,10 @@ export default function Home() {
         <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
             {stats.map((s, i) => (
-              <motion.div key={s.label} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.08 }} className="text-center">
+              <div key={s.label} className="text-center">
                 <div className="text-4xl lg:text-5xl font-bold text-[#d4af37] mb-1"><Counter end={s.value} suffix={s.suffix} /></div>
                 <div className="text-xs text-white/60 uppercase tracking-wider font-medium">{s.label}</div>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
@@ -174,7 +174,7 @@ export default function Home() {
               { icon: ClipboardCheck, title: 'Strong Project Execution & O&M', text: 'Rigorous delivery discipline with long-term operations and maintenance support.' },
               { icon: Scale, title: 'Integrated Legal Coordination', text: 'IndusVertex Law Firm handles end-to-end legal and compliance coordination.' }
             ].map((f, i) => (
-              <motion.div key={f.title} initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.08 }}>
+              <div key={f.title}>
                 <Card className="p-6 h-full hover:shadow-xl hover:-translate-y-1 transition-all border-border/60 bg-white dark:bg-[#0a1628] dark:border-white/10">
                   <div className="w-12 h-12 rounded-xl bg-[#0a1628] flex items-center justify-center mb-4">
                     <f.icon className="w-6 h-6 text-[#d4af37]" />
@@ -182,7 +182,7 @@ export default function Home() {
                   <h3 className="font-bold text-lg mb-2 text-[#0a1628] dark:text-white">{f.title}</h3>
                   <p className="text-sm text-gray-500 dark:text-white/60 leading-relaxed">{f.text}</p>
                 </Card>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
@@ -227,7 +227,7 @@ export default function Home() {
             {featured.map((s, i) => {
               const Ic = ICONS[s.icon] || Zap;
               return (
-                <motion.div key={s.slug} initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.06 }}>
+                <div key={s.slug}>
                   <Link href={`/services/${s.slug}`} className="block group">
                     <div className="rounded-xl overflow-hidden bg-white/5 border border-white/10 hover:bg-white/10 transition-all h-full">
                       <div className="relative h-44 overflow-hidden">
@@ -244,7 +244,7 @@ export default function Home() {
                       </div>
                     </div>
                   </Link>
-                </motion.div>
+                </div>
               );
             })}
           </div>
@@ -283,7 +283,7 @@ export default function Home() {
               { name:'Priya Nair', title:'Director, DC Operations', company:'Data Centre Industry', quote:'From design to O&M, the precision and discipline of the IndusVertex team set a benchmark. Our hyperscale build-out went live without a single deviation.' },
               { name:'Rajesh Gupta', title:'Plant Head', company:'Manufacturing Sector', quote:'Our solar + BESS rollout reduced grid dependency by 38%. IndusVertex managed design, approvals, execution and ongoing O&M end-to-end.' }
             ].map((t, i) => (
-              <motion.div key={i} initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.08 }}>
+              <div key={i}>
                 <Card className="p-7 h-full bg-white dark:bg-[#0a1628] border-gray-100 dark:border-white/10 shadow-sm hover:shadow-md transition-shadow">
                   <Quote className="w-8 h-8 text-[#16a34a] mb-4" />
                   <p className="text-gray-600 dark:text-white/70 leading-relaxed mb-5 italic">"{t.quote}"</p>
@@ -293,7 +293,7 @@ export default function Home() {
                     <div className="text-sm text-gray-500 dark:text-white/50">{t.title} · {t.company}</div>
                   </div>
                 </Card>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
