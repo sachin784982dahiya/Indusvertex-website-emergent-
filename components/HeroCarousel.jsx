@@ -13,7 +13,7 @@ const SLIDES = [
     accent: '#16a34a',
   },
   {
-    slug: 'data-centre-development',
+    slug: 'data-centre-hvac',
     tag: 'Data Centre Infrastructure',
     title: 'Data Centre Design, Build & Operations',
     desc: 'Hyperscale and enterprise data centres — precision cooling, power redundancy (N+1/2N), structured cabling and full lifecycle O&M.',
