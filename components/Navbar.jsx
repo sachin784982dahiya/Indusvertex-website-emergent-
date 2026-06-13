@@ -60,6 +60,7 @@ export default function Navbar() {
                   <span className="text-[#0a1628] dark:text-white">Indus</span><span className="text-[#16a34a]">Vertex</span>
                 </span>
                 <span className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">Private Limited</span>
+                <span className="hidden lg:block text-[11px] tracking-[0.06em] text-[#b8860b] font-medium mt-0.5">Transforming Vision into Infrastructure Reality</span>
               </div>
             </Link>
 

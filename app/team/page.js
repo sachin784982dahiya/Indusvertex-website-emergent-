@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { Card } from '@/components/ui/card';
 import { TEAM as STATIC_TEAM } from '@/lib/services-data';
 import PersonAvatar from '@/components/PersonAvatar';
-import { Linkedin, Mail, Award, Briefcase } from 'lucide-react';
+import { Award, Briefcase } from 'lucide-react';
 
 export default function Team() {
   const [team, setTeam] = useState(STATIC_TEAM);
@@ -51,10 +51,6 @@ export default function Team() {
                         <div className="text-xs text-muted-foreground uppercase tracking-wider">{m.creds}</div>
                       </div>
                       <p className="mt-4 text-foreground/75 leading-relaxed text-sm">{m.bio}</p>
-                      <div className="flex gap-2 mt-5">
-                        <a href={m.linkedin || '#'} target="_blank" rel="noreferrer" className="w-9 h-9 rounded-md border border-border flex items-center justify-center hover:bg-muted hover:border-accent transition-colors"><Linkedin className="w-4 h-4" /></a>
-                        <a href={`mailto:info@indusvertex.com`} className="w-9 h-9 rounded-md border border-border flex items-center justify-center hover:bg-muted hover:border-accent transition-colors"><Mail className="w-4 h-4" /></a>
-                      </div>
                     </div>
                   </div>
                 </Card>

@@ -1,39 +1,20 @@
 'use client';
-import { useState } from 'react';
 import { useParams, notFound } from 'next/navigation';
 import Link from 'next/link';
 import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
 import { Zap, BatteryCharging, Server, Building2, Cpu, Plug, ShieldAlert, Leaf, ClipboardCheck, Network, Scale, CheckCircle2, ArrowRight, ArrowLeft } from 'lucide-react';
 import { SERVICES } from '@/lib/services-data';
-import { toast } from 'sonner';
 
 const ICONS = { Zap, BatteryCharging, Server, Building2, Cpu, Plug, ShieldAlert, Leaf, ClipboardCheck, Network, Scale };
 
 export default function ServiceDetail() {
   const { slug } = useParams();
   const service = SERVICES.find(s => s.slug === slug);
-  const [form, setForm] = useState({ name:'', email:'', phone:'', message:'' });
-  const [loading, setLoading] = useState(false);
 
   if (!service) return notFound();
 
   const Ic = ICONS[service.icon] || Zap;
   const related = SERVICES.filter(s => s.slug !== slug).slice(0, 3);
-
-  const submit = async (e) => {
-    e.preventDefault(); setLoading(true);
-    try {
-      const res = await fetch('/api/service-inquiry', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ ...form, service: service.title }) });
-      const d = await res.json();
-      if (d.success) { toast.success(d.message); setForm({ name:'', email:'', phone:'', message:'' }); }
-      else toast.error(d.error || 'Submission failed');
-    } catch { toast.error('Network error'); }
-    setLoading(false);
-  };
 
   return (
     <div>
@@ -55,8 +36,8 @@ export default function ServiceDetail() {
       </section>
 
       <section className="py-16 bg-background">
-        <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6 grid lg:grid-cols-3 gap-10">
-          <div className="lg:col-span-2 space-y-10">
+        <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6">
+          <div className="space-y-10">
             <div>
               <div className="text-xs uppercase tracking-[0.2em] text-accent font-semibold mb-3">Overview</div>
               <h2 className="text-3xl font-bold mb-4">Capabilities & scope</h2>
@@ -70,10 +51,10 @@ export default function ServiceDetail() {
             <div>
               <div className="text-xs uppercase tracking-[0.2em] text-accent font-semibold mb-3">Process</div>
               <h2 className="text-3xl font-bold mb-4">Our delivery methodology</h2>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                {['Concept','Feasibility','Approval','Design','Execution','Compliance','O&M'].map((step, i) => (
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                {(service.process || []).map((step, i) => (
                   <div key={step} className="p-4 rounded-lg bg-card border border-border">
-                    <div className="text-2xl font-bold text-gradient-gold">0{i+1}</div>
+                    <div className="text-2xl font-bold text-gradient-gold">{String(i+1).padStart(2,'0')}</div>
                     <div className="text-sm font-semibold mt-1">{step}</div>
                   </div>
                 ))}
@@ -98,20 +79,6 @@ export default function ServiceDetail() {
                 ))}
               </div>
             </div>
-          </div>
-
-          <div className="lg:col-span-1">
-            <Card className="p-6 shadow-xl sticky top-24">
-              <h3 className="text-xl font-bold mb-1">Inquire about this service</h3>
-              <p className="text-sm text-muted-foreground mb-5">Our team responds within 24 hours.</p>
-              <form onSubmit={submit} className="space-y-3">
-                <div><Label>Name *</Label><Input required value={form.name} onChange={e=>setForm({...form,name:e.target.value})} className="mt-1.5" /></div>
-                <div><Label>Email *</Label><Input type="email" required value={form.email} onChange={e=>setForm({...form,email:e.target.value})} className="mt-1.5" /></div>
-                <div><Label>Phone</Label><Input value={form.phone} onChange={e=>setForm({...form,phone:e.target.value})} className="mt-1.5" /></div>
-                <div><Label>Project details</Label><Textarea rows={4} value={form.message} onChange={e=>setForm({...form,message:e.target.value})} className="mt-1.5" /></div>
-                <Button type="submit" disabled={loading} className="w-full font-semibold" style={{backgroundColor:'#d4af37', color:'#0a1628', height:'46px'}}>{loading ? 'Sending…' : 'Submit Inquiry'}</Button>
-              </form>
-            </Card>
           </div>
         </div>
       </section>

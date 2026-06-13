@@ -28,7 +28,7 @@ export default function Footer() {
             <div className="mt-6 space-y-3 text-sm">
               <div className="flex items-start gap-3 text-white/80"><MapPin className="w-4 h-4 mt-0.5 text-gold flex-shrink-0" /><span>{COMPANY.address}</span></div>
               <div className="flex items-center gap-3 text-white/80"><Phone className="w-4 h-4 text-gold" /><a href={`tel:${COMPANY.phoneRaw}`} className="hover:text-white">{COMPANY.phone}</a></div>
-              <div className="flex items-center gap-3 text-white/80"><Mail className="w-4 h-4 text-gold" /><a href={`mailto:${COMPANY.emails.info}`} className="hover:text-white">{COMPANY.emails.info}</a></div>
+              <div className="flex items-center gap-3 text-white/80"><Mail className="w-4 h-4 text-gold" /><a href={`mailto:${COMPANY.emails.business}`} className="hover:text-white">{COMPANY.emails.business}</a></div>
             </div>
             <a href="/company-profile.html" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 mt-6 px-4 py-2.5 rounded-lg gradient-gold text-sm font-semibold" style={{color:'#0a1628'}}><Download className="w-4 h-4" />Download Company Profile</a>
           </div>
@@ -61,9 +61,9 @@ export default function Footer() {
               <li><Link href="/admin" className="hover:text-white">Admin Login</Link></li>
             </ul>
             <div className="flex items-center gap-3 mt-5">
-              <a href="#" aria-label="LinkedIn" className="w-9 h-9 rounded-md border border-white/15 flex items-center justify-center hover:bg-white/10"><Linkedin className="w-4 h-4" /></a>
-              <a href="#" aria-label="Facebook" className="w-9 h-9 rounded-md border border-white/15 flex items-center justify-center hover:bg-white/10"><Facebook className="w-4 h-4" /></a>
-              <a href="#" aria-label="Instagram" className="w-9 h-9 rounded-md border border-white/15 flex items-center justify-center hover:bg-white/10"><Instagram className="w-4 h-4" /></a>
+              <a href="https://www.linkedin.com/in/indusvertex-private-limited-8ba6953a4/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" title="LinkedIn" className="w-11 h-11 rounded-lg flex items-center justify-center transition-all duration-200 hover:scale-110" style={{background:'#0077b5',color:'#fff'}}><Linkedin className="w-5 h-5" /></a>
+              <a href="https://www.facebook.com/profile.php?id=61572000273997" target="_blank" rel="noopener noreferrer" aria-label="Facebook" title="Facebook" className="w-11 h-11 rounded-lg flex items-center justify-center transition-all duration-200 hover:scale-110" style={{background:'#1877f2',color:'#fff'}}><Facebook className="w-5 h-5" /></a>
+              <a href="https://www.instagram.com/indus_vertex/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" title="Instagram" className="w-11 h-11 rounded-lg flex items-center justify-center transition-all duration-200 hover:scale-110" style={{background:'#e1306c',color:'#fff'}}><Instagram className="w-5 h-5" /></a>
             </div>
           </div>
         </div>
