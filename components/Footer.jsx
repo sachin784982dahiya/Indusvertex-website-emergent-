@@ -58,7 +58,6 @@ export default function Footer() {
             <ul className="space-y-2.5 text-sm text-white/70">
               {/* <li><Link href="/legal" className="hover:text-white">IndusVertex Law Firm</Link></li> */}
               <li><a href={`mailto:${COMPANY.emails.business}`} className="hover:text-white">Business Inquiry</a></li>
-              <li><a href={`mailto:${COMPANY.emails.legal}`} className="hover:text-white">Legal Inquiry</a></li>
               <li><Link href="/admin" className="hover:text-white">Admin Login</Link></li>
             </ul>
             <div className="flex items-center gap-3 mt-5">

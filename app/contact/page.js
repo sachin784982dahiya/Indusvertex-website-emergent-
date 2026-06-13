@@ -41,7 +41,7 @@ export default function Contact() {
             {[
               { icon: MapPin, title:'Head Office', text: COMPANY.address },
               { icon: Phone, title:'Phone', text: COMPANY.phone, href:`tel:${COMPANY.phoneRaw}` },
-              { icon: Mail, title:'Email', text: <div className="space-y-1"><div>{COMPANY.emails.info}</div><div className="text-muted-foreground text-xs">Business: {COMPANY.emails.business}</div><div className="text-muted-foreground text-xs">Legal: {COMPANY.emails.legal}</div></div> },
+              { icon: Mail, title:'Email', text: <div className="space-y-1"><div>{COMPANY.emails.info}</div><div className="text-muted-foreground text-xs">Business: {COMPANY.emails.business}</div></div> },
               { icon: Clock, title:'Working Hours', text: 'Mon – Sat: 10:00 AM – 7:00 PM' },
               { icon: Building2, title:'Corporate Identity', text: <div><div>CIN: {COMPANY.cin}</div><div>GSTIN: {COMPANY.gstin}</div></div> }
             ].map((c, i) => (

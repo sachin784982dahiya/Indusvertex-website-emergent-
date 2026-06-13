@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { getDb } from '@/lib/mongodb';
 import { v4 as uuidv4 } from 'uuid';
 import { signToken, checkAdmin, getAuth } from '@/lib/auth';
+import nodemailer from 'nodemailer';
 
 const json = (data, init = {}) => NextResponse.json(data, init);
 const err = (msg, status = 400) => NextResponse.json({ error: msg }, { status });
@@ -16,7 +17,6 @@ function slugify(s) { return String(s || '').toLowerCase().replace(/[^a-z0-9\s-]
 async function handle(req, params) {
   const path = (params?.path || []).join('/');
   const method = req.method;
-  const db = await getDb();
 
   if (path === '' || path === 'health') {
     return json({ ok: true, service: 'IndusVertex API', time: new Date().toISOString() });
@@ -36,7 +36,7 @@ async function handle(req, params) {
     return json({ user: { email: u.email, role: u.role } });
   }
 
-  // ============= LEADS =============
+  // ============= LEADS (no DB required — works via email) =============
   if (['contact', 'consultation', 'service-inquiry', 'project-inquiry'].includes(path) && method === 'POST') {
     const body = await readBody(req);
     const { name, email, phone, message } = body;
@@ -46,9 +46,70 @@ async function handle(req, params) {
       company: body.company || '', service: body.service || '', subject: body.subject || '',
       message: message || '', status: 'new', createdAt: new Date().toISOString(),
     };
-    await db.collection('leads').insertOne(lead);
-    return json({ success: true, message: 'Thank you. Our team will contact you within 24 hours.', id: lead.id });
+
+    let emailSent = false;
+    let dbSaved = false;
+
+    // Send email notification to business@indusvertex.com
+    const emailUser = process.env.EMAIL_USER;
+    const emailPass = process.env.EMAIL_PASS;
+    if (emailUser && emailPass) {
+      try {
+        const transporter = nodemailer.createTransport({
+          service: 'gmail',
+          auth: { user: emailUser, pass: emailPass },
+        });
+        await transporter.sendMail({
+          from: `"IndusVertex Website" <${emailUser}>`,
+          to: 'business@indusvertex.com',
+          replyTo: email,
+          subject: `New ${path === 'contact' ? 'Business Inquiry' : 'Consultation Request'} — ${lead.subject || lead.service || 'General'} | IndusVertex`,
+          html: `
+            <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;border:1px solid #e0e0e0;border-radius:8px;overflow:hidden">
+              <div style="background:#0a1628;padding:24px 32px">
+                <h2 style="color:#d4af37;margin:0;font-size:18px">New Enquiry — IndusVertex</h2>
+              </div>
+              <div style="padding:28px 32px;background:#fff">
+                <table style="width:100%;border-collapse:collapse;font-size:14px">
+                  <tr><td style="padding:8px 0;color:#555;width:130px"><strong>Name</strong></td><td style="padding:8px 0">${name}</td></tr>
+                  <tr><td style="padding:8px 0;color:#555"><strong>Email</strong></td><td style="padding:8px 0"><a href="mailto:${email}">${email}</a></td></tr>
+                  ${phone ? `<tr><td style="padding:8px 0;color:#555"><strong>Phone</strong></td><td style="padding:8px 0">${phone}</td></tr>` : ''}
+                  ${lead.company ? `<tr><td style="padding:8px 0;color:#555"><strong>Company</strong></td><td style="padding:8px 0">${lead.company}</td></tr>` : ''}
+                  ${lead.subject ? `<tr><td style="padding:8px 0;color:#555"><strong>Subject</strong></td><td style="padding:8px 0">${lead.subject}</td></tr>` : ''}
+                  ${lead.service ? `<tr><td style="padding:8px 0;color:#555"><strong>Service</strong></td><td style="padding:8px 0">${lead.service}</td></tr>` : ''}
+                </table>
+                <div style="margin-top:20px;padding:16px;background:#f9f9f9;border-radius:6px">
+                  <p style="margin:0 0 8px;color:#555;font-size:13px"><strong>Message</strong></p>
+                  <p style="margin:0;font-size:14px;line-height:1.6;white-space:pre-wrap">${message || '(no message)'}</p>
+                </div>
+                <p style="margin-top:20px;font-size:12px;color:#999">Submitted via indusvertex.com · ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })} IST</p>
+              </div>
+            </div>
+          `,
+        });
+        emailSent = true;
+      } catch (e) {
+        console.error('Email send error:', e);
+      }
+    }
+
+    // Try saving to MongoDB (optional — works without it)
+    try {
+      const db = await getDb();
+      await db.collection('leads').insertOne(lead);
+      dbSaved = true;
+    } catch (e) {
+      console.error('DB save error (non-fatal):', e);
+    }
+
+    if (emailSent || dbSaved) {
+      return json({ success: true, message: 'Thank you. Our team will contact you within 24 hours.', id: lead.id });
+    }
+    return err('Service temporarily unavailable. Please email us at business@indusvertex.com', 503);
   }
+  // All routes below require MongoDB
+  const db = await getDb();
+
   if (path === 'leads') {
     if (method === 'GET') {
       const unauthorized = requireAuth(req); if (unauthorized) return unauthorized;
