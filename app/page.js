@@ -42,7 +42,7 @@ export default function Home() {
             style={{ background: 'radial-gradient(circle, #0a1628 0%, transparent 70%)' }} />
         </div>
 
-        <div className="relative max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6 pt-12 pb-48 w-full">
+        <div className="relative max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6 pt-12 pb-72 w-full">
           <div className="grid lg:grid-cols-2 gap-8 xl:gap-12 items-center">
 
             {/* LEFT — Text */}
@@ -101,38 +101,197 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Bottom visual strip */}
-        <div className="absolute bottom-0 left-0 right-0 pointer-events-none" style={{ height: '160px', overflow: 'hidden' }}>
-          {/* Top fade */}
-          <div className="absolute inset-0 z-10" style={{ background: 'linear-gradient(to bottom, white 0%, transparent 50%)' }} />
-
-          {/* Left — city skyline image */}
-          <div className="absolute left-0 top-0 bottom-0" style={{ width: '38%', overflow: 'hidden' }}>
-            <img src="https://images.unsplash.com/photo-1486325212027-8081e485255e?crop=entropy&cs=srgb&fm=jpg&q=55&w=800"
-              loading="lazy" decoding="async" className="w-full h-full object-cover object-center" style={{ opacity: 0.65 }} />
-            <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, transparent 60%, white 100%)' }} />
-          </div>
-
-          {/* Right — solar/wind energy image */}
-          <div className="absolute right-0 top-0 bottom-0" style={{ width: '38%', overflow: 'hidden' }}>
-            <img src="https://images.unsplash.com/photo-1509391366360-2e959784a276?crop=entropy&cs=srgb&fm=jpg&q=55&w=800"
-              loading="lazy" decoding="async" className="w-full h-full object-cover object-center" style={{ opacity: 0.65 }} />
-            <div className="absolute inset-0" style={{ background: 'linear-gradient(to left, transparent 60%, white 100%)' }} />
-          </div>
-
-          {/* Center — SVG waves blending both sides */}
-          <svg className="absolute bottom-0 left-0 w-full z-20" viewBox="0 0 1440 80" preserveAspectRatio="none" fill="none">
+        {/* Bottom visual strip — bright infrastructure banner */}
+        <div className="absolute bottom-0 left-0 right-0 pointer-events-none" style={{ height: '230px', overflow: 'hidden' }}>
+          <svg className="absolute inset-0 w-full h-full" viewBox="0 0 1440 230" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
             <defs>
-              <linearGradient id="wg1" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#16a34a" stopOpacity="0.18" />
-                <stop offset="50%" stopColor="#d4af37" stopOpacity="0.1" />
-                <stop offset="100%" stopColor="#16a34a" stopOpacity="0.18" />
+              {/* Vivid sky gradient left→right */}
+              <linearGradient id="bsSky" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%"   stopColor="#7dd3fc"/>
+                <stop offset="40%"  stopColor="#bae6fd"/>
+                <stop offset="100%" stopColor="#e0f2fe"/>
+              </linearGradient>
+              {/* Sky top-to-bottom: bright top, lighter toward horizon */}
+              <linearGradient id="bsSkyV" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%"   stopColor="#38bdf8" stopOpacity="0.55"/>
+                <stop offset="60%"  stopColor="#7dd3fc" stopOpacity="0.15"/>
+                <stop offset="100%" stopColor="#bae6fd" stopOpacity="0"/>
+              </linearGradient>
+              {/* White top fade */}
+              <linearGradient id="bsTopFade" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%"  stopColor="white" stopOpacity="1"/>
+                <stop offset="20%" stopColor="white" stopOpacity="0.55"/>
+                <stop offset="36%" stopColor="white" stopOpacity="0"/>
+              </linearGradient>
+              {/* Navy bottom fade */}
+              <linearGradient id="bsBotFade" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="68%"  stopColor="#0a1628" stopOpacity="0"/>
+                <stop offset="100%" stopColor="#0a1628" stopOpacity="1"/>
+              </linearGradient>
+              {/* Warm sun */}
+              <radialGradient id="bsSun" cx="50%" cy="50%" r="50%">
+                <stop offset="0%"   stopColor="#fde68a" stopOpacity="1"/>
+                <stop offset="40%"  stopColor="#fde68a" stopOpacity="0.6"/>
+                <stop offset="100%" stopColor="#fde68a" stopOpacity="0"/>
+              </radialGradient>
+              {/* Green hill gradient */}
+              <linearGradient id="bsHill1" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%"   stopColor="#4ade80"/>
+                <stop offset="100%" stopColor="#16a34a"/>
+              </linearGradient>
+              <linearGradient id="bsHill2" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%"   stopColor="#22c55e"/>
+                <stop offset="100%" stopColor="#15803d"/>
               </linearGradient>
             </defs>
-            <path d="M0,40 C360,10 720,65 1080,30 C1260,12 1380,50 1440,28 L1440,80 L0,80 Z" fill="url(#wg1)" />
-            <path d="M0,35 C400,8 800,58 1200,22 C1320,10 1400,42 1440,20" stroke="#16a34a" strokeWidth="2.5" strokeOpacity="0.7" />
-            <path d="M0,50 C300,25 700,68 1050,42 C1260,26 1380,58 1440,40" stroke="#d4af37" strokeWidth="2" strokeOpacity="0.65" />
-            <path d="M0,62 C360,42 800,75 1100,55 C1280,42 1380,68 1440,55" stroke="#0a1628" strokeWidth="1.5" strokeOpacity="0.35" />
+
+            {/* Sky base */}
+            <rect width="1440" height="230" fill="url(#bsSky)"/>
+            <rect width="1440" height="230" fill="url(#bsSkyV)"/>
+            {/* Sun warm glow */}
+            <ellipse cx="112" cy="30" rx="105" ry="65" fill="url(#bsSun)"/>
+            {/* Sun disc */}
+            <circle cx="112" cy="22" r="18" fill="#fbbf24" fillOpacity="0.85"/>
+            <circle cx="112" cy="22" r="12" fill="#fef08a"/>
+
+            {/* ── CITY SKYLINE — colourful buildings ── */}
+            {[
+              [28,112,22,'#60a5fa'],[52,88,18,'#818cf8'],[75,104,24,'#34d399'],
+              [98,76,20,'#60a5fa'],[120,96,16,'#f472b6'],[138,106,26,'#a78bfa'],
+              [166,70,20,'#38bdf8'],[190,93,18,'#6ee7b7'],[213,110,28,'#93c5fd'],
+              [238,83,14,'#c4b5fd'],[254,96,20,'#6ee7b7'],[276,107,22,'#60a5fa']
+            ].map(([x,h,w,c],i) => (
+              <rect key={i} x={x} y={h} width={w} height={152-h} fill={c} fillOpacity="0.55"/>
+            ))}
+
+            {/* ── WIND TURBINE 1 (x=310) ── */}
+            <rect x="308" y="55" width="5" height="93" fill="#cbd5e1"/>
+            <circle cx="310" cy="55" r="5.5" fill="#94a3b8"/>
+            <line x1="310" y1="55" x2="272" y2="20"  stroke="white" strokeWidth="5" strokeLinecap="round"/>
+            <line x1="310" y1="55" x2="350" y2="34"  stroke="white" strokeWidth="5" strokeLinecap="round"/>
+            <line x1="310" y1="55" x2="303" y2="102" stroke="white" strokeWidth="5" strokeLinecap="round"/>
+
+            {/* ── WIND TURBINE 2 (x=420) ── */}
+            <rect x="418" y="44" width="6" height="104" fill="#cbd5e1"/>
+            <circle cx="420" cy="44" r="6.5" fill="#94a3b8"/>
+            <line x1="420" y1="44" x2="380" y2="8"   stroke="white" strokeWidth="6" strokeLinecap="round"/>
+            <line x1="420" y1="44" x2="464" y2="22"  stroke="white" strokeWidth="6" strokeLinecap="round"/>
+            <line x1="420" y1="44" x2="413" y2="96"  stroke="white" strokeWidth="6" strokeLinecap="round"/>
+
+            {/* ── WIND TURBINE 3 (x=520) ── */}
+            <rect x="518" y="60" width="5" height="88" fill="#cbd5e1"/>
+            <circle cx="520" cy="60" r="5" fill="#94a3b8"/>
+            <line x1="520" y1="60" x2="487" y2="28"  stroke="white" strokeWidth="4.5" strokeLinecap="round"/>
+            <line x1="520" y1="60" x2="556" y2="40"  stroke="white" strokeWidth="4.5" strokeLinecap="round"/>
+            <line x1="520" y1="60" x2="514" y2="106" stroke="white" strokeWidth="4.5" strokeLinecap="round"/>
+
+            {/* ── HV PYLONS ── */}
+            <path d="M576,148 L580,88 L584,148" stroke="#475569" strokeWidth="1.8" fill="rgba(71,85,105,0.12)"/>
+            <line x1="568" y1="108" x2="592" y2="108" stroke="#475569" strokeWidth="2"/>
+            <line x1="571" y1="96"  x2="589" y2="96"  stroke="#475569" strokeWidth="2"/>
+            <circle cx="568" cy="108" r="2.5" fill="#f59e0b"/>
+            <circle cx="592" cy="108" r="2.5" fill="#f59e0b"/>
+            <path d="M568,108 Q610,120 636,108" stroke="#94a3b8" strokeWidth="1.2" fill="none"/>
+            <path d="M646,148 L650,88 L654,148" stroke="#475569" strokeWidth="1.8" fill="rgba(71,85,105,0.12)"/>
+            <line x1="638" y1="108" x2="662" y2="108" stroke="#475569" strokeWidth="2"/>
+            <line x1="641" y1="96"  x2="659" y2="96"  stroke="#475569" strokeWidth="2"/>
+            <circle cx="638" cy="108" r="2.5" fill="#f59e0b"/>
+            <circle cx="662" cy="108" r="2.5" fill="#f59e0b"/>
+
+            {/* ── SOLAR ARRAY (brighter, larger) ── */}
+            {[0,1,2,3,4,5].map(col =>
+              [0,1,2,3].map(row => (
+                <rect key={`s${col}${row}`}
+                  x={190+col*18} y={120+row*8} width="15" height="6" rx="1.5"
+                  fill="#0ea5e9" fillOpacity="0.85" stroke="#0284c7" strokeWidth="0.8"/>
+              ))
+            )}
+            {/* Solar panel frame */}
+            <rect x="187" y="118" width="112" height="36" rx="2" fill="none" stroke="#0284c7" strokeWidth="1" strokeOpacity="0.4"/>
+
+            {/* ── HILLS — vivid green gradient ── */}
+            <path d="M0,148 Q90,130 200,142 Q310,154 430,134 Q530,116 640,140 Q740,158 860,142 Q980,128 1100,144 Q1230,158 1350,142 Q1420,134 1440,138 L1440,230 L0,230 Z"
+              fill="url(#bsHill1)"/>
+            <path d="M0,160 Q120,150 250,158 Q380,166 500,154 Q600,144 720,158 Q840,172 960,160 Q1080,150 1200,162 Q1340,174 1440,160 L1440,230 L0,230 Z"
+              fill="url(#bsHill2)" fillOpacity="0.9"/>
+
+            {/* ── ELEVATED METRO (right half x=700–1440) ── */}
+
+            {/* Support pillars — coloured caps */}
+            {[730,830,930,1030,1130,1230,1330,1415].map(x => (
+              <g key={x}>
+                <rect x={x-10} y={108} width={20} height={5} rx="2" fill="#475569"/>
+                <rect x={x-4}  y={113} width={8}  height={35} fill="#64748b"/>
+              </g>
+            ))}
+
+            {/* Track beam */}
+            <rect x="700" y="108" width="740" height="8" rx="2" fill="#94a3b8"/>
+            <line x1="700" y1="108" x2="1440" y2="108" stroke="#334155" strokeWidth="1.5"/>
+            <line x1="700" y1="115" x2="1440" y2="115" stroke="#334155" strokeWidth="1.5"/>
+
+            {/* ── CAR 1 — white body, vivid stripes ── */}
+            <path d="M722,74 C706,74 694,81 693,91 C694,101 706,108 722,108 Z" fill="white" stroke="#0ea5e9" strokeWidth="2"/>
+            <ellipse cx="695" cy="85"  rx="4.5" ry="3.5" fill="#fef08a"/>
+            <ellipse cx="695" cy="97"  rx="4.5" ry="3.5" fill="#fef08a"/>
+            <rect x="722" y="74" width="268" height="34" fill="white"/>
+            <rect x="722" y="74" width="268" height="34" fill="none" stroke="#0ea5e9" strokeWidth="2"/>
+            {/* Green top stripe */}
+            <rect x="693" y="75" width="297" height="5" fill="#16a34a" rx="1"/>
+            {/* Blue mid stripe */}
+            <rect x="693" y="80" width="297" height="5" fill="#0ea5e9" rx="1"/>
+            {/* Gold bottom stripe */}
+            <rect x="693" y="85" width="297" height="3" fill="#f59e0b" rx="1"/>
+            {/* Car 1 windows */}
+            {[730,762,794,826,858,890,922,954].map(x => (
+              <rect key={x} x={x} y={91} width={24} height={13} rx="3" fill="#e0f2fe"/>
+            ))}
+            <rect x="730"  y="107" width="28" height="5" rx="2" fill="#1e293b"/>
+            <rect x="946"  y="107" width="28" height="5" rx="2" fill="#1e293b"/>
+
+            {/* COUPLING */}
+            <rect x="988" y="82" width="10" height="26" rx="1" fill="#94a3b8"/>
+
+            {/* ── CAR 2 — same livery ── */}
+            <rect x="998" y="74" width="268" height="34" fill="white"/>
+            <rect x="998" y="74" width="268" height="34" fill="none" stroke="#0ea5e9" strokeWidth="2"/>
+            <rect x="998" y="75" width="268" height="5" fill="#16a34a" rx="1"/>
+            <rect x="998" y="80" width="268" height="5" fill="#0ea5e9" rx="1"/>
+            <rect x="998" y="85" width="268" height="3" fill="#f59e0b" rx="1"/>
+            {[1006,1038,1070,1102,1134,1166,1198,1230].map(x => (
+              <rect key={x} x={x} y={91} width={24} height={13} rx="3" fill="#e0f2fe"/>
+            ))}
+            <rect x="1010" y="107" width="28" height="5" rx="2" fill="#1e293b"/>
+            <rect x="1226" y="107" width="28" height="5" rx="2" fill="#1e293b"/>
+            {/* Tail */}
+            <path d="M1266,74 C1282,74 1291,81 1291,91 C1291,101 1282,108 1266,108 Z" fill="white" stroke="#0ea5e9" strokeWidth="2"/>
+            <rect x="1266" y="75" width="25" height="5" fill="#16a34a" rx="1"/>
+            <rect x="1266" y="80" width="25" height="5" fill="#0ea5e9" rx="1"/>
+
+            {/* ── SUBSTATION (coloured) ── */}
+            <rect x="1310" y="120" width="62" height="30" rx="3" fill="#dbeafe" stroke="#0ea5e9" strokeWidth="1.5"/>
+            <path d="M1308,120 L1341,110 L1374,120" fill="#bfdbfe" stroke="#0ea5e9" strokeWidth="1"/>
+            <rect x="1318" y="102" width="7" height="18" fill="#475569"/>
+            <rect x="1350" y="105" width="7" height="15" fill="#475569"/>
+            <rect x="1330" y="132" width="16" height="18" rx="1" fill="#93c5fd" fillOpacity="0.6"/>
+            <circle cx="1322" cy="128" r="5" fill="none" stroke="#16a34a" strokeWidth="2"/>
+            <circle cx="1360" cy="128" r="5" fill="none" stroke="#16a34a" strokeWidth="2"/>
+            <path d="M1266,108 Q1292,122 1310,127" stroke="#0ea5e9" strokeWidth="1.2" fill="none"/>
+
+            {/* ── WAVE LINES — vivid ── */}
+            <path d="M0,178 C240,162 480,182 720,168 C960,154 1200,176 1440,164 L1440,230 L0,230 Z" fill="#2563eb" fillOpacity="0.2"/>
+            <path d="M0,178 C240,162 480,182 720,168 C960,154 1200,176 1440,164" stroke="#2563eb" strokeWidth="3" strokeOpacity="0.85" fill="none"/>
+            <path d="M0,188 C240,174 480,196 720,181 C960,166 1200,189 1440,175 L1440,230 L0,230 Z" fill="#16a34a" fillOpacity="0.2"/>
+            <path d="M0,188 C240,174 480,196 720,181 C960,166 1200,189 1440,175" stroke="#16a34a" strokeWidth="3.2" strokeOpacity="0.9" fill="none"/>
+            <path d="M0,199 C300,186 600,205 900,193 C1100,184 1300,201 1440,193 L1440,230 L0,230 Z" fill="#f59e0b" fillOpacity="0.2"/>
+            <path d="M0,199 C300,186 600,205 900,193 C1100,184 1300,201 1440,193" stroke="#f59e0b" strokeWidth="2.5" strokeOpacity="0.9" fill="none"/>
+
+            {/* Navy bottom fill */}
+            <rect y="212" width="1440" height="18" fill="#0a1628"/>
+
+            {/* Overlay fades */}
+            <rect width="1440" height="230" fill="url(#bsBotFade)"/>
+            <rect width="1440" height="230" fill="url(#bsTopFade)"/>
           </svg>
         </div>
       </section>
@@ -285,9 +444,9 @@ export default function Home() {
           </div>
           <div className="grid md:grid-cols-3 gap-6">
             {[
-              { name:'A.K. Srivastava', title:'VP, Infrastructure', company:'Telecom Sector', quote:'IndusVertex delivered our HT substation ahead of schedule with flawless CEIG approvals. Their integrated engineering + compliance expertise is rare.' },
-              { name:'Priya Nair', title:'Director, DC Operations', company:'Data Centre Industry', quote:'From design to O&M, the precision and discipline of the IndusVertex team set a benchmark. Our hyperscale build-out went live without a single deviation.' },
-              { name:'Rajesh Gupta', title:'Plant Head', company:'Manufacturing Sector', quote:'Our solar + BESS rollout reduced grid dependency by 38%. IndusVertex managed design, approvals, execution and ongoing O&M end-to-end.' }
+              { initials:'A.S.', title:'VP – Infrastructure', company:'Leading Telecom Company', quote:'IndusVertex delivered our HT substation ahead of schedule with flawless CEIG approvals. Their integrated engineering + compliance expertise is rare.' },
+              { initials:'P.N.', title:'Director – DC Operations', company:'Hyperscale Data Centre', quote:'From design to O&M, the precision and discipline of the IndusVertex team set a benchmark. Our build-out went live without a single deviation.' },
+              { initials:'R.G.', title:'Plant Head', company:'Large Manufacturing Unit', quote:'Our solar + BESS rollout reduced grid dependency by 38%. IndusVertex managed design, approvals, execution and ongoing O&M end-to-end.' }
             ].map((t, i) => (
               <div key={i}>
                 <Card className="p-7 h-full bg-white dark:bg-[#0a1628] border-gray-100 dark:border-white/10 shadow-sm hover:shadow-md transition-shadow">
@@ -295,7 +454,7 @@ export default function Home() {
                   <p className="text-gray-600 dark:text-white/70 leading-relaxed mb-5 italic">"{t.quote}"</p>
                   <div className="flex gap-1 mb-3">{[...Array(5)].map((_,j)=><Star key={j} className="w-4 h-4 fill-[#d4af37] text-[#d4af37]" />)}</div>
                   <div className="border-t border-gray-100 dark:border-white/10 pt-3">
-                    <div className="font-bold text-[#0a1628] dark:text-white">{t.name}</div>
+                    <div className="font-bold text-[#0a1628] dark:text-white">{t.initials} <span className="text-xs font-normal text-gray-400 dark:text-white/30">(name withheld — client confidentiality)</span></div>
                     <div className="text-sm text-gray-500 dark:text-white/50">{t.title} · {t.company}</div>
                   </div>
                 </Card>
