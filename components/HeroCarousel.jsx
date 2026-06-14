@@ -8,8 +8,8 @@ const SLIDES = [
     slug: 'electrical-power-transmission',
     tag: 'Electrical Infrastructure',
     title: 'Power Transmission & HT/LT Systems',
-    desc: 'End-to-end design, execution and O&M of high-tension substations, LT distribution, CEIG approvals and grid connectivity.',
-    image: '/images/power_transmission.png',
+    desc: 'End-to-end design, supply, execution and O&M of HT/LT substations, transformers, panels and grid connectivity — backed by 1500+ CEIG approvals.',
+    image: '/images/projects/ht-panel-vi-meerut.jpg',
     accent: '#16a34a',
   },
   {
@@ -21,12 +21,20 @@ const SLIDES = [
     accent: '#0891b2',
   },
   {
-    slug: 'environmental-sustainability',
-    tag: 'Compliance & Legal',
-    title: 'Regulatory Approvals & Legal Advisory',
-    desc: 'CEIG, CTE/CTO, PCB, Fire NOC, environmental clearances — plus end-to-end legal coordination through IndusVertex Law Firm.',
-    image: '/images/compliances_image.png',
+    slug: 'transformer-testing-maintenance',
+    tag: 'Transformer Services',
+    title: 'Transformer Testing, Diagnostics & Maintenance',
+    desc: 'IR/PI testing, BDV oil analysis, WTI calibration, oil filtration and preventive maintenance — keeping your power assets reliable and compliant.',
+    image: '/images/projects/ht-transformer-yard.jpg',
     accent: '#d4af37',
+  },
+  {
+    slug: 'power-backup-renewable',
+    tag: 'Power Backup & Renewable Energy',
+    title: 'DG Sets, Solar & Hybrid Energy Systems',
+    desc: 'Complete DG low-side works, exhaust stack installation, AMF/synchronization panels, BESS and solar — for uninterrupted power at any scale.',
+    image: '/images/projects/dg-exhaust-stack.jpg',
+    accent: '#ea580c',
   },
 ];
 

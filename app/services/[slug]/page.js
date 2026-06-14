@@ -47,6 +47,12 @@ export default function ServiceDetail() {
               <div className="text-xs uppercase tracking-[0.2em] text-accent font-semibold mb-3">What we deliver</div>
               <h2 className="text-3xl font-bold mb-4">Service offerings</h2>
               <ul className="space-y-3">{service.points.map(p => (<li key={p} className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-accent mt-0.5 flex-shrink-0" /><span className="text-foreground/85">{p}</span></li>))}</ul>
+              {service.achievement && (
+                <div className="mt-6 p-5 rounded-xl border border-[#d4af37]/40" style={{background:'rgba(212,175,55,0.07)'}}>
+                  <div className="text-xs uppercase tracking-[0.15em] text-[#d4af37] font-bold mb-2">Project Achievement</div>
+                  <p className="text-sm text-[#0a1628] font-medium leading-relaxed">{service.achievement}</p>
+                </div>
+              )}
             </div>
             <div>
               <div className="text-xs uppercase tracking-[0.2em] text-accent font-semibold mb-3">Process</div>

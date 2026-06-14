@@ -7,6 +7,7 @@ export default function ClientLogo({ client, size = 'md', variant = 'card' }) {
   const dimClass =
     size === 'sm' ? 'w-12 h-12 text-sm' :
     size === 'lg' ? 'w-24 h-24 text-2xl' :
+    size === 'xl' ? 'w-32 h-32 text-3xl' :
     'w-16 h-16 text-base';
 
   const monogram = (
@@ -20,11 +21,11 @@ export default function ClientLogo({ client, size = 'md', variant = 'card' }) {
   );
 
   const logoEl = client.logo && !imgError ? (
-    <div className={`${dimClass} rounded-2xl flex items-center justify-center bg-white shadow-lg flex-shrink-0 overflow-hidden border border-gray-100`}>
+    <div className={`${dimClass} rounded-2xl flex items-center justify-center bg-white shadow-lg flex-shrink-0 overflow-hidden border border-gray-100 p-2`}>
       <img
         src={client.logo}
         alt={client.name}
-        className="w-4/5 h-4/5 object-contain"
+        className="w-full h-full object-contain"
         onError={() => setImgError(true)}
       />
     </div>

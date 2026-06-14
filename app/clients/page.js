@@ -50,11 +50,11 @@ export default function Clients() {
                 transition={{ duration: 0.4, delay: i * 0.04 }}
                 className="aspect-[4/3] rounded-xl border-2 border-border bg-card flex flex-col items-center justify-center p-6 text-center hover:border-accent hover:shadow-xl hover:-translate-y-1 transition-all group"
               >
-                <div className="h-20 flex items-center justify-center mb-3">
+                <div className="h-36 flex items-center justify-center mb-3">
                   {c.logoUrl ? (
-                    <img src={c.logoUrl} alt={c.name} className="h-16 w-auto object-contain max-w-[160px]" />
+                    <img src={c.logoUrl} alt={c.name} className="h-28 w-auto object-contain max-w-[200px]" />
                   ) : (
-                    <ClientLogo client={c} size="lg" />
+                    <ClientLogo client={c} size="xl" />
                   )}
                 </div>
                 <div className="font-semibold text-foreground/85 text-sm leading-tight">{c.name}</div>

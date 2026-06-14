@@ -45,8 +45,31 @@ export default function Navbar() {
 
   return (
     <>
+      {/* ── FIXED TOP WRAPPER: ticker + navbar stacked cleanly ── */}
+      <div className="fixed top-0 left-0 right-0 z-50 flex flex-col">
+
+        {/* News Ticker */}
+        <div className="w-full overflow-hidden bg-[#0a1628] border-b border-[#d4af37]/30 flex-shrink-0" style={{ height: '36px' }}>
+          <div className="flex items-center h-full">
+            <div className="flex-shrink-0 flex items-center gap-2 px-4 bg-[#d4af37] h-full">
+              <span className="w-2 h-2 rounded-full bg-[#0a1628] animate-pulse" />
+              <span className="text-[#0a1628] text-xs font-bold uppercase tracking-widest whitespace-nowrap">Latest</span>
+            </div>
+            <div className="relative flex-1 overflow-hidden h-full flex items-center">
+              <div className="flex whitespace-nowrap" style={{ animation: 'ticker-scroll 30s linear infinite' }}>
+                {[1,2,3].map(n => (
+                  <span key={n} className="text-white/90 text-sm font-medium px-10">
+                    ⚡ A Single-Window Solution for Complete Project Lifecycle Management – From Design &amp; Approvals to Execution, Testing, Commissioning and Handover.
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+          <style>{`@keyframes ticker-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-33.333%); } }`}</style>
+        </div>
+
       <header className={cn(
-        'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
+        'transition-all duration-300',
         transparent ? 'bg-transparent' : 'bg-background/85 backdrop-blur-xl border-b border-border shadow-sm'
       )}>
         <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6">
@@ -115,6 +138,7 @@ export default function Navbar() {
         </div>
 
       </header>
+      </div>{/* end fixed top wrapper */}
 
       {/* Mobile drawer overlay */}
       {open && (

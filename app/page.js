@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { ArrowRight, ShieldCheck, Zap, BatteryCharging, Server, Building2, Cpu, Plug, ShieldAlert, Leaf, ClipboardCheck, Network, Scale, Star, Quote, Users, PackageCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -10,6 +10,63 @@ import ClientLogo from '@/components/ClientLogo';
 import HeroCarousel from '@/components/HeroCarousel';
 
 const ICONS = { Zap, BatteryCharging, Server, Building2, Cpu, Plug, ShieldAlert, Leaf, ClipboardCheck, Network, Scale };
+
+function ClientsMarquee() {
+  const scrollRef = useRef(null);
+  const timerRef = useRef(null);
+
+  const startRoll = useCallback(() => {
+    timerRef.current = setInterval(() => {
+      const el = scrollRef.current;
+      if (!el) return;
+      el.scrollLeft += 2;
+      if (el.scrollLeft >= el.scrollWidth / 2) el.scrollLeft = 0;
+    }, 16);
+  }, []);
+
+  const stopRoll = useCallback(() => clearInterval(timerRef.current), []);
+
+  useEffect(() => { startRoll(); return stopRoll; }, [startRoll, stopRoll]);
+
+  const manualScroll = (dir) => {
+    stopRoll();
+    scrollRef.current?.scrollBy({ left: dir * 280, behavior: 'smooth' });
+    setTimeout(startRoll, 1000);
+  };
+
+  return (
+    <div className="relative">
+      {/* Fade edges */}
+      <div className="absolute left-12 top-0 bottom-0 w-16 z-10 pointer-events-none" style={{ background: 'linear-gradient(to right, white, transparent)' }} />
+      <div className="absolute right-12 top-0 bottom-0 w-16 z-10 pointer-events-none" style={{ background: 'linear-gradient(to left, white, transparent)' }} />
+
+      {/* Left arrow */}
+      <button onClick={() => manualScroll(-1)}
+        className="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white dark:bg-[#0a1628] border border-gray-200 dark:border-white/20 shadow-md flex items-center justify-center hover:scale-110 transition-all">
+        <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-[#0a1628] dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+      </button>
+
+      {/* Scrolling track */}
+      <div ref={scrollRef}
+        className="flex overflow-x-scroll gap-3 px-14 pb-2"
+        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        onMouseEnter={stopRoll}
+        onMouseLeave={startRoll}>
+        {[...CLIENTS, ...CLIENTS].map((c, i) => (
+          <div key={i} className="inline-flex flex-shrink-0 items-center gap-4 px-6 py-4 min-w-[220px] h-28 border border-gray-100 dark:border-white/10 rounded-xl bg-white dark:bg-white/5 shadow-sm">
+            <ClientLogo client={c} variant="inline" size="lg" />
+          </div>
+        ))}
+      </div>
+
+      {/* Right arrow */}
+      <button onClick={() => manualScroll(1)}
+        className="absolute right-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white dark:bg-[#0a1628] border border-gray-200 dark:border-white/20 shadow-md flex items-center justify-center hover:scale-110 transition-all">
+        <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-[#0a1628] dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+      </button>
+    </div>
+  );
+}
 
 function Counter({ end, suffix = '' }) {
   const [v, setV] = useState(0);
@@ -26,7 +83,7 @@ export default function Home() {
     { label: 'Projects Delivered', value: 150, suffix: '+' },
     { label: 'Enterprise Clients', value: 50, suffix: '+' },
     { label: 'Years Combined Experience', value: 40, suffix: '+' },
-    { label: 'Regulatory Approvals', value: 200, suffix: '+' }
+    { label: 'Regulatory Approvals', value: 1500, suffix: '+' }
   ];
   const featured = SERVICES.slice(0, 6);
 
@@ -409,30 +466,7 @@ export default function Home() {
             <h2 className="text-3xl lg:text-4xl font-bold text-[#0a1628]">Partnering with India's leading enterprises</h2>
           </div>
         </div>
-        <div className="relative px-4">
-          {/* Left arrow */}
-          <button
-            onClick={() => document.getElementById('clients-scroll').scrollBy({ left: -280, behavior: 'smooth' })}
-            className="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white dark:bg-[#0a1628] border border-gray-200 dark:border-white/20 shadow-md flex items-center justify-center hover:scale-110 transition-all">
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-[#0a1628] dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
-          </button>
-
-          {/* Scrollable row */}
-          <div id="clients-scroll" className="flex overflow-x-auto gap-3 px-10 pb-2 scroll-smooth" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-            {CLIENTS.map((c, i) => (
-              <div key={i} className="inline-flex flex-shrink-0 items-center justify-center gap-3 px-8 py-5 min-w-[240px] h-24 border border-gray-100 dark:border-white/10 rounded-xl bg-white dark:bg-white/5 shadow-sm">
-                <ClientLogo client={c} variant="inline" size="md" />
-              </div>
-            ))}
-          </div>
-
-          {/* Right arrow */}
-          <button
-            onClick={() => document.getElementById('clients-scroll').scrollBy({ left: 280, behavior: 'smooth' })}
-            className="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white dark:bg-[#0a1628] border border-gray-200 dark:border-white/20 shadow-md flex items-center justify-center hover:scale-110 transition-all">
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-[#0a1628] dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
-          </button>
-        </div>
+        <ClientsMarquee />
       </section>
 
       {/* ── TESTIMONIALS ── */}

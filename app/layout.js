@@ -32,7 +32,8 @@ export default function RootLayout({ children }) {
       <body className="min-h-screen bg-background text-foreground antialiased font-sans">
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
           <Navbar />
-          <main className="min-h-screen">{children}</main>
+          {/* pt-9 = 36px ticker height; pages' own pt-20/24 covers the 80px navbar below it */}
+          <main className="min-h-screen pt-9">{children}</main>
           <Footer />
           <FloatingButtons />
           <Toaster position="top-right" richColors />

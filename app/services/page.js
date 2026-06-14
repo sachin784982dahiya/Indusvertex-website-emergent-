@@ -32,13 +32,13 @@ export default function Services() {
       <section className="min-h-[65vh] flex items-center gradient-navy text-white relative overflow-hidden">
         {/* Background image */}
         <img
-          src="https://images.unsplash.com/photo-1486325212027-8081e485255e?crop=entropy&cs=srgb&fm=jpg&q=70&w=1800"
+          src="https://images.unsplash.com/photo-1621905251918-48416bd8575a?crop=entropy&cs=srgb&fm=jpg&q=70&w=1800"
           alt="Services background"
           className="absolute inset-0 w-full h-full object-cover object-center"
-          style={{ opacity: 0.35 }}
+          style={{ opacity: 0.65 }}
         />
         {/* Dark gradient overlay for text readability */}
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(10,22,40,0.85) 0%, rgba(10,22,40,0.55) 100%)' }} />
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(10,22,40,0.70) 0%, rgba(10,22,40,0.35) 100%)' }} />
         <div className="absolute inset-0 grid-pattern opacity-20" />
         <div className="relative max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6 pt-24 pb-16">
           <div className="text-xs uppercase tracking-[0.2em] text-gold font-semibold mb-3">Our Services</div>
@@ -71,6 +71,11 @@ export default function Services() {
                         <li key={p} className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-accent mt-0.5 flex-shrink-0" /><span className="text-foreground/80">{p}</span></li>
                       ))}
                     </ul>
+                    {s.achievement && (
+                      <div className="mb-6 p-4 rounded-xl border border-[#d4af37]/40 bg-[#d4af37]/8" style={{background:'rgba(212,175,55,0.07)'}}>
+                        <p className="text-sm text-[#0a1628] font-medium leading-relaxed">{s.achievement}</p>
+                      </div>
+                    )}
                     <div className="flex flex-wrap gap-2 mb-6">
                       {s.industries.map(i => <span key={i} className="text-xs px-3 py-1 rounded-full bg-muted text-foreground/70 font-medium">{i}</span>)}
                     </div>
