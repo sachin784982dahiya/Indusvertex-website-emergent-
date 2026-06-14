@@ -1,8 +1,47 @@
 'use client';
-import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
-import { MapPin, Building2, Calendar, CheckCircle2, Zap, ChevronRight, ArrowRight } from 'lucide-react';
+import { useEffect, useState, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { MapPin, Building2, Calendar, CheckCircle2, Zap, ChevronRight, ArrowRight, X, ZoomIn } from 'lucide-react';
 import Link from 'next/link';
+
+/* ── LIGHTBOX ───────────────────────────────────────────────────────────── */
+function Lightbox({ src, alt, onClose }) {
+  useEffect(() => {
+    const handler = (e) => { if (e.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [onClose]);
+
+  return (
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 z-50 flex items-center justify-center p-4"
+        style={{ background: 'rgba(0,0,0,0.9)' }}
+        onClick={onClose}
+      >
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-all"
+        >
+          <X className="w-5 h-5" />
+        </button>
+        <motion.img
+          initial={{ scale: 0.85, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0.85, opacity: 0 }}
+          transition={{ duration: 0.25 }}
+          src={src}
+          alt={alt}
+          className="max-w-full max-h-[90vh] object-contain rounded-xl shadow-2xl"
+          onClick={(e) => e.stopPropagation()}
+        />
+      </motion.div>
+    </AnimatePresence>
+  );
+}
 
 const CAT_COLORS = {
   'Power Transmission':  { bg: '#fff7ed', border: '#f97316', badge: '#ea580c', text: '#9a3412', light: '#fff3e0' },
@@ -65,6 +104,70 @@ const SEED_PROJECTS = [
     featured: true,
   },
   {
+    id: '6',
+    no: 'PRJ-HT-006',
+    title: '11 kV HT Line Project – Dudu, Jaipur, Rajasthan',
+    client: 'Indus Towers',
+    location: 'Dudu, Jaipur, Rajasthan',
+    category: 'Power Transmission',
+    status: 'Completed',
+    value: '12 km HT Line',
+    duration: 'Within Schedule',
+    specs: [
+      { label: 'Voltage', value: '11 kV HT Line' },
+      { label: 'Length', value: '12 km' },
+      { label: 'Works', value: 'Design, Supply, Install, T&C' },
+      { label: 'Client', value: 'Indus Towers' },
+    ],
+    highlights: [
+      'Successfully executed 12 km of 11 kV HT Line for reliable power connectivity to telecom infrastructure',
+      'Conducted route survey, alignment finalization and coordination with local utility authorities',
+      'Erection of poles, cross-arms, insulators and associated line hardware',
+      'Stringing of conductors and installation of all HT line accessories',
+      'Earthing, safety and protection system implementation',
+      'Testing, commissioning and successful energization of the HT feeder',
+      'Ensured compliance with client specifications, utility standards and applicable safety regulations',
+      'Completed the project within the stipulated timeline and handed over successfully',
+    ],
+    scope: ['Engineering & Design', 'Supply of Line Materials', 'HT Line Construction', 'Testing & Commissioning', 'Utility Coordination', 'Project Management & Handover'],
+    outcome: '✔ Successfully commissioned 12 km of 11 kV HT Line at Dudu, Jaipur (Rajasthan) for Indus Towers, enabling reliable and uninterrupted power supply to telecom infrastructure.',
+    image: '/images/projects/11KVA_HT_LINE.png',
+    imgFit: 'contain',
+    featured: true,
+  },
+  {
+    id: '7',
+    no: 'PRJ-DC-007',
+    title: 'Express Feeder HT Electrical Works – Nxtra Data Centre, Varanasi',
+    client: 'Nxtra by Airtel',
+    location: 'Varanasi, Uttar Pradesh',
+    category: 'Power Transmission',
+    status: 'Completed',
+    value: 'HT Express Feeder',
+    duration: 'Design to Handover',
+    specs: [
+      { label: 'Client', value: 'Nxtra by Airtel' },
+      { label: 'Type', value: 'HT Express Feeder' },
+      { label: 'Works', value: 'Cable Laying & Termination' },
+      { label: 'Sector', value: 'Data Centre' },
+    ],
+    highlights: [
+      'Survey, planning and execution of dedicated HT express feeder',
+      'HT cable laying through trench/duct route',
+      'Installation of HT cable termination kits and jointing works',
+      'HT panel interfacing and feeder connectivity',
+      'Earthing and bonding system installation',
+      'Testing of HT cables including insulation resistance and continuity checks',
+      'Coordination with utility authorities for feeder integration and energization',
+      'Pre-commissioning, commissioning and successful handover',
+    ],
+    scope: ['HT Feeder Infrastructure Development', 'HT Cable Laying & Termination', 'Earthing & Testing', 'Utility Coordination', 'Commissioning & Energization Support', 'Data Centre Power Infrastructure Works'],
+    outcome: '✔ Successfully executed and commissioned the dedicated HT Express Feeder for Nxtra Data Centre, Varanasi, ensuring reliable and uninterrupted power connectivity for critical data centre operations.',
+    image: '/images/projects/EXPRESS_FEEDER_AIRTEL.png',
+    imgFit: 'contain',
+    featured: true,
+  },
+  {
     id: '4',
     no: 'PRJ-COMP-004',
     title: '1500+ CEIG & PCB Statutory Approvals – Pan India',
@@ -124,6 +227,7 @@ const SEED_PROJECTS = [
     scope: ['EV Infrastructure Development', 'Electrical Design & Load Assessment', 'HT/LT Power Distribution', 'Cable Laying & Termination', 'Earthing & Safety Systems', 'Testing, Commissioning & Handover'],
     outcome: 'Successfully commissioned EV Charging Station infrastructure in Rajasthan for Statiq — supporting sustainable EV mobility across the state.',
     image: '/images/projects/EV_STATION%20_IMAGE.png',
+    imgFit: 'contain',
     featured: true,
   },
   {
@@ -154,7 +258,8 @@ const SEED_PROJECTS = [
     ],
     scope: ['ETP Design & Engineering', 'Equipment Supply & Installation', 'Piping & Instrumentation', 'Electrical & Control Panel', 'Performance Testing', 'Handover & Documentation'],
     outcome: 'Successfully commissioned 4 KLD ETP at Manor & Mews, Jaipur — effective wastewater treatment with full PCB environmental compliance and handover documentation.',
-    image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?crop=entropy&cs=srgb&fm=jpg&q=85&w=1200',
+    image: '/images/projects/4KLD_image.png',
+    imgFit: 'contain',
     featured: true,
   },
 ];
@@ -163,7 +268,10 @@ const SEED_PROJECTS = [
 function FeaturedCard({ p, i }) {
   const col = CAT_COLORS[p.category] || CAT_COLORS['Power Transmission'];
   const flip = i % 2 === 1;
+  const [lightbox, setLightbox] = useState(false);
   return (
+    <>
+    {lightbox && <Lightbox src={p.image} alt={p.title} onClose={() => setLightbox(false)} />}
     <motion.div
       initial={{ opacity: 0, y: 28 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -173,9 +281,16 @@ function FeaturedCard({ p, i }) {
       style={{ border: `2px solid ${col.border}30` }}
     >
       {/* Image — fixed height, not stretching */}
-      <div className="lg:w-[42%] h-56 lg:h-auto lg:max-h-[380px] relative overflow-hidden flex-shrink-0">
-        <img src={p.image} alt={p.title} className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
-        <div className="absolute inset-0" style={{ background: `linear-gradient(${flip ? '270deg' : '90deg'}, ${col.badge}bb 0%, transparent 55%)` }} />
+      <div
+        className="lg:w-[42%] h-56 lg:h-auto lg:max-h-[380px] relative overflow-hidden flex-shrink-0 cursor-zoom-in group/img"
+        onClick={() => setLightbox(true)}
+      >
+        <img src={p.image} alt={p.title} className={`w-full h-full ${p.imgFit === 'contain' ? 'object-contain bg-white' : 'object-cover group-hover/img:scale-105'} transition-transform duration-700`} />
+        <div className="absolute inset-0 bg-black/0 group-hover/img:bg-black/20 transition-all duration-300 flex items-center justify-center">
+          <div className="opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 bg-white/90 rounded-full p-2 shadow-lg">
+            <ZoomIn className="w-5 h-5 text-slate-700" />
+          </div>
+        </div>
         <div className="absolute bottom-3 left-3 px-2.5 py-1 rounded-full text-[10px] font-black text-white shadow"
           style={{ background: col.badge }}>{p.category}</div>
       </div>
@@ -255,6 +370,7 @@ function FeaturedCard({ p, i }) {
         </div>
       </div>
     </motion.div>
+    </>
   );
 }
 

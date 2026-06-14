@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 import { Zap, BatteryCharging, Server, Building2, Cpu, Plug, ShieldAlert, Leaf, ClipboardCheck, Network, Scale, ArrowRight, CheckCircle2 } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -66,11 +67,18 @@ export default function Services() {
                   <div>
                     <h2 className="text-3xl lg:text-4xl font-bold leading-tight mb-4">{s.title}</h2>
                     <p className="text-foreground/75 leading-relaxed mb-6">{s.short}</p>
-                    <ul className="space-y-3 mb-6">
-                      {s.points.map(p => (
+                    <ul className="space-y-3 mb-4">
+                      {s.points.slice(0, 5).map(p => (
                         <li key={p} className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-accent mt-0.5 flex-shrink-0" /><span className="text-foreground/80">{p}</span></li>
                       ))}
                     </ul>
+                    {s.points.length > 5 && (
+                      <Link href={`/services/${s.slug}`}
+                        className="inline-flex items-center gap-1.5 text-sm font-bold mb-6 hover:gap-2.5 transition-all"
+                        style={{ color: '#d4af37' }}>
+                        Read More — {s.points.length - 5} more capabilities <ArrowRight className="w-4 h-4" />
+                      </Link>
+                    )}
                     {s.achievement && (
                       <div className="mb-6 p-4 rounded-xl border border-[#d4af37]/40 bg-[#d4af37]/8" style={{background:'rgba(212,175,55,0.07)'}}>
                         <p className="text-sm text-[#0a1628] font-medium leading-relaxed">{s.achievement}</p>

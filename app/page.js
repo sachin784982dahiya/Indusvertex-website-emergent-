@@ -353,6 +353,105 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── PROJECT TICKER ── */}
+      <div className="bg-[#0a1628] border-b border-white/10 overflow-hidden py-3">
+        <div className="flex items-center gap-0 animate-none">
+          <div className="flex-shrink-0 px-4 py-1 bg-[#16a34a] text-white text-xs font-black uppercase tracking-widest mr-4">Live Projects</div>
+          <div className="overflow-hidden flex-1">
+            <div className="flex gap-8 whitespace-nowrap"
+              style={{
+                animation: 'ticker-scroll 30s linear infinite',
+              }}>
+              {[
+                { label: '1250 kVA PSS Installation', client: 'Vodafone Idea', location: 'Meerut, UP' },
+                { label: '12 km 11 kV HT Line', client: 'Indus Towers', location: 'Dudu, Jaipur' },
+                { label: 'HT Express Feeder', client: 'Nxtra by Airtel', location: 'Varanasi, UP' },
+                { label: 'EV Charging Infrastructure', client: 'Statiq', location: 'Rajasthan' },
+                { label: '4 KLD ETP Installation', client: 'Manor & Mews', location: 'Jaipur, Rajasthan' },
+                { label: 'Transformer Testing & Maintenance', client: 'Multiple Clients', location: 'Pan India' },
+                { label: '1500+ CEIG & PCB Approvals', client: 'Bharti Airtel & others', location: 'Pan India' },
+              ].concat([
+                { label: '1250 kVA PSS Installation', client: 'Vodafone Idea', location: 'Meerut, UP' },
+                { label: '12 km 11 kV HT Line', client: 'Indus Towers', location: 'Dudu, Jaipur' },
+                { label: 'HT Express Feeder', client: 'Nxtra by Airtel', location: 'Varanasi, UP' },
+                { label: 'EV Charging Infrastructure', client: 'Statiq', location: 'Rajasthan' },
+                { label: '4 KLD ETP Installation', client: 'Manor & Mews', location: 'Jaipur, Rajasthan' },
+                { label: 'Transformer Testing & Maintenance', client: 'Multiple Clients', location: 'Pan India' },
+                { label: '1500+ CEIG & PCB Approvals', client: 'Bharti Airtel & others', location: 'Pan India' },
+              ]).map((p, i) => (
+                <span key={i} className="inline-flex items-center gap-2 text-xs text-white/80 flex-shrink-0">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#16a34a] flex-shrink-0" />
+                  <span className="font-bold text-white">{p.label}</span>
+                  <span className="text-white/40">·</span>
+                  <span className="text-[#d4af37]">{p.client}</span>
+                  <span className="text-white/40">·</span>
+                  <span className="text-white/60">{p.location}</span>
+                  <span className="ml-4 text-white/20">|</span>
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+        <style>{`
+          @keyframes ticker-scroll {
+            0%   { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+          }
+        `}</style>
+      </div>
+
+      {/* ── PROJECT PROOF STRIP ── */}
+      <section className="py-10 bg-[#0a1628]">
+        <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <div className="text-[10px] uppercase tracking-[0.25em] text-[#16a34a] font-bold mb-1">Real Projects · Real Results</div>
+              <h2 className="text-xl font-black text-white">Our Work, On Ground</h2>
+            </div>
+            <Link href="/projects" className="inline-flex items-center gap-1.5 text-xs font-bold text-[#d4af37] hover:gap-2.5 transition-all">
+              View All Projects <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-3">
+            {[
+              { img: '/images/projects/ht-panel-vi-meerut.jpg',      title: '1250 kVA PSS',         client: 'Vodafone Idea', location: 'Meerut, UP',       badge: 'Power',      color: '#ea580c' },
+              { img: '/images/projects/11KVA_HT_LINE.png',           title: '11 kV HT Line',        client: 'Indus Towers',  location: 'Dudu, Jaipur',    badge: 'HT Line',    color: '#ea580c', fit: 'contain' },
+              { img: '/images/projects/EXPRESS_FEEDER_AIRTEL.png',   title: 'HT Express Feeder',    client: 'Nxtra Airtel',  location: 'Varanasi',        badge: 'Data Centre',color: '#0891b2', fit: 'contain' },
+              { img: '/images/projects/EV_STATION _IMAGE.png',       title: 'EV Charging Infra',    client: 'Statiq',        location: 'Rajasthan',       badge: 'EV',         color: '#0891b2', fit: 'contain' },
+              { img: '/images/projects/4KLD_image.png',              title: '4 KLD ETP',            client: 'Manor & Mews',  location: 'Jaipur',          badge: 'ETP',        color: '#059669', fit: 'contain' },
+              { img: '/images/projects/ht-transformer-yard.jpg',     title: 'Transformer Testing',  client: 'Multiple',      location: 'Pan India',       badge: 'Testing',    color: '#ea580c' },
+              { img: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?crop=entropy&cs=srgb&fm=jpg&q=85&w=600', title: '1500+ Approvals', client: 'Airtel & others', location: 'Pan India', badge: 'Compliance', color: '#9333ea' },
+            ].map((p, i) => (
+              <Link href="/projects" key={i}>
+                <motion.div
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: i * 0.06 }}
+                  className="relative rounded-xl overflow-hidden group cursor-pointer"
+                  style={{ aspectRatio: '3/4' }}
+                >
+                  <img
+                    src={p.img} alt={p.title}
+                    className={`w-full h-full ${p.fit === 'contain' ? 'object-contain bg-white' : 'object-cover'} group-hover:scale-105 transition-transform duration-500`}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                  <div className="absolute top-2 left-2">
+                    <span className="px-1.5 py-0.5 rounded text-[9px] font-black text-white"
+                      style={{ background: p.color }}>{p.badge}</span>
+                  </div>
+                  <div className="absolute bottom-0 left-0 right-0 p-2.5">
+                    <div className="text-white font-black text-[11px] leading-tight mb-0.5">{p.title}</div>
+                    <div className="text-white/60 text-[9px]">{p.client}</div>
+                    <div className="text-[#d4af37] text-[9px]">{p.location}</div>
+                  </div>
+                </motion.div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── STATS ── */}
       <section className="py-16 bg-[#0a1628]">
         <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6">
@@ -376,17 +475,42 @@ export default function Home() {
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { icon: Zap, title: 'Technical Engineering Excellence', text: 'Multi-disciplinary expertise across power, HVAC, civil, IT and automation.' },
-              { icon: ShieldCheck, title: 'Regulatory & Compliance Expertise', text: 'CEIG, CTE/CTO, PCB, Fire NOC and statutory clearances under one roof.' },
-              { icon: ClipboardCheck, title: 'Strong Project Execution & O&M', text: 'Rigorous delivery discipline with long-term operations and maintenance support.' },
-              { icon: Leaf, title: 'Sustainable & Green Engineering', text: 'Eco-conscious designs integrating solar, BESS and environmental compliance from day one.' }
+              {
+                icon: Zap,
+                title: 'HT/LT Power Experts',
+                stat: '150+ Projects',
+                text: 'From 11 kV HT lines and 1250 kVA substations to LT panels and cable terminations — executed across telecom, data centres and industrial sites.',
+                color: '#ea580c',
+              },
+              {
+                icon: ShieldCheck,
+                title: '1500+ Approvals Secured',
+                stat: 'CEIG · PCB · CTE/CTO',
+                text: 'We handle the full regulatory cycle — drawings, submissions, inspections and follow-ups — so your project is never held up by paperwork.',
+                color: '#9333ea',
+              },
+              {
+                icon: ClipboardCheck,
+                title: 'End-to-End Accountability',
+                stat: 'Design → Handover',
+                text: 'Single-partner responsibility from survey and design through supply, installation, testing and commissioning — no handoff gaps, no excuses.',
+                color: '#0891b2',
+              },
+              {
+                icon: Leaf,
+                title: 'Sustainable by Design',
+                stat: 'EV · ETP · STP · ZLD',
+                text: 'EV charging infrastructure, effluent treatment plants and green compliance built into every project from day one — not added as an afterthought.',
+                color: '#16a34a',
+              },
             ].map((f, i) => (
               <div key={f.title}>
                 <Card className="p-6 h-full hover:shadow-xl hover:-translate-y-1 transition-all border-border/60 bg-white dark:bg-[#0a1628] dark:border-white/10">
-                  <div className="w-12 h-12 rounded-xl bg-[#0a1628] flex items-center justify-center mb-4">
-                    <f.icon className="w-6 h-6 text-[#d4af37]" />
+                  <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style={{ background: `${f.color}18` }}>
+                    <f.icon className="w-6 h-6" style={{ color: f.color }} />
                   </div>
-                  <h3 className="font-bold text-lg mb-2 text-[#0a1628] dark:text-white">{f.title}</h3>
+                  <div className="text-[10px] font-black uppercase tracking-widest mb-1" style={{ color: f.color }}>{f.stat}</div>
+                  <h3 className="font-bold text-lg mb-2 text-[#0a1628] dark:text-white leading-snug">{f.title}</h3>
                   <p className="text-sm text-gray-500 dark:text-white/60 leading-relaxed">{f.text}</p>
                 </Card>
               </div>
