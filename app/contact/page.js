@@ -13,6 +13,7 @@ export default function Contact() {
   const [form, setForm] = useState({ name:'', email:'', phone:'', company:'', subject:'', message:'' });
   const [loading, setLoading] = useState(false);
 
+
   const submit = async (e) => {
     e.preventDefault(); setLoading(true);
     try {
@@ -26,16 +27,7 @@ export default function Contact() {
 
   return (
     <div>
-      <section className="flex items-center gradient-navy text-white relative overflow-hidden py-16 pt-28">
-        <div className="absolute inset-0 grid-pattern opacity-30" />
-        <div className="relative max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6">
-          <div className="text-xs uppercase tracking-[0.2em] text-gold font-semibold mb-3">Get in Touch</div>
-          <h1 className="text-4xl lg:text-5xl font-bold max-w-3xl leading-tight">Let’s build something exceptional together.</h1>
-          <p className="mt-4 text-base text-white/70 max-w-2xl">Whether it’s a new project, regulatory advisory, or a partnership opportunity — our team will respond within 24 hours.</p>
-        </div>
-      </section>
-
-      <section id="inquiry" className="py-16 bg-slate-50 dark:bg-[#0d1f3c]">
+      <section id="inquiry" className="pt-32 pb-16 bg-slate-50 dark:bg-[#0d1f3c]">
         <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-10 items-start">
 
           {/* LEFT — Business Inquiry Form */}
