@@ -127,7 +127,7 @@ export default function Navbar() {
 <button onClick={() => mounted && setTheme(theme === 'dark' ? 'light' : 'dark')} className={cn('p-2 rounded-md transition-colors', transparent ? 'text-white hover:bg-white/10' : 'text-foreground hover:bg-muted')} aria-label="Toggle theme">
                 {mounted && theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
               </button>
-              <Link href="/contact" className="hidden md:block ml-1">
+              <Link href="/contact#inquiry" className="hidden md:block ml-1">
                 <Button className="font-semibold" style={{backgroundColor:'#d4af37', color:'#0a1628'}}>Request Consultation</Button>
               </Link>
               <button onClick={() => setOpen(!open)} className={cn('lg:hidden p-2 rounded-md', transparent ? 'text-white' : 'text-foreground')} aria-label="Menu">

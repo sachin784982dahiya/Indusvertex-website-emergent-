@@ -1,13 +1,43 @@
 'use client';
-import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { useEffect, useState, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Card } from '@/components/ui/card';
 import { TEAM as STATIC_TEAM } from '@/lib/services-data';
 import PersonAvatar from '@/components/PersonAvatar';
-import { Award, Briefcase } from 'lucide-react';
+import { Award, Briefcase, X, ZoomIn } from 'lucide-react';
+
+function Lightbox({ src, alt, onClose }) {
+  useEffect(() => {
+    const handler = (e) => { if (e.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [onClose]);
+  return (
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+        className="fixed inset-0 z-50 flex items-center justify-center p-4"
+        style={{ background: 'rgba(0,0,0,0.88)' }}
+        onClick={onClose}
+      >
+        <button onClick={onClose} className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 hover:bg-white/25 flex items-center justify-center text-white transition-all">
+          <X className="w-5 h-5" />
+        </button>
+        <motion.img
+          initial={{ scale: 0.85, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.85, opacity: 0 }}
+          transition={{ duration: 0.25 }}
+          src={src} alt={alt}
+          className="max-w-sm w-full max-h-[85vh] object-contain rounded-2xl shadow-2xl"
+          onClick={(e) => e.stopPropagation()}
+        />
+      </motion.div>
+    </AnimatePresence>
+  );
+}
 
 export default function Team() {
   const [team, setTeam] = useState(STATIC_TEAM);
+  const [lightbox, setLightbox] = useState(null); // { src, alt }
 
   useEffect(() => {
     fetch('/api/team').then(r => r.ok ? r.json() : null).then(d => {
@@ -17,6 +47,7 @@ export default function Team() {
 
   return (
     <div>
+      {lightbox && <Lightbox src={lightbox.src} alt={lightbox.alt} onClose={() => setLightbox(null)} />}
       <section className="min-h-[65vh] flex items-center gradient-navy text-white relative overflow-hidden">
         <div className="absolute inset-0 grid-pattern opacity-30" />
         <div className="relative max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6 pt-24 pb-16">
@@ -39,7 +70,15 @@ export default function Team() {
               >
                 <Card className="p-8 hover:shadow-2xl transition-all border-border/60 h-full group">
                   <div className="flex items-start gap-6">
-                    <PersonAvatar name={m.name} imageUrl={m.imageUrl || m.image} size="lg" shape="square" />
+                    <div
+                      className="relative cursor-zoom-in group/avatar flex-shrink-0"
+                      onClick={() => (m.imageUrl || m.image) && setLightbox({ src: m.imageUrl || m.image, alt: m.name })}
+                    >
+                      <PersonAvatar name={m.name} imageUrl={m.imageUrl || m.image} size="lg" shape="square" />
+                      <div className="absolute inset-0 rounded-xl bg-black/0 group-hover/avatar:bg-black/25 transition-all flex items-center justify-center">
+                        <ZoomIn className="w-5 h-5 text-white opacity-0 group-hover/avatar:opacity-100 transition-opacity" />
+                      </div>
+                    </div>
                     <div className="flex-1">
                       <h3 className="text-2xl font-bold leading-tight">{m.name}</h3>
                       <div className="flex items-center gap-1.5 mt-1.5">
@@ -53,6 +92,7 @@ export default function Team() {
                       <p className="mt-4 text-foreground/75 leading-relaxed text-sm">{m.bio}</p>
                     </div>
                   </div>
+
                 </Card>
               </motion.div>
             ))}

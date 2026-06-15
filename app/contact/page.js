@@ -26,58 +26,81 @@ export default function Contact() {
 
   return (
     <div>
-      <section className="min-h-[65vh] flex items-center gradient-navy text-white relative overflow-hidden">
+      <section className="flex items-center gradient-navy text-white relative overflow-hidden py-16 pt-28">
         <div className="absolute inset-0 grid-pattern opacity-30" />
-        <div className="relative max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6 pt-24 pb-16">
+        <div className="relative max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6">
           <div className="text-xs uppercase tracking-[0.2em] text-gold font-semibold mb-3">Get in Touch</div>
-          <h1 className="text-5xl lg:text-6xl font-bold max-w-4xl leading-tight">Let’s build something exceptional together.</h1>
-          <p className="mt-6 text-lg text-white/75 max-w-3xl">Whether it’s a new project, regulatory advisory, or a partnership opportunity — our team will respond within 24 hours.</p>
+          <h1 className="text-4xl lg:text-5xl font-bold max-w-3xl leading-tight">Let’s build something exceptional together.</h1>
+          <p className="mt-4 text-base text-white/70 max-w-2xl">Whether it’s a new project, regulatory advisory, or a partnership opportunity — our team will respond within 24 hours.</p>
         </div>
       </section>
 
-      <section className="py-20 bg-background">
-        <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6 grid lg:grid-cols-5 gap-10">
-          <div className="lg:col-span-2 space-y-5">
+      <section id="inquiry" className="py-16 bg-slate-50 dark:bg-[#0d1f3c]">
+        <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-10 items-start">
+
+          {/* LEFT — Business Inquiry Form */}
+          <div className="bg-white dark:bg-[#0a1628] rounded-2xl shadow-xl p-7 border border-slate-100 dark:border-white/10">
+            <div className="mb-5">
+              <div className="text-[10px] uppercase tracking-[0.2em] font-black text-[#16a34a] mb-1">Contact Us</div>
+              <h2 className="text-xl font-black text-[#0a1628] dark:text-white">Business Inquiry</h2>
+              <p className="text-slate-500 text-xs mt-1">Our team will respond within 24 hours with a tailored reply.</p>
+            </div>
+            <form onSubmit={submit} className="space-y-4">
+              <div>
+                <Label className="text-xs font-semibold text-slate-600">Full Name *</Label>
+                <Input required value={form.name} onChange={e=>setForm({...form,name:e.target.value})} className="mt-1 h-9 text-sm" />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <Label className="text-xs font-semibold text-slate-600">Phone</Label>
+                  <Input value={form.phone} onChange={e=>setForm({...form,phone:e.target.value})} className="mt-1 h-9 text-sm" />
+                </div>
+                <div>
+                  <Label className="text-xs font-semibold text-slate-600">Company</Label>
+                  <Input value={form.company} onChange={e=>setForm({...form,company:e.target.value})} className="mt-1 h-9 text-sm" />
+                </div>
+              </div>
+              <div>
+                <Label className="text-xs font-semibold text-slate-600">Subject</Label>
+                <Input value={form.subject} onChange={e=>setForm({...form,subject:e.target.value})} placeholder="e.g. HT Line project, ETP installation…" className="mt-1 h-9 text-sm" />
+              </div>
+              <div>
+                <Label className="text-xs font-semibold text-slate-600">Message *</Label>
+                <Textarea required rows={4} value={form.message} onChange={e=>setForm({...form,message:e.target.value})} placeholder="Describe your requirement, location and timeline…" className="mt-1 text-sm resize-none" />
+              </div>
+              <Button type="submit" disabled={loading} className="w-full font-bold text-sm" style={{backgroundColor:'#d4af37', color:'#0a1628', height:'42px'}}>
+                {loading ? 'Sending…' : 'Send Message'}
+              </Button>
+            </form>
+          </div>
+
+          {/* RIGHT — Company Info + Map */}
+          <div className="space-y-4">
             {[
-              { icon: MapPin, title:'Head Office', text: COMPANY.address },
-              { icon: Phone, title:'Phone', text: COMPANY.phone, href:`tel:${COMPANY.phoneRaw}` },
-              { icon: Mail, title:'Email', text: <div className="space-y-1"><div>{COMPANY.emails.business}</div></div> },
-              { icon: Clock, title:'Working Hours', text: 'Mon – Sat: 10:00 AM – 7:00 PM' },
-              { icon: Building2, title:'Corporate Identity', text: <div><div>CIN: {COMPANY.cin}</div><div>GSTIN: {COMPANY.gstin}</div></div> }
+              { icon: MapPin,   title: 'Head Office',        content: COMPANY.address },
+              { icon: Phone,    title: 'Phone',              content: COMPANY.phone, href: `tel:${COMPANY.phoneRaw}` },
+              { icon: Mail,     title: 'Email',              content: COMPANY.emails.business },
+              { icon: Clock,    title: 'Working Hours',      content: 'Mon – Sat: 10:00 AM – 7:00 PM' },
+              { icon: Building2,title: 'Corporate Identity', content: `CIN: ${COMPANY.cin}  ·  GSTIN: ${COMPANY.gstin}` },
             ].map((c, i) => (
-              <Card key={i} className="p-5">
-                <div className="flex items-start gap-4">
-                  <div className="w-11 h-11 rounded-lg gradient-navy flex items-center justify-center flex-shrink-0"><c.icon className="w-5 h-5 text-gold" /></div>
-                  <div className="flex-1">
-                    <div className="text-xs uppercase tracking-wider text-muted-foreground font-semibold mb-1">{c.title}</div>
-                    {c.href ? <a href={c.href} className="text-foreground font-semibold hover:text-accent">{c.text}</a> : <div className="text-foreground/85 text-sm leading-relaxed">{c.text}</div>}
-                  </div>
+              <div key={i} className="flex items-start gap-4 bg-white dark:bg-[#0a1628] rounded-xl p-4 border border-slate-100 dark:border-white/10 shadow-sm">
+                <div className="w-9 h-9 rounded-lg bg-[#0a1628] flex items-center justify-center flex-shrink-0">
+                  <c.icon className="w-4 h-4 text-[#d4af37]" />
                 </div>
-              </Card>
+                <div>
+                  <div className="text-[10px] uppercase tracking-widest font-black text-slate-400 mb-0.5">{c.title}</div>
+                  {c.href
+                    ? <a href={c.href} className="text-sm font-bold text-[#0a1628] dark:text-white hover:text-[#16a34a]">{c.content}</a>
+                    : <div className="text-sm text-slate-700 dark:text-white/75 leading-relaxed">{c.content}</div>
+                  }
+                </div>
+              </div>
             ))}
-            <Card className="overflow-hidden p-0">
-              <iframe src="https://www.google.com/maps?q=Shastri+Nagar+Ghaziabad+Uttar+Pradesh+201002&output=embed" width="100%" height="250" style={{border:0}} loading="lazy" allowFullScreen referrerPolicy="no-referrer-when-downgrade" />
-            </Card>
+            <div className="rounded-xl overflow-hidden border border-slate-100 dark:border-white/10 shadow-sm">
+              <iframe src="https://www.google.com/maps?q=Shastri+Nagar+Ghaziabad+Uttar+Pradesh+201002&output=embed" width="100%" height="220" style={{border:0}} loading="lazy" allowFullScreen referrerPolicy="no-referrer-when-downgrade" />
+            </div>
           </div>
-          <div className="lg:col-span-3">
-            <Card className="p-8 shadow-xl">
-              <h2 className="text-2xl font-bold mb-2">Business Inquiry</h2>
-              <p className="text-foreground/70 text-sm mb-6">Share your requirement and our team will revert with a tailored response.</p>
-              <form onSubmit={submit} className="space-y-5">
-                <div className="grid md:grid-cols-2 gap-5">
-                  <div><Label>Full Name *</Label><Input required value={form.name} onChange={e=>setForm({...form,name:e.target.value})} className="mt-1.5" /></div>
-                  <div><Label>Email *</Label><Input type="email" required value={form.email} onChange={e=>setForm({...form,email:e.target.value})} className="mt-1.5" /></div>
-                </div>
-                <div className="grid md:grid-cols-2 gap-5">
-                  <div><Label>Phone</Label><Input value={form.phone} onChange={e=>setForm({...form,phone:e.target.value})} className="mt-1.5" /></div>
-                  <div><Label>Company / Organization</Label><Input value={form.company} onChange={e=>setForm({...form,company:e.target.value})} className="mt-1.5" /></div>
-                </div>
-                <div><Label>Subject</Label><Input value={form.subject} onChange={e=>setForm({...form,subject:e.target.value})} placeholder="e.g. Data Centre project, Solar+BESS RFQ…" className="mt-1.5" /></div>
-                <div><Label>Message *</Label><Textarea required rows={6} value={form.message} onChange={e=>setForm({...form,message:e.target.value})} placeholder="Tell us about your requirement…" className="mt-1.5" /></div>
-                <Button type="submit" disabled={loading} size="lg" className="w-full font-semibold text-base" style={{backgroundColor:'#d4af37', color:'#0a1628', height:'52px'}}>{loading ? 'Sending…' : 'Send Message'}</Button>
-              </form>
-            </Card>
-          </div>
+
         </div>
       </section>
     </div>
