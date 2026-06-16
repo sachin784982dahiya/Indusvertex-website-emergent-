@@ -28,6 +28,7 @@ export default function Footer() {
             <div className="mt-6 space-y-3 text-sm">
               <div className="flex items-start gap-3 text-white/80"><MapPin className="w-4 h-4 mt-0.5 text-gold flex-shrink-0" /><span>{COMPANY.address}</span></div>
               <div className="flex items-center gap-3 text-white/80"><Phone className="w-4 h-4 text-gold" /><a href={`tel:${COMPANY.phoneRaw}`} className="hover:text-white">{COMPANY.phone}</a></div>
+              <div className="flex items-center gap-3 text-white/80"><Phone className="w-4 h-4 text-gold" /><a href={`tel:${COMPANY.landlineRaw}`} className="hover:text-white">{COMPANY.landline}</a></div>
               <div className="flex items-center gap-3 text-white/80"><Mail className="w-4 h-4 text-gold" /><a href={`mailto:${COMPANY.emails.business}`} className="hover:text-white">{COMPANY.emails.business}</a></div>
             </div>
             <a href="/company-profile.html" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 mt-6 px-4 py-2.5 rounded-lg gradient-gold text-sm font-semibold" style={{color:'#0a1628'}}><Download className="w-4 h-4" />Download Company Profile</a>

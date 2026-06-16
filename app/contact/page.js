@@ -70,7 +70,8 @@ export default function Contact() {
           <div className="space-y-4">
             {[
               { icon: MapPin,   title: 'Head Office',        content: COMPANY.address },
-              { icon: Phone,    title: 'Phone',              content: COMPANY.phone, href: `tel:${COMPANY.phoneRaw}` },
+              { icon: Phone,    title: 'Mobile',             content: COMPANY.phone, href: `tel:${COMPANY.phoneRaw}` },
+              { icon: Phone,    title: 'Landline',           content: COMPANY.landline, href: `tel:${COMPANY.landlineRaw}` },
               { icon: Mail,     title: 'Email',              content: COMPANY.emails.business },
               { icon: Clock,    title: 'Working Hours',      content: 'Mon – Sat: 10:00 AM – 7:00 PM' },
               { icon: Building2,title: 'Corporate Identity', content: `CIN: ${COMPANY.cin}  ·  GSTIN: ${COMPANY.gstin}` },

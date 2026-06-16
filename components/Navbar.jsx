@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
-import { Menu, X, Moon, Sun, ChevronDown, Home, Info, Briefcase, FolderOpen, Users, Scale, UserCircle, Phone, ArrowRight } from 'lucide-react';
+import { Menu, X, Moon, Sun, ChevronDown, Home, Info, Briefcase, FolderOpen, Users, Scale, UserCircle, Phone, ArrowRight, Handshake, Building2 } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -24,6 +24,7 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
+  const [workOpen, setWorkOpen] = useState(false);
   const { theme, setTheme } = useTheme();
   const pathname = usePathname();
 
@@ -35,7 +36,7 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  useEffect(() => { setOpen(false); setServicesOpen(false); }, [pathname]);
+  useEffect(() => { setOpen(false); setServicesOpen(false); setWorkOpen(false); }, [pathname]);
 
   // Hide on admin routes
   if (pathname?.startsWith('/admin')) return null;
@@ -124,9 +125,46 @@ export default function Navbar() {
             </nav>
 
             <div className="flex items-center gap-1">
-<button onClick={() => mounted && setTheme(theme === 'dark' ? 'light' : 'dark')} className={cn('p-2 rounded-md transition-colors', transparent ? 'text-white hover:bg-white/10' : 'text-foreground hover:bg-muted')} aria-label="Toggle theme">
+              <button onClick={() => mounted && setTheme(theme === 'dark' ? 'light' : 'dark')} className={cn('p-2 rounded-md transition-colors', transparent ? 'text-white hover:bg-white/10' : 'text-foreground hover:bg-muted')} aria-label="Toggle theme">
                 {mounted && theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
               </button>
+
+              {/* Work With Us dropdown */}
+              <div className="relative hidden md:block" onMouseEnter={() => setWorkOpen(true)} onMouseLeave={() => setWorkOpen(false)}>
+                <button className={cn(
+                  'inline-flex items-center gap-1.5 px-3 py-2 text-sm font-semibold rounded-md border transition-colors',
+                  transparent
+                    ? 'border-white/30 text-white hover:bg-white/10'
+                    : 'border-border text-foreground hover:bg-muted'
+                )}>
+                  <Handshake className="w-4 h-4" /> Work With Us <ChevronDown className="w-3.5 h-3.5" />
+                </button>
+                {workOpen && (
+                  <div className="absolute top-full right-0 pt-2 w-52">
+                    <div className="bg-popover border border-border rounded-xl shadow-2xl p-2 flex flex-col gap-1">
+                      <Link href="/vendor" className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-muted text-sm font-medium text-foreground transition-colors">
+                        <div className="w-7 h-7 rounded-md bg-[#0a1628] flex items-center justify-center flex-shrink-0">
+                          <Building2 className="w-3.5 h-3.5 text-[#d4af37]" />
+                        </div>
+                        <div>
+                          <div className="font-semibold text-xs">Become a Vendor</div>
+                          <div className="text-[10px] text-muted-foreground">Register your firm</div>
+                        </div>
+                      </Link>
+                      <Link href="/careers" className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-muted text-sm font-medium text-foreground transition-colors">
+                        <div className="w-7 h-7 rounded-md bg-[#16a34a] flex items-center justify-center flex-shrink-0">
+                          <Briefcase className="w-3.5 h-3.5 text-white" />
+                        </div>
+                        <div>
+                          <div className="font-semibold text-xs">Join Our Team</div>
+                          <div className="text-[10px] text-muted-foreground">View open positions</div>
+                        </div>
+                      </Link>
+                    </div>
+                  </div>
+                )}
+              </div>
+
               <Link href="/contact#inquiry" className="hidden md:block ml-1">
                 <Button className="font-semibold" style={{backgroundColor:'#d4af37', color:'#0a1628'}}>Request Consultation</Button>
               </Link>
@@ -191,14 +229,24 @@ export default function Navbar() {
         </nav>
 
         {/* CTA */}
-        <div className="px-4 py-5 border-t border-white/10">
-          <Link href="/contact" onClick={() => setOpen(false)}>
+        <div className="px-4 py-5 border-t border-white/10 space-y-2">
+          <Link href="/vendor" onClick={() => setOpen(false)}>
+            <button className="w-full py-2.5 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 transition-all hover:opacity-90 border border-white/20 text-white">
+              <Building2 className="w-4 h-4" /> Become a Vendor
+            </button>
+          </Link>
+          <Link href="/careers" onClick={() => setOpen(false)}>
+            <button className="w-full py-2.5 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 transition-all hover:opacity-90 border border-white/20 text-white">
+              <Briefcase className="w-4 h-4" /> Join Our Team
+            </button>
+          </Link>
+          <Link href="/contact#inquiry" onClick={() => setOpen(false)}>
             <button className="w-full py-3 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 transition-all hover:opacity-90"
               style={{backgroundColor:'#d4af37', color:'#0a1628'}}>
               Request Consultation <ArrowRight className="w-4 h-4" />
             </button>
           </Link>
-          <p className="text-center text-white/30 text-[11px] mt-3">Precision Engineering & Sustainable Solutions</p>
+          <p className="text-center text-white/30 text-[11px] mt-1">Precision Engineering & Sustainable Solutions</p>
         </div>
       </div>
     </>

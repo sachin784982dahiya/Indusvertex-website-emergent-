@@ -107,6 +107,88 @@ async function handle(req, params) {
     }
     return err('Service temporarily unavailable. Please email us at business@indusvertex.com', 503);
   }
+  // ============= VENDOR INQUIRY (no DB required — email first) =============
+  if (path === 'vendor-inquiry' && method === 'POST') {
+    const body = await readBody(req);
+    const { companyName, contactPerson, phone, email, tradeCategory, gst, experience, areasOfOperation, message } = body;
+    if (!companyName || !contactPerson || !phone || !email) return err('Company name, contact person, phone and email are required');
+    const vendor = { id: uuidv4(), companyName, contactPerson, phone, email, tradeCategory: tradeCategory || '', gst: gst || '', experience: experience || '', areasOfOperation: areasOfOperation || '', message: message || '', status: 'new', createdAt: new Date().toISOString() };
+    let emailSent = false;
+    const emailUser = process.env.EMAIL_USER; const emailPass = process.env.EMAIL_PASS;
+    if (emailUser && emailPass) {
+      try {
+        const transporter = nodemailer.createTransport({ service: 'gmail', auth: { user: emailUser, pass: emailPass } });
+        await transporter.sendMail({
+          from: `"IndusVertex Website" <${emailUser}>`, to: 'business@indusvertex.com', replyTo: email,
+          subject: `New Vendor Enquiry — ${companyName} | IndusVertex`,
+          html: `<div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;border:1px solid #e0e0e0;border-radius:8px;overflow:hidden">
+            <div style="background:#0a1628;padding:24px 32px"><h2 style="color:#d4af37;margin:0">New Vendor Enquiry — IndusVertex</h2></div>
+            <div style="padding:28px 32px;background:#fff">
+              <table style="width:100%;border-collapse:collapse;font-size:14px">
+                <tr><td style="padding:8px 0;color:#555;width:160px"><strong>Company</strong></td><td><strong>${companyName}</strong></td></tr>
+                <tr><td style="padding:8px 0;color:#555"><strong>Contact Person</strong></td><td>${contactPerson}</td></tr>
+                <tr><td style="padding:8px 0;color:#555"><strong>Phone</strong></td><td>${phone}</td></tr>
+                <tr><td style="padding:8px 0;color:#555"><strong>Email</strong></td><td><a href="mailto:${email}">${email}</a></td></tr>
+                ${tradeCategory ? `<tr><td style="padding:8px 0;color:#555"><strong>Trade Category</strong></td><td>${tradeCategory}</td></tr>` : ''}
+                ${gst ? `<tr><td style="padding:8px 0;color:#555"><strong>GST No.</strong></td><td>${gst}</td></tr>` : ''}
+                ${experience ? `<tr><td style="padding:8px 0;color:#555"><strong>Experience</strong></td><td>${experience}</td></tr>` : ''}
+                ${areasOfOperation ? `<tr><td style="padding:8px 0;color:#555"><strong>Areas of Operation</strong></td><td>${areasOfOperation}</td></tr>` : ''}
+              </table>
+              ${message ? `<div style="margin-top:20px;padding:16px;background:#f9f9f9;border-radius:6px"><p style="margin:0 0 8px;color:#555;font-size:13px"><strong>Message</strong></p><p style="margin:0;font-size:14px;line-height:1.6;white-space:pre-wrap">${message}</p></div>` : ''}
+              <p style="margin-top:20px;font-size:12px;color:#999">Submitted via indusvertex.com/vendor · ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })} IST</p>
+            </div></div>`,
+        });
+        emailSent = true;
+      } catch(e) { console.error('Vendor email error:', e); }
+    }
+    try { const db = await getDb(); await db.collection('vendor_inquiries').insertOne(vendor); } catch(e) { console.error('DB error (non-fatal):', e); }
+    if (emailSent) return json({ success: true, message: 'Thank you. Our procurement team will review your profile and contact you within 48 hours.', id: vendor.id });
+    return err('Service temporarily unavailable. Please email us at business@indusvertex.com', 503);
+  }
+
+  // ============= CAREER APPLICATION (no DB required — email first) =============
+  if (path === 'career-application' && method === 'POST') {
+    const body = await readBody(req);
+    const { name, email, phone, position, experience, currentOrg, coverLetter, resumeFile } = body;
+    if (!name || !phone || !email) return err('Name, phone and email are required');
+    const application = { id: uuidv4(), name, email, phone, position: position || 'General Application', experience: experience || '', currentOrg: currentOrg || '', coverLetter: coverLetter || '', hasResume: !!resumeFile, status: 'received', createdAt: new Date().toISOString() };
+    let emailSent = false;
+    const emailUser = process.env.EMAIL_USER; const emailPass = process.env.EMAIL_PASS;
+    if (emailUser && emailPass) {
+      try {
+        const transporter = nodemailer.createTransport({ service: 'gmail', auth: { user: emailUser, pass: emailPass } });
+        const attachments = [];
+        if (resumeFile?.base64 && resumeFile?.name) {
+          attachments.push({ filename: resumeFile.name, content: resumeFile.base64, encoding: 'base64', contentType: resumeFile.type || 'application/octet-stream' });
+        }
+        await transporter.sendMail({
+          from: `"IndusVertex Website" <${emailUser}>`, to: 'business@indusvertex.com', replyTo: email,
+          subject: `New Job Application — ${application.position} | IndusVertex`,
+          attachments,
+          html: `<div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;border:1px solid #e0e0e0;border-radius:8px;overflow:hidden">
+            <div style="background:#0a1628;padding:24px 32px"><h2 style="color:#d4af37;margin:0">New Job Application — IndusVertex</h2></div>
+            <div style="padding:28px 32px;background:#fff">
+              <table style="width:100%;border-collapse:collapse;font-size:14px">
+                <tr><td style="padding:8px 0;color:#555;width:140px"><strong>Name</strong></td><td>${name}</td></tr>
+                <tr><td style="padding:8px 0;color:#555"><strong>Phone</strong></td><td>${phone}</td></tr>
+                <tr><td style="padding:8px 0;color:#555"><strong>Email</strong></td><td><a href="mailto:${email}">${email}</a></td></tr>
+                <tr><td style="padding:8px 0;color:#555"><strong>Position</strong></td><td><strong>${application.position}</strong></td></tr>
+                ${experience ? `<tr><td style="padding:8px 0;color:#555"><strong>Experience</strong></td><td>${experience}</td></tr>` : ''}
+                ${currentOrg ? `<tr><td style="padding:8px 0;color:#555"><strong>Current Org</strong></td><td>${currentOrg}</td></tr>` : ''}
+                <tr><td style="padding:8px 0;color:#555"><strong>Resume</strong></td><td>${resumeFile?.name ? `Attached — ${resumeFile.name}` : 'Not uploaded'}</td></tr>
+              </table>
+              ${coverLetter ? `<div style="margin-top:20px;padding:16px;background:#f9f9f9;border-radius:6px"><p style="margin:0 0 8px;color:#555;font-size:13px"><strong>Cover Note</strong></p><p style="margin:0;font-size:14px;line-height:1.6;white-space:pre-wrap">${coverLetter}</p></div>` : ''}
+              <p style="margin-top:20px;font-size:12px;color:#999">Submitted via indusvertex.com/careers · ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })} IST</p>
+            </div></div>`,
+        });
+        emailSent = true;
+      } catch(e) { console.error('Careers email error:', e); }
+    }
+    try { const db = await getDb(); await db.collection('applications').insertOne(application); } catch(e) { console.error('DB error (non-fatal):', e); }
+    if (emailSent) return json({ success: true, message: 'Application received! Our team will get back to you within 5 working days.', id: application.id });
+    return err('Service temporarily unavailable. Please email us at business@indusvertex.com', 503);
+  }
+
   // All routes below require MongoDB
   const db = await getDb();
 
@@ -160,14 +242,6 @@ async function handle(req, params) {
       await db.collection('jobs').deleteOne({ id });
       return json({ success: true });
     }
-  }
-  if (path === 'career-application' && method === 'POST') {
-    const body = await readBody(req);
-    const { name, email, phone, jobTitle, experience, coverLetter, resumeUrl } = body;
-    if (!name || !email || !jobTitle) return err('Name, email and job title are required');
-    const application = { id: uuidv4(), name, email, phone: phone || '', jobTitle, experience: experience || '', coverLetter: coverLetter || '', resumeUrl: resumeUrl || '', status: 'received', createdAt: new Date().toISOString() };
-    await db.collection('applications').insertOne(application);
-    return json({ success: true, message: 'Application received. Our HR team will get back to you shortly.', id: application.id });
   }
   if (path === 'applications' && method === 'GET') {
     const unauthorized = requireAuth(req); if (unauthorized) return unauthorized;
