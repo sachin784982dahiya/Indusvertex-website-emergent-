@@ -59,7 +59,7 @@ export default function Navbar() {
             <div className="relative flex-1 overflow-hidden h-full flex items-center">
               <div className="flex whitespace-nowrap" style={{ animation: 'ticker-scroll 30s linear infinite' }}>
                 {[1,2,3].map(n => (
-                  <span key={n} className="text-white/90 text-sm font-medium px-10">
+                  <span key={n} className="text-[#16a34a] text-sm font-medium px-10">
                     ⚡ A Single-Window Solution for Complete Project Lifecycle Management – From Design &amp; Approvals to Execution, Testing, Commissioning and Handover.
                   </span>
                 ))}

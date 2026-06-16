@@ -381,7 +381,7 @@ export default function Home() {
               ]).map((p, i) => (
                 <span key={i} className="inline-flex items-center gap-2 text-xs text-white/80 flex-shrink-0">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#16a34a] flex-shrink-0" />
-                  <span className="font-bold text-white">{p.label}</span>
+                  <span className="font-bold text-[#16a34a]">{p.label}</span>
                   <span className="text-white/40">·</span>
                   <span className="text-[#d4af37]">{p.client}</span>
                   <span className="text-white/40">·</span>
