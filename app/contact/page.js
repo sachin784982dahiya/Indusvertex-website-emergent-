@@ -75,29 +75,28 @@ export default function Contact() {
           {/* RIGHT — Company Info + Map */}
           <div className="space-y-4">
             {[
-              { icon: MapPin,   title: 'Head Office',        content: COMPANY.address },
+              { icon: MapPin,   title: 'Head Office',        content: COMPANY.address, href: COMPANY.mapUrl },
               { icon: Phone,    title: 'Mobile',             content: COMPANY.phone, href: `tel:${COMPANY.phoneRaw}` },
               { icon: Phone,    title: 'Landline',           content: COMPANY.landline, href: `tel:${COMPANY.landlineRaw}` },
               { icon: Mail,     title: 'Email',              content: COMPANY.emails.business },
               { icon: Clock,    title: 'Working Hours',      content: 'Mon – Sat: 10:00 AM – 7:00 PM' },
               { icon: Building2,title: 'Corporate Identity', content: `CIN: ${COMPANY.cin}  ·  GSTIN: ${COMPANY.gstin}` },
-            ].map((c, i) => (
-              <div key={i} className="flex items-start gap-4 bg-white dark:bg-[#0a1628] rounded-xl p-4 border border-slate-100 dark:border-white/10 shadow-sm">
-                <div className="w-9 h-9 rounded-lg bg-[#0a1628] flex items-center justify-center flex-shrink-0">
-                  <c.icon className="w-4 h-4 text-[#d4af37]" />
-                </div>
-                <div>
-                  <div className="text-[10px] uppercase tracking-widest font-black text-slate-400 mb-0.5">{c.title}</div>
-                  {c.href
-                    ? <a href={c.href} className="text-sm font-bold text-[#0a1628] dark:text-white hover:text-[#16a34a]">{c.content}</a>
-                    : <div className="text-sm text-slate-700 dark:text-white/75 leading-relaxed">{c.content}</div>
-                  }
-                </div>
-              </div>
-            ))}
-            <div className="rounded-xl overflow-hidden border border-slate-100 dark:border-white/10 shadow-sm">
-              <iframe src="https://www.google.com/maps?q=Shastri+Nagar+Ghaziabad+Uttar+Pradesh+201002&output=embed" width="100%" height="220" style={{border:0}} loading="lazy" allowFullScreen referrerPolicy="no-referrer-when-downgrade" />
-            </div>
+            ].map((c, i) => {
+              const inner = (
+                <>
+                  <div className="w-9 h-9 rounded-lg bg-[#0a1628] flex items-center justify-center flex-shrink-0">
+                    <c.icon className="w-4 h-4 text-[#d4af37]" />
+                  </div>
+                  <div>
+                    <div className="text-[10px] uppercase tracking-widest font-black text-slate-400 mb-0.5">{c.title}</div>
+                    <div className="text-sm text-slate-700 dark:text-white/75 leading-relaxed">{c.content}</div>
+                  </div>
+                </>
+              );
+              return c.href
+                ? <a key={i} href={c.href} target="_blank" rel="noopener noreferrer" className="flex items-start gap-4 bg-white dark:bg-[#0a1628] rounded-xl p-4 border border-slate-100 dark:border-white/10 shadow-sm hover:border-[#d4af37] transition-colors">{inner}</a>
+                : <div key={i} className="flex items-start gap-4 bg-white dark:bg-[#0a1628] rounded-xl p-4 border border-slate-100 dark:border-white/10 shadow-sm">{inner}</div>;
+            })}
           </div>
 
         </div>
