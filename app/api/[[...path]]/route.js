@@ -141,8 +141,9 @@ async function handle(req, params) {
         emailSent = true;
       } catch(e) { console.error('Vendor email error:', e); }
     }
-    try { const db = await getDb(); await db.collection('vendor_inquiries').insertOne(vendor); } catch(e) { console.error('DB error (non-fatal):', e); }
-    if (emailSent) return json({ success: true, message: 'Thank you. Our procurement team will review your profile and contact you within 48 hours.', id: vendor.id });
+    let dbSaved = false;
+    try { const db = await getDb(); await db.collection('vendor_inquiries').insertOne(vendor); dbSaved = true; } catch(e) { console.error('DB error (non-fatal):', e); }
+    if (emailSent || dbSaved) return json({ success: true, message: 'Thank you. Our procurement team will review your profile and contact you within 48 hours.', id: vendor.id });
     return err('Service temporarily unavailable. Please email us at business@indusvertex.com', 503);
   }
 
@@ -184,8 +185,9 @@ async function handle(req, params) {
         emailSent = true;
       } catch(e) { console.error('Careers email error:', e); }
     }
-    try { const db = await getDb(); await db.collection('applications').insertOne(application); } catch(e) { console.error('DB error (non-fatal):', e); }
-    if (emailSent) return json({ success: true, message: 'Application received! Our team will get back to you within 5 working days.', id: application.id });
+    let dbSaved = false;
+    try { const db = await getDb(); await db.collection('applications').insertOne(application); dbSaved = true; } catch(e) { console.error('DB error (non-fatal):', e); }
+    if (emailSent || dbSaved) return json({ success: true, message: 'Application received! Our team will get back to you within 5 working days.', id: application.id });
     return err('Service temporarily unavailable. Please email us at business@indusvertex.com', 503);
   }
 

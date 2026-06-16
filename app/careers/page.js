@@ -30,7 +30,7 @@ export default function Careers() {
   const handleFile = (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    if (file.size > 5 * 1024 * 1024) { toast.error('File too large. Max 5 MB.'); return; }
+    if (file.size > 2 * 1024 * 1024) { toast.error('File too large. Max 2 MB.'); return; }
     const reader = new FileReader();
     reader.onload = () => setResumeFile({ name: file.name, base64: reader.result.split(',')[1], type: file.type });
     reader.readAsDataURL(file);
@@ -141,7 +141,7 @@ export default function Careers() {
                 </div>
 
                 <div>
-                  <Label className="text-xs font-semibold text-slate-600">Upload Resume <span className="text-slate-400 font-normal">(PDF / DOC / DOCX · max 5 MB)</span></Label>
+                  <Label className="text-xs font-semibold text-slate-600">Upload Resume <span className="text-slate-400 font-normal">(PDF / DOC / DOCX · max 2 MB)</span></Label>
                   <input ref={fileRef} type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                     className="hidden" onChange={handleFile} />
                   {resumeFile ? (
