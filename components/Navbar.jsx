@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
-import { Menu, X, Moon, Sun, ChevronDown, Home, Info, Briefcase, FolderOpen, Users, Scale, UserCircle, Phone, ArrowRight, Handshake, Building2 } from 'lucide-react';
+import { Menu, X, Moon, Sun, ChevronDown, Home, Info, Briefcase, FolderOpen, Users, Scale, UserCircle, Phone, ArrowRight, Handshake, Building2, Zap, Wrench, Battery, ClipboardCheck, Server, Car, ShieldAlert, Leaf, Landmark, Cpu, Network } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -50,16 +50,18 @@ export default function Navbar() {
       <div className="fixed top-0 left-0 right-0 z-50 flex flex-col">
 
         {/* News Ticker */}
-        <div className="w-full overflow-hidden bg-[#0a1628] border-b border-[#d4af37]/30 flex-shrink-0" style={{ height: '36px' }}>
+        <div className="w-full overflow-hidden bg-[#162844] border-b border-[#d4af37]/30 flex-shrink-0" style={{ height: '36px' }}>
           <div className="flex items-center h-full">
             <div className="flex-shrink-0 flex items-center gap-2 px-4 bg-[#d4af37] h-full">
               <span className="w-2 h-2 rounded-full bg-[#0a1628] animate-pulse" />
               <span className="text-[#0a1628] text-xs font-bold uppercase tracking-widest whitespace-nowrap">Latest</span>
             </div>
-            <div className="relative flex-1 overflow-hidden h-full flex items-center">
-              <div className="flex whitespace-nowrap" style={{ animation: 'ticker-scroll 30s linear infinite' }}>
+            <div className="relative flex-1 overflow-hidden h-full flex items-center group">
+              <div className="flex whitespace-nowrap" style={{ animation: 'ticker-scroll 30s linear infinite' }}
+                onMouseEnter={e => e.currentTarget.style.animationPlayState = 'paused'}
+                onMouseLeave={e => e.currentTarget.style.animationPlayState = 'running'}>
                 {[1,2,3].map(n => (
-                  <span key={n} className="text-[#16a34a] text-sm font-medium px-10">
+                  <span key={n} className="text-[#16a34a] text-base font-semibold px-10">
                     ⚡ A Single-Window Solution for Complete Project Lifecycle Management – From Design &amp; Approvals to Execution, Testing, Commissioning and Handover.
                   </span>
                 ))}
@@ -100,17 +102,39 @@ export default function Navbar() {
                       )}>
                         {item.label} <ChevronDown className="w-3.5 h-3.5" />
                       </Link>
-                      {servicesOpen && (
-                        <div className="absolute top-full left-1/2 -translate-x-1/2 pt-3 w-[640px]">
-                          <div className="bg-popover border border-border rounded-xl shadow-2xl p-3 grid grid-cols-2 gap-1">
-                            {SERVICES.filter(s => s.slug !== 'legal-advisory').map(s => (
-                              <Link key={s.slug} href={`/services/${s.slug}`} className="text-sm px-3 py-2 rounded-md hover:bg-muted text-foreground/80 hover:text-foreground transition-colors">
-                                {s.title}
-                              </Link>
-                            ))}
+                      {servicesOpen && (() => {
+                        const serviceIcons = {
+                          'electrical-power-transmission': Zap,
+                          'transformer-testing-maintenance': Wrench,
+                          'power-backup-renewable': Battery,
+                          'project-management-approvals': ClipboardCheck,
+                          'data-centre-hvac': Server,
+                          'ev-infrastructure': Car,
+                          'fire-safety-surveillance': ShieldAlert,
+                          'environmental-sustainability': Leaf,
+                          'civil-structural': Landmark,
+                          'automation-smart-infrastructure': Cpu,
+                          'it-infrastructure-ofc': Network,
+                        };
+                        return (
+                          <div className="absolute top-full left-1/2 -translate-x-1/2 pt-3 w-[680px]">
+                            <div className="bg-popover border border-border rounded-xl shadow-2xl p-4 grid grid-cols-2 gap-1">
+                              {SERVICES.filter(s => s.slug !== 'legal-advisory').map(s => {
+                                const Icon = serviceIcons[s.slug] || Briefcase;
+                                return (
+                                  <Link key={s.slug} href={`/services/${s.slug}`}
+                                    className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-muted transition-colors group">
+                                    <div className="w-7 h-7 rounded-md bg-[#0a1628] flex items-center justify-center flex-shrink-0 group-hover:bg-[#d4af37] transition-colors">
+                                      <Icon className="w-3.5 h-3.5 text-[#d4af37] group-hover:text-[#0a1628] transition-colors" />
+                                    </div>
+                                    <span className="text-sm font-bold text-foreground group-hover:text-foreground tracking-tight">{s.title}</span>
+                                  </Link>
+                                );
+                              })}
+                            </div>
                           </div>
-                        </div>
-                      )}
+                        );
+                      })()}
                     </div>
                   );
                 }
@@ -132,10 +156,8 @@ export default function Navbar() {
               {/* Work With Us dropdown */}
               <div className="relative hidden md:block" onMouseEnter={() => setWorkOpen(true)} onMouseLeave={() => setWorkOpen(false)}>
                 <button className={cn(
-                  'inline-flex items-center gap-1.5 px-3 py-2 text-sm font-semibold rounded-md border transition-colors',
-                  transparent
-                    ? 'border-white/30 text-white hover:bg-white/10'
-                    : 'border-border text-foreground hover:bg-muted'
+                  'inline-flex items-center gap-1.5 px-3 py-2 text-sm font-semibold rounded-md transition-colors',
+                  'bg-[#d4af37] text-[#0a1628] hover:bg-[#c9a430]'
                 )}>
                   <Handshake className="w-4 h-4" /> Work With Us <ChevronDown className="w-3.5 h-3.5" />
                 </button>

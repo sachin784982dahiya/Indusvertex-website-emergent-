@@ -61,7 +61,7 @@ async function handle(req, params) {
         });
         await transporter.sendMail({
           from: `"IndusVertex Website" <${emailUser}>`,
-          to: 'business@indusvertex.com',
+          to: 'business@indusvertex.com, info@indusvertex.com',
           ...(email ? { replyTo: email } : {}),
           subject: `New ${path === 'contact' ? 'Business Inquiry' : 'Consultation Request'} — ${lead.subject || lead.service || 'General'} | IndusVertex`,
           html: `
@@ -116,7 +116,7 @@ async function handle(req, params) {
       try {
         const transporter = nodemailer.createTransport({ service: 'gmail', auth: { user: emailUser, pass: emailPass } });
         await transporter.sendMail({
-          from: `"IndusVertex Website" <${emailUser}>`, to: 'business@indusvertex.com', replyTo: email,
+          from: `"IndusVertex Website" <${emailUser}>`, to: 'business@indusvertex.com, info@indusvertex.com', replyTo: email,
           subject: `New Vendor Enquiry — ${companyName} | IndusVertex`,
           html: `<div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;border:1px solid #e0e0e0;border-radius:8px;overflow:hidden">
             <div style="background:#0a1628;padding:24px 32px"><h2 style="color:#d4af37;margin:0">New Vendor Enquiry — IndusVertex</h2></div>
@@ -158,7 +158,7 @@ async function handle(req, params) {
           attachments.push({ filename: resumeFile.name, content: resumeFile.base64, encoding: 'base64', contentType: resumeFile.type || 'application/octet-stream' });
         }
         await transporter.sendMail({
-          from: `"IndusVertex Website" <${emailUser}>`, to: 'business@indusvertex.com', replyTo: email,
+          from: `"IndusVertex Website" <${emailUser}>`, to: 'business@indusvertex.com, info@indusvertex.com', replyTo: email,
           subject: `New Job Application — ${application.position} | IndusVertex`,
           attachments,
           html: `<div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;border:1px solid #e0e0e0;border-radius:8px;overflow:hidden">

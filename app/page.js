@@ -80,10 +80,10 @@ function Counter({ end, suffix = '' }) {
 
 export default function Home() {
   const stats = [
-    { label: 'Projects Delivered', value: 150, suffix: '+' },
-    { label: 'Enterprise Clients', value: 50, suffix: '+' },
+    { label: 'Projects Delivered', value: 300, suffix: '+' },
+    { label: 'Statutory Approvals', value: 4000, suffix: '+' },
     { label: 'Years Combined Experience', value: 40, suffix: '+' },
-    { label: 'Regulatory Approvals', value: 1500, suffix: '+' }
+    { label: 'Domains Served', value: 15, suffix: '' }
   ];
   const featured = SERVICES.slice(0, 6);
 
@@ -369,7 +369,7 @@ export default function Home() {
                 { label: 'EV Charging Infrastructure', client: 'Statiq', location: 'Rajasthan' },
                 { label: '4 KLD ETP Installation', client: 'Manor & Mews', location: 'Jaipur, Rajasthan' },
                 { label: 'Transformer Testing & Maintenance', client: 'Multiple Clients', location: 'Pan India' },
-                { label: '1500+ CEIG & PCB Approvals', client: 'Bharti Airtel & others', location: 'Pan India' },
+                { label: '4000+ CEIG & PCB Approvals', client: 'Bharti Airtel & others', location: 'Pan India' },
               ].concat([
                 { label: '1250 kVA PSS Installation', client: 'Vodafone Idea', location: 'Meerut, UP' },
                 { label: '12 km 11 kV HT Line', client: 'Indus Towers', location: 'Dudu, Jaipur' },
@@ -377,7 +377,7 @@ export default function Home() {
                 { label: 'EV Charging Infrastructure', client: 'Statiq', location: 'Rajasthan' },
                 { label: '4 KLD ETP Installation', client: 'Manor & Mews', location: 'Jaipur, Rajasthan' },
                 { label: 'Transformer Testing & Maintenance', client: 'Multiple Clients', location: 'Pan India' },
-                { label: '1500+ CEIG & PCB Approvals', client: 'Bharti Airtel & others', location: 'Pan India' },
+                { label: '4000+ CEIG & PCB Approvals', client: 'Bharti Airtel & others', location: 'Pan India' },
               ]).map((p, i) => (
                 <span key={i} className="inline-flex items-center gap-2 text-xs text-white/80 flex-shrink-0">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#16a34a] flex-shrink-0" />
@@ -420,7 +420,7 @@ export default function Home() {
               { img: '/images/projects/EV_STATION _IMAGE.png',       title: 'EV Charging Infra',    client: 'Statiq',        location: 'Rajasthan',       badge: 'EV',         color: '#0891b2', fit: 'contain' },
               { img: '/images/projects/4KLD_image.png',              title: '4 KLD ETP',            client: 'Manor & Mews',  location: 'Jaipur',          badge: 'ETP',        color: '#059669', fit: 'contain' },
               { img: '/images/projects/ht-transformer-yard.jpg',     title: 'Transformer Testing',  client: 'Multiple',      location: 'Pan India',       badge: 'Testing',    color: '#ea580c' },
-              { img: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?crop=entropy&cs=srgb&fm=jpg&q=85&w=600', title: '1500+ Approvals', client: 'Airtel & others', location: 'Pan India', badge: 'Compliance', color: '#9333ea' },
+              { img: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?crop=entropy&cs=srgb&fm=jpg&q=85&w=600', title: '4000+ Approvals', client: 'Airtel & others', location: 'Pan India', badge: 'Compliance', color: '#9333ea' },
             ].map((p, i) => (
               <Link href="/projects" key={i}>
                 <motion.div
@@ -478,13 +478,13 @@ export default function Home() {
               {
                 icon: Zap,
                 title: 'HT/LT Power Experts',
-                stat: '150+ Projects',
+                stat: '300+ Projects',
                 text: 'From 11 kV HT lines and 1250 kVA substations to LT panels and cable terminations — executed across telecom, data centres and industrial sites.',
                 color: '#ea580c',
               },
               {
                 icon: ShieldCheck,
-                title: '1500+ Approvals Secured',
+                title: '4000+ Approvals Secured',
                 stat: 'CEIG · PCB · CTE/CTO',
                 text: 'We handle the full regulatory cycle — drawings, submissions, inspections and follow-ups — so your project is never held up by paperwork.',
                 color: '#9333ea',

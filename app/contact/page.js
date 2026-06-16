@@ -74,11 +74,34 @@ export default function Contact() {
 
           {/* RIGHT — Company Info + Map */}
           <div className="space-y-4">
+            {/* Head Office card — special layout with map thumbnail */}
+            <a href={COMPANY.mapUrl} target="_blank" rel="noopener noreferrer"
+              className="flex items-start gap-4 bg-white dark:bg-[#0a1628] rounded-xl p-4 border border-slate-100 dark:border-white/10 shadow-sm hover:border-[#d4af37] transition-colors">
+              <div className="w-9 h-9 rounded-lg bg-[#0a1628] flex items-center justify-center flex-shrink-0">
+                <MapPin className="w-4 h-4 text-[#d4af37]" />
+              </div>
+              <div className="flex-1">
+                <div className="text-[10px] uppercase tracking-widest font-black text-slate-400 mb-0.5">Head Office</div>
+                <div className="text-sm text-slate-700 dark:text-white/75 leading-relaxed">
+                  IndusVertex House, Plot No 8, Kh No 579,<br />
+                  Avantika Phase 2, Shastri Nagar, Ghaziabad – 201002
+                </div>
+              </div>
+              <a href={COMPANY.mapUrl} target="_blank" rel="noopener noreferrer"
+                className="flex-shrink-0 rounded-lg overflow-hidden border border-slate-200 dark:border-white/10 hover:border-[#d4af37] transition-colors"
+                onClick={e => e.stopPropagation()}>
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3499.8!2d77.4896617!3d28.675974!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cf30075a339f9%3A0x5a1486982497e362!2sIndusVertex%20Law%20Firm!5e0!3m2!1sen!2sin!4v1718000000000!5m2!1sen!2sin"
+                  width="110" height="80" style={{border:0, pointerEvents:'none'}} loading="lazy"
+                />
+              </a>
+            </a>
+
+            {/* Other contact cards */}
             {[
-              { icon: MapPin,   title: 'Head Office',        content: COMPANY.address, href: COMPANY.mapUrl },
               { icon: Phone,    title: 'Mobile',             content: COMPANY.phone, href: `tel:${COMPANY.phoneRaw}` },
               { icon: Phone,    title: 'Landline',           content: COMPANY.landline, href: `tel:${COMPANY.landlineRaw}` },
-              { icon: Mail,     title: 'Email',              content: COMPANY.emails.business },
+              { icon: Mail,     title: 'Email',              content: `${COMPANY.emails.business}\n${COMPANY.emails.info}` },
               { icon: Clock,    title: 'Working Hours',      content: 'Mon – Sat: 10:00 AM – 7:00 PM' },
               { icon: Building2,title: 'Corporate Identity', content: `CIN: ${COMPANY.cin}  ·  GSTIN: ${COMPANY.gstin}` },
             ].map((c, i) => {
@@ -89,7 +112,7 @@ export default function Contact() {
                   </div>
                   <div>
                     <div className="text-[10px] uppercase tracking-widest font-black text-slate-400 mb-0.5">{c.title}</div>
-                    <div className="text-sm text-slate-700 dark:text-white/75 leading-relaxed">{c.content}</div>
+                    <div className="text-sm text-slate-700 dark:text-white/75 leading-relaxed whitespace-pre-line">{c.content}</div>
                   </div>
                 </>
               );
