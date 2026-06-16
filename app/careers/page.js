@@ -20,12 +20,47 @@ export default function Careers() {
     name: '', phone: '', email: '', position: '',
     experience: '', currentOrg: '', coverLetter: '',
   });
-  const [resumeFile, setResumeFile] = useState(null); // { name, base64, type }
+  const [resumeFile, setResumeFile] = useState(null);
+  const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const fileRef = useRef();
 
-  const set = (field) => (e) => setForm(f => ({ ...f, [field]: e.target.value }));
+  // Refs for required fields
+  const refs = { name: useRef(), phone: useRef(), email: useRef() };
+
+  const REQUIRED = [
+    { key: 'name',  label: 'Full Name' },
+    { key: 'phone', label: 'Phone' },
+    { key: 'email', label: 'Email' },
+  ];
+
+  const validate = () => {
+    const newErrors = {};
+    let firstErrorRef = null;
+    for (const { key, label } of REQUIRED) {
+      if (!form[key].trim()) {
+        newErrors[key] = `${label} is required`;
+        if (!firstErrorRef) firstErrorRef = refs[key];
+      }
+    }
+    // Phone format check — min 10 digits
+    if (form.phone && form.phone.replace(/\D/g, '').length < 10) {
+      newErrors.phone = 'Enter a valid 10-digit phone number';
+      if (!firstErrorRef) firstErrorRef = refs.phone;
+    }
+    // Email format check
+    if (form.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+      newErrors.email = 'Enter a valid email address';
+      if (!firstErrorRef) firstErrorRef = refs.email;
+    }
+    setErrors(newErrors);
+    if (firstErrorRef?.current) {
+      firstErrorRef.current.focus();
+      firstErrorRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleFile = (e) => {
     const file = e.target.files?.[0];
@@ -38,6 +73,7 @@ export default function Careers() {
 
   const submit = async (e) => {
     e.preventDefault();
+    if (!validate()) return;
     setLoading(true);
     try {
       const res = await fetch('/api/career-application', {
@@ -48,27 +84,29 @@ export default function Careers() {
       const d = await res.json();
       if (d.success) { toast.success(d.message); setSubmitted(true); }
       else toast.error(d.error || 'Could not submit. Please try again.');
-    } catch {
-      toast.error('Network error. Please email us at business@indusvertex.com');
-    }
+    } catch { toast.error('Network error. Please email us at business@indusvertex.com'); }
     setLoading(false);
   };
 
+  const field = (key) => ({
+    value: form[key],
+    onChange: (e) => { setForm(f => ({ ...f, [key]: e.target.value })); setErrors(er => ({ ...er, [key]: '' })); },
+  });
+
+  const ErrorMsg = ({ k }) => errors[k] ? <p className="text-xs text-red-500 mt-1">{errors[k]}</p> : null;
+  const inputClass = (k) => `mt-1 h-9 text-sm ${errors[k] ? 'border-red-400 focus:ring-red-300' : ''}`;
+
   return (
     <div>
-      {/* Hero */}
       <section className="gradient-navy text-white relative overflow-hidden py-20 pt-36">
         <div className="absolute inset-0 grid-pattern opacity-30" />
         <div className="relative max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-xs uppercase tracking-[0.2em] text-[#d4af37] font-semibold mb-3">Join Our Team</div>
           <h1 className="text-4xl lg:text-5xl font-bold max-w-3xl leading-tight">Build India's Infrastructure with Us</h1>
-          <p className="mt-4 text-base text-white/70 max-w-2xl">
-            We're always looking for talented engineers, project managers and compliance professionals. Send us your details and we'll be in touch.
-          </p>
+          <p className="mt-4 text-base text-white/70 max-w-2xl">We're always looking for talented engineers, project managers and compliance professionals. Send us your details and we'll be in touch.</p>
         </div>
       </section>
 
-      {/* Perks strip */}
       <section className="py-10 bg-white dark:bg-[#0a1628] border-b border-slate-100 dark:border-white/10">
         <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -84,7 +122,6 @@ export default function Careers() {
         </div>
       </section>
 
-      {/* Application Form */}
       <section className="py-16 bg-slate-50 dark:bg-[#0d1f3c]">
         <div className="max-w-screen-sm mx-auto px-4 sm:px-6 lg:px-8">
           {submitted ? (
@@ -94,9 +131,7 @@ export default function Careers() {
                 <CheckCircle2 className="w-8 h-8 text-[#16a34a]" />
               </div>
               <h2 className="text-2xl font-bold mb-3">Application Received!</h2>
-              <p className="text-slate-500 dark:text-white/60 text-sm max-w-xs mx-auto">
-                Our team will review your application and reach out within 5 working days.
-              </p>
+              <p className="text-slate-500 dark:text-white/60 text-sm max-w-xs mx-auto">Our team will review your application and reach out within 5 working days.</p>
             </motion.div>
           ) : (
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
@@ -104,40 +139,43 @@ export default function Careers() {
               <div className="mb-6">
                 <div className="text-[10px] uppercase tracking-[0.2em] font-black text-[#16a34a] mb-1">Apply Now</div>
                 <h2 className="text-2xl font-black text-[#0a1628] dark:text-white">Job Application</h2>
-                <p className="text-slate-500 text-xs mt-1">Fill in your details and we'll reach out if there's a match.</p>
+                <p className="text-slate-500 text-xs mt-1">Fields marked * are required.</p>
               </div>
 
-              <form onSubmit={submit} className="space-y-4">
+              <form onSubmit={submit} noValidate className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <Label className="text-xs font-semibold text-slate-600">Full Name *</Label>
-                    <Input required value={form.name} onChange={set('name')} className="mt-1 h-9 text-sm" placeholder="Your full name" />
+                    <Input ref={refs.name} {...field('name')} className={inputClass('name')} placeholder="Your full name" />
+                    <ErrorMsg k="name" />
                   </div>
                   <div>
                     <Label className="text-xs font-semibold text-slate-600">Phone *</Label>
-                    <Input required value={form.phone} onChange={set('phone')} className="mt-1 h-9 text-sm" placeholder="+91 XXXXX XXXXX" />
+                    <Input ref={refs.phone} {...field('phone')} className={inputClass('phone')} placeholder="+91 XXXXX XXXXX" />
+                    <ErrorMsg k="phone" />
                   </div>
                 </div>
 
                 <div>
                   <Label className="text-xs font-semibold text-slate-600">Email *</Label>
-                  <Input required type="email" value={form.email} onChange={set('email')} className="mt-1 h-9 text-sm" placeholder="your@email.com" />
+                  <Input ref={refs.email} type="email" {...field('email')} className={inputClass('email')} placeholder="your@email.com" />
+                  <ErrorMsg k="email" />
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <Label className="text-xs font-semibold text-slate-600">Position Applying For</Label>
-                    <Input value={form.position} onChange={set('position')} className="mt-1 h-9 text-sm" placeholder="e.g. Electrical Engineer" />
+                    <Input {...field('position')} className="mt-1 h-9 text-sm" placeholder="e.g. Electrical Engineer" />
                   </div>
                   <div>
                     <Label className="text-xs font-semibold text-slate-600">Total Experience</Label>
-                    <Input value={form.experience} onChange={set('experience')} className="mt-1 h-9 text-sm" placeholder="e.g. 5 years" />
+                    <Input {...field('experience')} className="mt-1 h-9 text-sm" placeholder="e.g. 5 years" />
                   </div>
                 </div>
 
                 <div>
                   <Label className="text-xs font-semibold text-slate-600">Current Organisation</Label>
-                  <Input value={form.currentOrg} onChange={set('currentOrg')} className="mt-1 h-9 text-sm" placeholder="Where you currently work (if applicable)" />
+                  <Input {...field('currentOrg')} className="mt-1 h-9 text-sm" placeholder="Where you currently work (if applicable)" />
                 </div>
 
                 <div>
@@ -162,9 +200,7 @@ export default function Careers() {
 
                 <div>
                   <Label className="text-xs font-semibold text-slate-600">Cover Note</Label>
-                  <Textarea rows={4} value={form.coverLetter} onChange={set('coverLetter')}
-                    placeholder="Briefly tell us about yourself, your skills and why you want to join IndusVertex…"
-                    className="mt-1 text-sm resize-none" />
+                  <Textarea rows={4} {...field('coverLetter')} placeholder="Briefly tell us about yourself, your skills and why you want to join IndusVertex…" className="mt-1 text-sm resize-none" />
                 </div>
 
                 <Button type="submit" disabled={loading} className="w-full font-bold text-sm" style={{ backgroundColor: '#d4af37', color: '#0a1628', height: '42px' }}>

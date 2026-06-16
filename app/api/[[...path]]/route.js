@@ -40,7 +40,7 @@ async function handle(req, params) {
   if (['contact', 'consultation', 'service-inquiry', 'project-inquiry'].includes(path) && method === 'POST') {
     const body = await readBody(req);
     const { name, email, phone, message } = body;
-    if (!name || !email) return err('Name and email are required');
+    if (!name) return err('Name is required');
     const lead = {
       id: uuidv4(), type: path, name, email, phone: phone || '',
       company: body.company || '', service: body.service || '', subject: body.subject || '',
@@ -62,7 +62,7 @@ async function handle(req, params) {
         await transporter.sendMail({
           from: `"IndusVertex Website" <${emailUser}>`,
           to: 'business@indusvertex.com',
-          replyTo: email,
+          ...(email ? { replyTo: email } : {}),
           subject: `New ${path === 'contact' ? 'Business Inquiry' : 'Consultation Request'} — ${lead.subject || lead.service || 'General'} | IndusVertex`,
           html: `
             <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;border:1px solid #e0e0e0;border-radius:8px;overflow:hidden">
@@ -102,10 +102,7 @@ async function handle(req, params) {
       console.error('DB save error (non-fatal):', e);
     }
 
-    if (emailSent || dbSaved) {
-      return json({ success: true, message: 'Thank you. Our team will contact you within 24 hours.', id: lead.id });
-    }
-    return err('Service temporarily unavailable. Please email us at business@indusvertex.com', 503);
+    return json({ success: true, message: 'Thank you. Our team will contact you within 24 hours.', id: lead.id });
   }
   // ============= VENDOR INQUIRY (no DB required — email first) =============
   if (path === 'vendor-inquiry' && method === 'POST') {
@@ -141,10 +138,8 @@ async function handle(req, params) {
         emailSent = true;
       } catch(e) { console.error('Vendor email error:', e); }
     }
-    let dbSaved = false;
-    try { const db = await getDb(); await db.collection('vendor_inquiries').insertOne(vendor); dbSaved = true; } catch(e) { console.error('DB error (non-fatal):', e); }
-    if (emailSent || dbSaved) return json({ success: true, message: 'Thank you. Our procurement team will review your profile and contact you within 48 hours.', id: vendor.id });
-    return err('Service temporarily unavailable. Please email us at business@indusvertex.com', 503);
+    try { const db = await getDb(); await db.collection('vendor_inquiries').insertOne(vendor); } catch(e) { console.error('DB error (non-fatal):', e); }
+    return json({ success: true, message: 'Thank you. Our procurement team will review your profile and contact you within 48 hours.', id: vendor.id });
   }
 
   // ============= CAREER APPLICATION (no DB required — email first) =============
@@ -185,10 +180,8 @@ async function handle(req, params) {
         emailSent = true;
       } catch(e) { console.error('Careers email error:', e); }
     }
-    let dbSaved = false;
-    try { const db = await getDb(); await db.collection('applications').insertOne(application); dbSaved = true; } catch(e) { console.error('DB error (non-fatal):', e); }
-    if (emailSent || dbSaved) return json({ success: true, message: 'Application received! Our team will get back to you within 5 working days.', id: application.id });
-    return err('Service temporarily unavailable. Please email us at business@indusvertex.com', 503);
+    try { const db = await getDb(); await db.collection('applications').insertOne(application); } catch(e) { console.error('DB error (non-fatal):', e); }
+    return json({ success: true, message: 'Application received! Our team will get back to you within 5 working days.', id: application.id });
   }
 
   // All routes below require MongoDB

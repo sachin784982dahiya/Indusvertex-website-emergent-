@@ -15,7 +15,13 @@ export default function Contact() {
 
 
   const submit = async (e) => {
-    e.preventDefault(); setLoading(true);
+    e.preventDefault();
+    // Validate
+    if (!form.name.trim()) { toast.error('Full name is required'); return; }
+    if (!form.phone.trim() || form.phone.replace(/\D/g, '').length < 10) { toast.error('Enter a valid 10-digit phone number'); return; }
+    if (!form.company.trim()) { toast.error('Company name is required'); return; }
+    if (!form.message.trim()) { toast.error('Message is required'); return; }
+    setLoading(true);
     try {
       const res = await fetch('/api/contact', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(form) });
       const d = await res.json();
@@ -44,11 +50,11 @@ export default function Contact() {
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <Label className="text-xs font-semibold text-slate-600">Phone</Label>
-                  <Input value={form.phone} onChange={e=>setForm({...form,phone:e.target.value})} className="mt-1 h-9 text-sm" />
+                  <Label className="text-xs font-semibold text-slate-600">Phone *</Label>
+                  <Input value={form.phone} onChange={e=>setForm({...form,phone:e.target.value})} className="mt-1 h-9 text-sm" placeholder="+91 XXXXX XXXXX" />
                 </div>
                 <div>
-                  <Label className="text-xs font-semibold text-slate-600">Company</Label>
+                  <Label className="text-xs font-semibold text-slate-600">Company *</Label>
                   <Input value={form.company} onChange={e=>setForm({...form,company:e.target.value})} className="mt-1 h-9 text-sm" />
                 </div>
               </div>
