@@ -174,10 +174,7 @@
     linear-gradient(90deg, rgba(10,22,40,0.04) 1px, transparent 1px) !important;
 }
 
-/* ── Navbar: transparent-state text on light hero ── */
-:root:not(.dark) header [class*="text-white"] { color: #0a1628 !important; }
-:root:not(.dark) header [class*="hover:text-white"]:hover { color: #0a1628 !important; }
-:root:not(.dark) header [class*="hover:bg-white"]:hover  { background: rgba(10,22,40,0.06) !important; }
+/* ── Navbar: text-white stays white on hero (dark gradient handles contrast) ── */
 
 /* ── Footer stays dark (intentional design) ── */
 footer.gradient-navy,

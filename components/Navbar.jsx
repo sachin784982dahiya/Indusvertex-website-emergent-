@@ -73,8 +73,12 @@ export default function Navbar() {
 
       <header className={cn(
         'transition-all duration-300',
-        transparent ? 'bg-transparent' : 'bg-background/85 backdrop-blur-xl border-b border-border shadow-sm'
-      )}>
+        transparent
+          ? 'border-b border-white/10'
+          : 'bg-background/85 backdrop-blur-xl border-b border-border shadow-sm'
+      )}
+        style={transparent ? { background: 'linear-gradient(to bottom, rgba(5,14,28,0.92) 0%, rgba(5,14,28,0.4) 80%, rgba(5,14,28,0.0) 100%)' } : {}}
+      >
         <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6">
           <div className="flex items-center justify-between h-20">
             <Link href="/" className="flex items-center gap-2.5 group">
@@ -83,10 +87,10 @@ export default function Navbar() {
               </div>
               <div className="flex flex-col leading-tight">
                 <span className="font-bold text-lg tracking-tight">
-                  <span className="text-[#0a1628] dark:text-white">Indus</span><span className="text-[#16a34a]">Vertex</span>
+                  <span className={transparent ? 'text-white' : 'text-[#0a1628] dark:text-white'}>Indus</span><span className="text-[#16a34a]">Vertex</span>
                 </span>
-                <span className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">Private Limited</span>
-                <span className="hidden lg:block text-[11px] tracking-[0.06em] text-[#b8860b] font-medium mt-0.5">Transforming Vision into Infrastructure Reality</span>
+                <span className={cn('text-[10px] uppercase tracking-[0.18em]', transparent ? 'text-white/70' : 'text-muted-foreground')}>Private Limited</span>
+                <span className={cn('hidden lg:block text-[11px] tracking-[0.06em] font-medium mt-0.5', transparent ? 'text-[#d4af37]' : 'text-[#b8860b]')}>Transforming Vision into Infrastructure Reality</span>
               </div>
             </Link>
 
@@ -97,7 +101,7 @@ export default function Navbar() {
                     <div key={item.href} className="relative" onMouseEnter={() => setServicesOpen(true)} onMouseLeave={() => setServicesOpen(false)}>
                       <Link href={item.href} className={cn(
                         'inline-flex items-center gap-1 px-3 py-2 text-sm font-medium rounded-md transition-colors',
-                        transparent ? 'text-white/90 hover:text-white' : 'text-foreground/80 hover:text-foreground',
+                        transparent ? 'text-white hover:text-white/80' : 'text-foreground/80 hover:text-foreground',
                         pathname.startsWith('/services') && (transparent ? 'text-white' : 'text-primary')
                       )}>
                         {item.label} <ChevronDown className="w-3.5 h-3.5" />
@@ -141,7 +145,7 @@ export default function Navbar() {
                 return (
                   <Link key={item.href} href={item.href} className={cn(
                     'px-3 py-2 text-sm font-medium rounded-md transition-colors',
-                    transparent ? 'text-white/90 hover:text-white' : 'text-foreground/80 hover:text-foreground',
+                    transparent ? 'text-white hover:text-white/80' : 'text-foreground/80 hover:text-foreground',
                     pathname === item.href && (transparent ? 'text-white' : 'text-primary')
                   )}>{item.label}</Link>
                 );
