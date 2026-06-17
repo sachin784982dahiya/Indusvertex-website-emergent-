@@ -492,15 +492,15 @@ export default function Projects() {
                 <span style={{ color: '#16a34a' }}>Delivered.</span>
               </h1>
               <p className="text-white/60 text-lg max-w-2xl leading-relaxed">
-                Real projects. Real specs. Real outcomes — across HT power substations, transformer maintenance, EV charging, ETP systems and 1500+ statutory approvals.
+                Real projects. Real specs. Real outcomes — across HT power substations, transformer maintenance, EV charging, ETP systems and 4000+ statutory approvals.
               </p>
             </div>
             {/* Stats */}
             <div className="grid grid-cols-3 lg:grid-cols-1 gap-6 lg:gap-4 lg:items-end">
               {[
-                { value: '1500+', label: 'Statutory Approvals', color: '#d4af37' },
-                { value: '150+',  label: 'Projects Delivered',  color: '#16a34a' },
-                { value: '4',     label: 'Engineering Domains', color: '#0891b2' },
+                { value: '4000+', label: 'Statutory Approvals', color: '#d4af37' },
+                { value: '300+',  label: 'Projects Delivered',  color: '#16a34a' },
+                { value: '15',    label: 'Domains Served',      color: '#0891b2' },
               ].map(s => (
                 <div key={s.label} className="lg:text-right">
                   <div className="text-3xl lg:text-4xl font-black" style={{ color: s.color }}>{s.value}</div>
