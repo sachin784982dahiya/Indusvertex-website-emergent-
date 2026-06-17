@@ -61,7 +61,9 @@ async function handle(req, params) {
         });
         await transporter.sendMail({
           from: `"IndusVertex Website" <${emailUser}>`,
-          to: 'business@indusvertex.com, info@indusvertex.com',
+          to: lead.service === 'Legal Advisory' || (lead.subject || '').toLowerCase().includes('legal')
+            ? 'legal@indusvertex.com, business@indusvertex.com'
+            : 'business@indusvertex.com, info@indusvertex.com',
           ...(email ? { replyTo: email } : {}),
           subject: `New ${path === 'contact' ? 'Business Inquiry' : 'Consultation Request'} — ${lead.subject || lead.service || 'General'} | IndusVertex`,
           html: `

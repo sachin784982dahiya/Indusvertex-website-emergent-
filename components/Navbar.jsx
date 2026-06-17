@@ -38,8 +38,8 @@ export default function Navbar() {
 
   useEffect(() => { setOpen(false); setServicesOpen(false); setWorkOpen(false); }, [pathname]);
 
-  // Hide on admin routes
-  if (pathname?.startsWith('/admin')) return null;
+  // Hide on admin and legal routes
+  if (pathname?.startsWith('/admin') || pathname?.startsWith('/legal')) return null;
 
   const onHome = pathname === '/';
   const transparent = onHome && !scrolled;

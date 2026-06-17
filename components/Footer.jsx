@@ -6,7 +6,7 @@ import { COMPANY, SERVICES } from '@/lib/services-data';
 
 export default function Footer() {
   const pathname = usePathname();
-  if (pathname?.startsWith('/admin')) return null;
+  if (pathname?.startsWith('/admin') || pathname?.startsWith('/legal')) return null;
   return (
     <footer className="gradient-navy text-white relative overflow-hidden">
       <div className="absolute inset-0 grid-pattern opacity-30" />

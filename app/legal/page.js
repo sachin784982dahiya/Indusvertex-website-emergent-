@@ -1,10 +1,10 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { Card } from '@/components/ui/card';
-import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import PersonAvatar from '@/components/PersonAvatar';
-import { Scale, Gavel, FileText, Building, ShieldCheck, AlertTriangle, CheckCircle2, ArrowRight, Award, Briefcase, Mail, Linkedin } from 'lucide-react';
+import LegalNavbar from '@/components/LegalNavbar';
+import { Scale, Gavel, Building, ShieldCheck, AlertTriangle, CheckCircle2, ArrowRight, Award, Briefcase, Mail, Linkedin, X, Phone, User, MessageSquare, MapPin } from 'lucide-react';
 
 // Default legal team displayed on the legal page. Admin can override / add more via team CRUD
 // by giving role containing "Legal" or "Counsel".
@@ -38,6 +38,29 @@ const DEFAULT_LEGAL_TEAM = [
 export default function Legal() {
   const [legalTeam, setLegalTeam] = useState(DEFAULT_LEGAL_TEAM);
   const [showDisclaimer, setShowDisclaimer] = useState(true);
+  const [showForm, setShowForm] = useState(false);
+  const [formData, setFormData] = useState({ name: '', email: '', phone: '', message: '' });
+  const [formStatus, setFormStatus] = useState('idle'); // idle | sending | sent | error
+
+  async function handleFormSubmit(e) {
+    e.preventDefault();
+    setFormStatus('sending');
+    try {
+      const res = await fetch('/api/consultation', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...formData, subject: 'Legal Consultation Request', service: 'Legal Advisory' }),
+      });
+      if (res.ok) {
+        setFormStatus('sent');
+        setFormData({ name: '', email: '', phone: '', message: '' });
+      } else {
+        setFormStatus('error');
+      }
+    } catch {
+      setFormStatus('error');
+    }
+  }
 
   useEffect(() => {
     fetch('/api/team').then(r => r.ok ? r.json() : null).then(d => {
@@ -81,7 +104,65 @@ export default function Legal() {
   ];
 
   return (
-    <div>
+    <div id="top">
+      <LegalNavbar />
+      {/* CONSULTATION MODAL */}
+      {showForm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="bg-background rounded-2xl shadow-2xl max-w-lg w-full p-8 border border-border relative">
+            <button onClick={() => { setShowForm(false); setFormStatus('idle'); }} className="absolute top-4 right-4 p-1.5 rounded-lg hover:bg-muted transition-colors">
+              <X className="w-5 h-5" />
+            </button>
+            {formStatus === 'sent' ? (
+              <div className="text-center py-6">
+                <div className="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
+                  <CheckCircle2 className="w-7 h-7 text-green-600" />
+                </div>
+                <h3 className="text-xl font-bold mb-2">Query Submitted</h3>
+                <p className="text-foreground/70 text-sm">Our legal team will get back to you shortly at <strong>{formData.email || 'your email'}</strong>.</p>
+                <Button className="mt-6 font-semibold" style={{ backgroundColor: '#d4af37', color: '#0a1628' }} onClick={() => { setShowForm(false); setFormStatus('idle'); }}>Close</Button>
+              </div>
+            ) : (
+              <>
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-10 h-10 rounded-lg gradient-gold flex items-center justify-center flex-shrink-0"><Scale className="w-5 h-5" style={{ color: '#0a1628' }} /></div>
+                  <div>
+                    <h3 className="font-bold text-lg leading-tight">Schedule a Consultation</h3>
+                    <p className="text-xs text-muted-foreground">IndusVertex Law Firm · legal@indusvertex.com</p>
+                  </div>
+                </div>
+                <form onSubmit={handleFormSubmit} className="space-y-4">
+                  <div className="relative">
+                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                    <input required placeholder="Full Name *" value={formData.name} onChange={e => setFormData(p => ({ ...p, name: e.target.value }))}
+                      className="w-full pl-9 pr-4 py-2.5 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-[#d4af37]" />
+                  </div>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                    <input type="email" required placeholder="Email Address *" value={formData.email} onChange={e => setFormData(p => ({ ...p, email: e.target.value }))}
+                      className="w-full pl-9 pr-4 py-2.5 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-[#d4af37]" />
+                  </div>
+                  <div className="relative">
+                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                    <input placeholder="Phone Number" value={formData.phone} onChange={e => setFormData(p => ({ ...p, phone: e.target.value }))}
+                      className="w-full pl-9 pr-4 py-2.5 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-[#d4af37]" />
+                  </div>
+                  <div className="relative">
+                    <MessageSquare className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />
+                    <textarea required rows={4} placeholder="Briefly describe your legal matter *" value={formData.message} onChange={e => setFormData(p => ({ ...p, message: e.target.value }))}
+                      className="w-full pl-9 pr-4 py-2.5 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-[#d4af37] resize-none" />
+                  </div>
+                  {formStatus === 'error' && <p className="text-red-500 text-xs">Something went wrong. Please try again or email legal@indusvertex.com directly.</p>}
+                  <Button type="submit" disabled={formStatus === 'sending'} className="w-full font-semibold" style={{ backgroundColor: '#d4af37', color: '#0a1628', height: '48px' }}>
+                    {formStatus === 'sending' ? 'Sending...' : 'Submit Query'} {formStatus !== 'sending' && <ArrowRight className="ml-2 w-4 h-4" />}
+                  </Button>
+                </form>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* DISCLAIMER POPUP */}
       {showDisclaimer && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
@@ -103,7 +184,7 @@ export default function Legal() {
           </div>
         </div>
       )}
-      <section className="pt-36 pb-24 relative overflow-hidden section-dark">
+      <section id="legal-about" className="pt-20 pb-24 relative overflow-hidden section-dark">
 
         <div className="absolute inset-0 grid-pattern opacity-20" />
         <div className="relative max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6 text-white">
@@ -117,7 +198,7 @@ export default function Legal() {
           <h1 className="text-5xl lg:text-6xl font-bold max-w-4xl leading-tight">Comprehensive legal, compliance & litigation advisory.</h1>
           <p className="mt-6 text-lg text-white/75 max-w-3xl leading-relaxed">IndusVertex Law Firm provides legal, compliance, litigation and advisory services to Industries, Corporates, Banks, NBFCs and Individual Clients across India — fully integrated with our engineering and infrastructure capabilities.</p>
           <div className="mt-8 flex flex-wrap gap-4">
-            <Link href="/contact"><Button size="lg" className="font-semibold" style={{backgroundColor:'#d4af37', color:'#0a1628', height:'52px'}}>Schedule a Consultation <ArrowRight className="ml-2 w-4 h-4" /></Button></Link>
+            <Button size="lg" className="font-semibold" style={{backgroundColor:'#d4af37', color:'#0a1628', height:'52px'}} onClick={() => setShowForm(true)}>Schedule a Consultation <ArrowRight className="ml-2 w-4 h-4" /></Button>
             <a href="mailto:legal@indusvertex.com"><Button size="lg" variant="outline" className="border-white/30 text-white bg-white/5 hover:bg-white/15 hover:text-white" style={{height:'52px'}}>legal@indusvertex.com</Button></a>
           </div>
         </div>
@@ -140,7 +221,7 @@ export default function Legal() {
           </div>
 
           {/* LEGAL TEAM */}
-          <div className="mb-8">
+          <div id="legal-team" className="mb-8" style={{scrollMarginTop:'88px'}}>
             <div className="text-xs uppercase tracking-[0.2em] text-accent font-semibold mb-3">Our Legal Counsel</div>
             <h2 className="text-3xl lg:text-4xl font-bold">Meet the lawyers behind IndusVertex Law Firm</h2>
             <p className="text-foreground/70 mt-3 max-w-3xl">Multi-disciplinary legal expertise across corporate, banking, real estate, regulatory and litigation matters.</p>
@@ -188,6 +269,41 @@ export default function Legal() {
                 <span className="text-foreground/85">{s}</span>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CONTACT SECTION */}
+      <section id="legal-contact" className="py-20 section-dark" style={{scrollMarginTop:'88px'}}>
+        <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6">
+          <div className="text-xs uppercase tracking-[0.2em] text-[#d4af37] font-semibold mb-3 text-center">Get In Touch</div>
+          <h2 className="text-3xl lg:text-4xl font-bold text-white text-center mb-3">Contact IndusVertex Law Firm</h2>
+          <p className="text-white/60 text-center max-w-xl mx-auto mb-12">Reach out for a confidential consultation. Our legal team will respond within 24 hours.</p>
+          <div className="grid md:grid-cols-3 gap-6 mb-12">
+            {[
+              { icon: Mail,    label: 'Email Us',     value: 'legal@indusvertex.com',  href: 'mailto:legal@indusvertex.com' },
+              { icon: Phone,   label: 'Call Us',      value: '+91-120-4567890',         href: 'tel:+911204567890' },
+              { icon: MapPin,  label: 'Office',       value: 'IndusVertex House, Plot No 8, Kh No 579, Avantika Phase 2, Shastri Nagar, Ghaziabad, Uttar Pradesh – 201002', href: null },
+            ].map(c => (
+              <div key={c.label} className="flex flex-col items-center text-center p-7 rounded-2xl border border-[#d4af37]/20 bg-white/5 hover:bg-white/10 transition-colors">
+                <div className="w-12 h-12 rounded-xl bg-[#d4af37]/10 border border-[#d4af37]/30 flex items-center justify-center mb-4">
+                  <c.icon className="w-5 h-5 text-[#d4af37]" />
+                </div>
+                <div className="text-xs uppercase tracking-widest text-white/40 mb-1">{c.label}</div>
+                {c.href
+                  ? <a href={c.href} className="text-white font-semibold hover:text-[#d4af37] transition-colors">{c.value}</a>
+                  : <span className="text-white font-semibold">{c.value}</span>}
+              </div>
+            ))}
+          </div>
+          <div className="text-center">
+            <button onClick={() => setShowForm(true)}
+              className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-semibold text-[#0a1628] bg-[#d4af37] hover:bg-[#c9a430] transition-colors text-base">
+              Schedule a Consultation <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+          <div className="mt-16 pt-8 border-t border-white/10 text-center text-white/30 text-xs">
+            © {new Date().getFullYear()} IndusVertex Law Firm · As per Bar Council of India rules, this website does not constitute legal advice or solicitation.
           </div>
         </div>
       </section>
