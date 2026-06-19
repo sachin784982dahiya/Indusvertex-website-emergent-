@@ -1,114 +1,453 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<title>IndusVertex Private Limited — Company Profile</title>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta charset="utf-8"/>
+<title>IndusVertex Private Limited — Company Profile 2025</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
 <style>
-  @page { size: A4; margin: 18mm; }
-  * { box-sizing: border-box; }
-  body { font-family: -apple-system, 'Segoe UI', Inter, Roboto, Arial, sans-serif; color: #0a1628; line-height: 1.55; max-width: 920px; margin: 0 auto; padding: 30px; background: #fff; }
-  h1, h2, h3 { font-family: Georgia, 'Times New Roman', serif; letter-spacing: -0.01em; }
-  .gold { color: #b8860b; }
-  .navy { color: #0a1628; }
-  .hero { background: linear-gradient(135deg, #050e1c, #102a4a); color: #fff; padding: 40px; border-radius: 12px; margin-bottom: 30px; }
-  .hero .tag { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: #d4af37; font-weight: 600; }
-  .hero h1 { font-size: 36px; margin: 8px 0 12px; }
-  .hero p { color: rgba(255,255,255,0.8); margin: 0; }
-  .info { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0; }
-  .info-card { background: #f6f7f9; border-left: 3px solid #d4af37; padding: 12px 16px; border-radius: 6px; }
-  .info-card .label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: #666; font-weight: 600; }
-  .info-card .value { font-weight: 600; margin-top: 2px; }
-  h2 { font-size: 22px; margin-top: 32px; border-bottom: 2px solid #d4af37; padding-bottom: 6px; }
-  h3 { font-size: 16px; margin: 18px 0 6px; color: #0a1628; }
-  ul { margin: 6px 0 12px 18px; padding: 0; }
-  li { margin-bottom: 4px; font-size: 14px; }
-  .stages { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin: 12px 0; }
-  .stage { background: #f6f7f9; border: 1px solid #e3e5ea; border-radius: 6px; padding: 8px; text-align: center; font-size: 11px; font-weight: 600; }
-  .stage span { color: #b8860b; font-weight: 700; display: block; font-size: 14px; }
-  .footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid #e3e5ea; font-size: 11px; color: #666; text-align: center; }
-  .print { position: fixed; top: 16px; right: 16px; background: #d4af37; color: #0a1628; padding: 10px 18px; border-radius: 8px; font-weight: 700; text-decoration: none; box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
-  @media print { .print { display: none; } body { padding: 0; } }
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap');
+@page { size:A4; margin:0; }
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --navy:#050e1c; --navy2:#0d2042; --gold:#d4af37; --gold2:#b8960f;
+  --green:#16a34a; --text:#0a1628; --muted:#5a6a80; --border:#e4e8ef;
+  --bg:#f7f8fa; --white:#ffffff;
+}
+body{font-family:'Inter',sans-serif;color:var(--text);background:#fff;font-size:13px;line-height:1.65;}
+
+/* ── PRINT BUTTON ── */
+.pbt{position:fixed;top:18px;right:18px;background:var(--gold);color:var(--navy);padding:9px 20px;border-radius:6px;font-weight:700;font-size:12px;border:none;cursor:pointer;box-shadow:0 4px 18px rgba(0,0,0,.18);z-index:999;letter-spacing:.03em;}
+@media print{.pbt{display:none;}body{-webkit-print-color-adjust:exact;print-color-adjust:exact;}}
+
+/* ══════════════════════════════════════════
+   PAGE WRAPPER
+══════════════════════════════════════════ */
+.doc{max-width:900px;margin:0 auto;padding:36px 40px 48px;}
+
+/* ── COVER ── */
+.cover{background:linear-gradient(150deg,var(--navy) 0%,#0b1e3a 55%,#112d50 100%);border-radius:14px;padding:48px 48px 0;margin-bottom:32px;overflow:hidden;position:relative;}
+.cover-accent{position:absolute;top:-80px;right:-80px;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(212,175,55,.12) 0%,transparent 70%);}
+.cover-accent2{position:absolute;bottom:-60px;left:30%;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(22,163,74,.08) 0%,transparent 70%);}
+.cover-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:36px;position:relative;z-index:1;}
+.cover-eyebrow{font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:12px;}
+.cover-title{font-family:'Playfair Display',Georgia,serif;font-size:38px;font-weight:800;color:#fff;line-height:1.12;margin-bottom:10px;}
+.cover-tagline{font-size:14.5px;color:rgba(255,255,255,.65);font-weight:400;max-width:440px;}
+.cover-year{background:rgba(212,175,55,.15);border:1px solid rgba(212,175,55,.4);color:var(--gold);font-size:10px;font-weight:700;padding:6px 14px;border-radius:4px;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;height:fit-content;}
+.cover-divider{height:1px;background:linear-gradient(to right,rgba(212,175,55,.5),rgba(255,255,255,.08),transparent);margin-bottom:28px;position:relative;z-index:1;}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);position:relative;z-index:1;}
+.cs{padding:20px 0 24px;text-align:center;border-top:1px solid rgba(255,255,255,.08);}
+.cs:not(:last-child){border-right:1px solid rgba(255,255,255,.07);}
+.cs-num{font-size:30px;font-weight:800;line-height:1;letter-spacing:-.02em;}
+.cs-num.gold{color:var(--gold);}
+.cs-num.grn{color:#4ade80;}
+.cs-num.blu{color:#60a5fa;}
+.cs-num.wht{color:#fff;}
+.cs-lbl{font-size:9px;text-transform:uppercase;letter-spacing:.14em;color:rgba(255,255,255,.45);margin-top:5px;font-weight:600;}
+
+/* ── COMPANY INFO STRIP ── */
+.info-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:30px;}
+.ic{background:#fff;padding:12px 16px;}
+.ic.span2{grid-column:span 2;}
+.ic.span3{grid-column:span 3;}
+.ic-label{font-size:8.5px;text-transform:uppercase;letter-spacing:.16em;color:var(--muted);font-weight:700;margin-bottom:3px;}
+.ic-val{font-size:12.5px;font-weight:600;color:var(--text);}
+
+/* ── SECTION ── */
+.sec{margin-bottom:34px;}
+.sec-hd{display:flex;align-items:center;gap:10px;margin-bottom:4px;}
+.sec-bar{width:4px;height:22px;background:linear-gradient(to bottom,var(--gold),var(--gold2));border-radius:2px;flex-shrink:0;}
+.sec-title{font-family:'Playfair Display',Georgia,serif;font-size:18px;font-weight:700;color:var(--text);}
+.sec-rule{height:1px;background:linear-gradient(to right,var(--gold),var(--border));margin-bottom:18px;}
+
+/* ── ABOUT ── */
+.about-body{color:#2d3e53;line-height:1.8;font-size:13px;}
+
+/* ── LIFECYCLE ── */
+.lifecycle{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-top:4px;}
+.lc{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:11px 6px;text-align:center;}
+.lc-n{display:block;font-size:16px;font-weight:800;color:var(--gold);line-height:1;margin-bottom:5px;}
+.lc-t{font-size:9px;text-transform:uppercase;letter-spacing:.07em;font-weight:700;color:var(--muted);}
+
+/* ── STRENGTHS ── */
+.strengths{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.str{background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start;}
+.str-ico{width:34px;height:34px;border-radius:7px;background:var(--navy);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:15px;}
+.str-body strong{display:block;font-size:12.5px;font-weight:700;color:var(--text);margin-bottom:3px;}
+.str-body p{font-size:11.5px;color:var(--muted);line-height:1.55;}
+
+/* ── SERVICES ── */
+.svc-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.svc{border:1px solid var(--border);border-radius:9px;padding:14px 16px;background:#fff;}
+.svc-top{display:flex;align-items:center;gap:8px;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--bg);}
+.svc-num{font-size:8.5px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.12em;background:rgba(212,175,55,.1);border:1px solid rgba(212,175,55,.25);padding:2px 7px;border-radius:3px;}
+.svc h3{font-size:12.5px;font-weight:700;color:var(--text);}
+.svc ul{list-style:none;padding:0;}
+.svc li{font-size:11.5px;color:var(--muted);padding:2.5px 0 2.5px 13px;position:relative;}
+.svc li::before{content:'▸';position:absolute;left:0;color:var(--gold);font-size:9px;top:4px;}
+
+/* ── LEGAL BOX ── */
+.legal-panel{background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 100%);border-radius:12px;padding:28px 32px;color:#fff;}
+.legal-eyebrow{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:8px;}
+.legal-panel h3{font-family:'Playfair Display',Georgia,serif;font-size:19px;margin-bottom:10px;font-weight:700;}
+.legal-panel p{color:rgba(255,255,255,.68);font-size:12px;line-height:1.75;margin-bottom:16px;}
+.legal-tags{display:flex;flex-wrap:wrap;gap:7px;}
+.ltag{background:rgba(212,175,55,.12);border:1px solid rgba(212,175,55,.28);color:var(--gold);font-size:10px;font-weight:600;padding:4px 11px;border-radius:12px;}
+
+/* ── PROJECTS ── */
+.proj-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.proj{border:1px solid var(--border);border-radius:9px;overflow:hidden;background:#fff;}
+.proj-top{padding:12px 16px 10px;border-bottom:1px solid var(--bg);}
+.proj-badge{display:inline-block;font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;padding:3px 9px;border-radius:3px;margin-bottom:8px;}
+.proj h4{font-size:12.5px;font-weight:700;color:var(--text);line-height:1.4;margin-bottom:4px;}
+.proj-meta{font-size:10.5px;color:var(--muted);}
+.proj-meta span{margin-right:10px;}
+.proj-outcome{padding:10px 16px;font-size:11.5px;color:#3d5166;line-height:1.6;background:var(--bg);}
+
+/* ── TEAM ── */
+.team-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.tc{border:1px solid var(--border);border-radius:9px;padding:16px;display:flex;gap:13px;background:#fff;}
+.tc-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--navy),#1e3f6a);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--gold);font-weight:800;font-size:14px;border:2px solid rgba(212,175,55,.25);}
+.tc h4{font-size:13px;font-weight:700;color:var(--text);margin-bottom:2px;}
+.tc-role{font-size:11px;font-weight:600;color:var(--gold);margin-bottom:2px;}
+.tc-creds{font-size:10px;color:var(--muted);margin-bottom:6px;}
+.tc p{font-size:11.5px;color:#4a5a6e;line-height:1.6;}
+
+/* ── CLIENTS ── */
+.clients{display:flex;flex-wrap:wrap;gap:8px;}
+.ctag{background:var(--bg);border:1px solid var(--border);border-radius:20px;padding:5px 15px;font-size:12px;font-weight:600;color:var(--text);}
+
+/* ── FOOTER ── */
+.foot{margin-top:36px;border-top:2px solid var(--gold);padding-top:18px;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;}
+.foot-l{font-size:11px;color:var(--muted);line-height:1.85;}
+.foot-l strong{color:var(--text);font-size:12px;}
+.foot-r{text-align:right;font-size:11px;color:var(--muted);line-height:1.85;}
+.foot-r a{color:var(--gold2);text-decoration:none;font-weight:600;}
 </style>
 </head>
 <body>
-<a class="print" href="javascript:window.print()">⬇ Save as PDF</a>
-<div class="hero">
-  <div class="tag">● Engineering · Infrastructure · Compliance</div>
-  <h1>IndusVertex Private Limited</h1>
-  <p style="font-size:18px">Transforming Vision into Infrastructure Reality</p>
+<button class="pbt" onclick="window.print()">⬇ Save as PDF</button>
+
+<div class="doc">
+
+<!-- ══ COVER ══ -->
+<div class="cover">
+  <div class="cover-accent"></div>
+  <div class="cover-accent2"></div>
+  <div class="cover-head">
+    <div>
+      <div class="cover-eyebrow">● Engineering · Infrastructure · Compliance · Sustainability</div>
+      <div class="cover-title">IndusVertex<br/>Private Limited</div>
+      <div class="cover-tagline">Transforming Vision into Infrastructure Reality</div>
+    </div>
+    <div class="cover-year">Company Profile 2025</div>
+  </div>
+  <div class="cover-divider"></div>
+  <div class="cover-stats">
+    <div class="cs"><div class="cs-num gold">4000+</div><div class="cs-lbl">Statutory Approvals</div></div>
+    <div class="cs"><div class="cs-num grn">300+</div><div class="cs-lbl">Projects Delivered</div></div>
+    <div class="cs"><div class="cs-num blu">15</div><div class="cs-lbl">Domains Served</div></div>
+    <div class="cs"><div class="cs-num wht">40+</div><div class="cs-lbl">Yrs Combined Exp.</div></div>
+  </div>
 </div>
 
-<div class="info">
-  <div class="info-card"><div class="label">CIN</div><div class="value">U82990UP2025PTC238382</div></div>
-  <div class="info-card"><div class="label">GSTIN</div><div class="value">09AAICI5630B1ZS</div></div>
-  <div class="info-card"><div class="label">Phone</div><div class="value">+91 8859-596939</div></div>
-  <div class="info-card"><div class="label">Email</div><div class="value">business@indusvertex.com</div></div>
-  <div class="info-card" style="grid-column: span 2"><div class="label">Registered Office</div><div class="value">Plot No 8, Kh No 579, Avantika Phase 2, Shastri Nagar, Ghaziabad, Uttar Pradesh – 201002</div></div>
+<!-- ══ COMPANY INFO ══ -->
+<div class="info-strip">
+  <div class="ic"><div class="ic-label">CIN</div><div class="ic-val">U82990UP2025PTC238382</div></div>
+  <div class="ic"><div class="ic-label">GSTIN</div><div class="ic-val">09AAICI5630B1ZS</div></div>
+  <div class="ic"><div class="ic-label">Mobile</div><div class="ic-val">+91 8859-596939</div></div>
+  <div class="ic"><div class="ic-label">Landline</div><div class="ic-val">+91 120-4756019</div></div>
+  <div class="ic"><div class="ic-label">Business Email</div><div class="ic-val">business@indusvertex.com</div></div>
+  <div class="ic"><div class="ic-label">Info Email</div><div class="ic-val">info@indusvertex.com</div></div>
+  <div class="ic span3"><div class="ic-label">Registered Office</div><div class="ic-val">IndusVertex House, Plot No. 8, Kh. No. 579, Avantika Phase 2, Shastri Nagar, Ghaziabad, Uttar Pradesh – 201002</div></div>
 </div>
 
-<h2>About IndusVertex</h2>
-<p>IndusVertex Private Limited is an integrated engineering, infrastructure, compliance and advisory company delivering end-to-end solutions for industries, institutions, corporates and government sectors. We specialize in power transmission and uninterrupted power solutions, CSS/PSS systems, DG Set installation, civil &amp; structural infrastructure, data center development, IT infrastructure &amp; optical fiber cabling, EV infrastructure, fire safety systems and environmental solutions including ETP, STP, WTP and OCEMS. Our expertise covers regulatory approvals and compliances such as CEIG approvals, CTE/CTO, Pollution Control Board compliances and Fire Safety NOCs, complemented by integrated legal advisory services through IndusVertex Law Firm.</p>
-
-<h2>Our Business Approach</h2>
-<div class="stages">
-  <div class="stage"><span>01</span>Concept</div>
-  <div class="stage"><span>02</span>Feasibility</div>
-  <div class="stage"><span>03</span>Approval</div>
-  <div class="stage"><span>04</span>Design</div>
-  <div class="stage"><span>05</span>Execution</div>
-  <div class="stage"><span>06</span>Compliance</div>
-  <div class="stage"><span>07</span>O&amp;M</div>
+<!-- ══ ABOUT ══ -->
+<div class="sec">
+  <div class="sec-hd"><div class="sec-bar"></div><div class="sec-title">About IndusVertex</div></div>
+  <div class="sec-rule"></div>
+  <p class="about-body">IndusVertex Private Limited is a next-generation integrated engineering and infrastructure company — built to deliver what most firms cannot: complete project lifecycle ownership, from concept to commissioning, under a single roof.<br/><br/>We operate across power transmission, renewable energy, data centres, EV infrastructure, civil construction, environmental sustainability, automation and IT infrastructure — serving India's leading telecom majors, data centre operators, industrial corporates and government bodies. With <strong>4000+ statutory approvals</strong>, <strong>300+ projects delivered</strong> and operations spanning <strong>15 domains</strong>, IndusVertex has established itself as a trusted single-window partner for complex, multi-disciplinary infrastructure challenges.<br/><br/>Our edge lies in <strong>in-house depth</strong> — multi-disciplinary engineering teams, regulatory and compliance expertise, and rigorous project execution — all under one point of accountability. No fragmented vendors. No coordination gaps. Just infrastructure delivered on time, on spec and in full compliance.</p>
 </div>
 
-<h2>Core Strengths</h2>
-<ul>
-  <li>Technical Engineering Excellence — multi-disciplinary teams across power, HVAC, civil, IT, automation and renewable energy</li>
-  <li>Regulatory &amp; Compliance Expertise — CEIG, CTE/CTO, PCB, Fire NOC under one roof</li>
-  <li>Strong Project Execution &amp; O&amp;M — rigorous delivery discipline and long-term operations support</li>
-  <li>Integrated Legal Coordination — IndusVertex Law Firm handles end-to-end legal and compliance matters</li>
-</ul>
-
-<h2>Service Verticals</h2>
-<h3>1. Electrical Power Transmission &amp; Infrastructure</h3>
-<ul><li>HT/LT Power Infrastructure (GSS / AIS / GIS)</li><li>Load Sanctioning, CEIG &amp; Utility Approvals</li><li>Transformers, PSS, CSS, VCB, RMU &amp; Panels installation</li><li>Earthing, Lightning Protection &amp; Safety Systems</li></ul>
-<h3>2. Power Backup &amp; Renewable Energy Solutions</h3>
-<ul><li>DG Set Installation, Testing &amp; O&amp;M</li><li>Solar Power Plants &amp; BESS</li><li>Hybrid Energy Systems (Solar + DG + Grid)</li><li>Energy Optimization, Monitoring &amp; Audits</li></ul>
-<h3>3. Data Centre Development &amp; HVAC</h3>
-<ul><li>Greenfield / Retrofit Data Centre Design &amp; Build</li><li>Precision Cooling, Raised Flooring, HAC/CAC</li><li>N+1 / 2N Redundancy Planning</li><li>Operations &amp; Maintenance Services</li></ul>
-<h3>4. Civil &amp; Structural Infrastructure</h3>
-<ul><li>Industrial, Commercial &amp; Institutional Construction</li><li>Site Development, Excavation &amp; Earthwork</li><li>Structural Design, Engineering &amp; Execution</li><li>Turnkey EPC Projects with O&amp;M</li></ul>
-<h3>5. Automation &amp; Smart Infrastructure</h3>
-<ul><li>Industrial Automation (PLC / SCADA)</li><li>IoT-Based Smart Monitoring &amp; Control</li><li>GIS &amp; Satellite-Based Mapping</li><li>Smart City &amp; Intelligent Infrastructure</li></ul>
-<h3>6. EV Infrastructure Development</h3>
-<ul><li>EV Charging Infrastructure (Public &amp; Private)</li><li>Fleet Charging Solutions &amp; Depot Electrification</li><li>Smart Charging with Grid / Solar / BESS Integration</li></ul>
-<h3>7. Fire Safety &amp; Surveillance Systems</h3>
-<ul><li>Fire Detection &amp; Alarm Systems (FDAS)</li><li>Hydrant, Sprinkler &amp; Gas Suppression Systems</li><li>CCTV &amp; Intelligent Video Surveillance</li><li>Fire Safety Audits &amp; Regulatory Compliance</li></ul>
-<h3>8. Environmental &amp; Sustainability Solutions</h3>
-<ul><li>ETP / STP / WTP / ZLD Systems</li><li>OCEMS Integration &amp; Regulatory Monitoring</li><li>Integrated Waste Management</li><li>Sustainability &amp; ESG Consulting</li></ul>
-<h3>9. Project Management &amp; Regulatory Approvals</h3>
-<ul><li>Project Management Consultancy (PMC)</li><li>Environmental Clearances (CTE / CTO)</li><li>Statutory Approvals, Licenses &amp; NOCs</li><li>EHS Compliance &amp; Coordination with Authorities</li></ul>
-<h3>10. IT Infrastructure &amp; Optical Fiber Cabling</h3>
-<ul><li>Structured Cabling (LAN / WAN)</li><li>Optical Fiber Network Deployment (OFC)</li><li>Server &amp; Networking Infrastructure</li><li>Telecom Infrastructure Development</li></ul>
-<h3>11. Legal Advisory Services — IndusVertex Law Firm</h3>
-<ul><li>Corporate &amp; Industrial Compliance</li><li>Banking, SARFAESI &amp; Financial Recovery</li><li>RERA, Real Estate &amp; Infrastructure Legal</li><li>Litigation, Contract Drafting &amp; Documentation</li></ul>
-
-<h2>Leadership Team</h2>
-<h3>Adv. Pradeep Kumar — Director &amp; Associate Legal Counsel</h3>
-<p>B.Tech (IT) | LL.B | LL.M (Silver Medalist). A legal and compliance specialist with 10+ years of experience in IT and electrical infrastructure, along with 3+ years of expertise in regulatory and environmental compliance. He is actively engaged in civil and criminal practice, supporting corporate and public sector matters.</p>
-<h3>Prince Gaurav — Chief Executive Officer</h3>
-<p>B.Tech | MBA (Marketing &amp; Finance). A financial and strategic planning expert with over 12 years of experience in banking, specializing in working capital and project financing for MSME and mid-corporate sectors. He leads business strategy, financial structuring, and project planning at IndusVertex.</p>
-<h3>Yogyata — Operation Manager</h3>
-<p>B.C.A. A dynamic professional with over 5 years of experience in education and computer training, complemented by 2+ years of hands-on exposure in data centre operations and automation systems. She brings strong analytical skills and a technology-driven approach to operational excellence.</p>
-<h3>Vivek Kumar — Field Executive</h3>
-<p>Diploma (Electrical) | ITI Fitter. A seasoned technical expert with 15+ years of rich experience in electrical systems, power transmission, operations &amp; maintenance (O&amp;M), and civil &amp; infrastructure projects. He plays a key role in execution, quality control, and large-scale project delivery.</p>
-
-<h2>Selected Clients</h2>
-<p>Tata Teleservices Limited · Tata Communications · Bharti Airtel · Bharti Foundation · Cosmo Infra · Paswara Paper Limited · Menor and Mews · Vodafone Idea Limited · Sudhir Power Ltd · Nxtra Data · CtrlS Data Centers Ltd · Green Power</p>
-
-<div class="footer">
-  © IndusVertex Private Limited · CIN: U82990UP2025PTC238382 · GSTIN: 09AAICI5630B1ZS<br/>
-  business@indusvertex.com · +91 8859-596939
+<!-- ══ LIFECYCLE ══ -->
+<div class="sec">
+  <div class="sec-hd"><div class="sec-bar"></div><div class="sec-title">Single-Window Project Lifecycle</div></div>
+  <div class="sec-rule"></div>
+  <div class="lifecycle">
+    <div class="lc"><span class="lc-n">01</span><span class="lc-t">Concept</span></div>
+    <div class="lc"><span class="lc-n">02</span><span class="lc-t">Feasibility</span></div>
+    <div class="lc"><span class="lc-n">03</span><span class="lc-t">Approvals</span></div>
+    <div class="lc"><span class="lc-n">04</span><span class="lc-t">Design</span></div>
+    <div class="lc"><span class="lc-n">05</span><span class="lc-t">Execution</span></div>
+    <div class="lc"><span class="lc-n">06</span><span class="lc-t">Compliance</span></div>
+    <div class="lc"><span class="lc-n">07</span><span class="lc-t">O&amp;M</span></div>
+  </div>
 </div>
+
+<!-- ══ CORE STRENGTHS ══ -->
+<div class="sec">
+  <div class="sec-hd"><div class="sec-bar"></div><div class="sec-title">Core Strengths</div></div>
+  <div class="sec-rule"></div>
+  <div class="strengths">
+    <div class="str"><div class="str-ico">⚡</div><div class="str-body"><strong>Technical Engineering Excellence</strong><p>Multi-disciplinary teams across HT power, HVAC, civil, IT, automation and renewable energy — delivering complex projects on time and on spec.</p></div></div>
+    <div class="str"><div class="str-ico">📋</div><div class="str-body"><strong>Regulatory &amp; Compliance Depth</strong><p>4000+ statutory approvals secured — CEIG, CTE/CTO, PCB, Fire NOC and environmental clearances across Pan-India operations.</p></div></div>
+    <div class="str"><div class="str-ico">🔧</div><div class="str-body"><strong>Rigorous Execution &amp; O&amp;M</strong><p>End-to-end project delivery with structured quality controls, safety standards and long-term operations &amp; maintenance commitment.</p></div></div>
+    <div class="str"><div class="str-ico">🎯</div><div class="str-body"><strong>Single-Point Accountability</strong><p>One partner for the complete project lifecycle — from design and approvals through execution, testing, commissioning and long-term O&amp;M.</p></div></div>
+  </div>
+</div>
+
+<!-- ══ SERVICE VERTICALS ══ -->
+<div class="sec">
+  <div class="sec-hd"><div class="sec-bar"></div><div class="sec-title">Service Verticals</div></div>
+  <div class="sec-rule"></div>
+  <div class="svc-grid">
+
+    <div class="svc">
+      <div class="svc-top"><span class="svc-num">01</span><h3>⚡ Electrical Power Transmission &amp; Infrastructure</h3></div>
+      <ul>
+        <li>HT/LT Power Infrastructure — GSS, AIS, GIS</li>
+        <li>Load Sanctioning, CEIG &amp; Utility Approvals</li>
+        <li>Transformers, PSS, CSS, VCB, RMU &amp; Panel Installation</li>
+        <li>HT Express Feeders for Telecom &amp; Data Centres</li>
+        <li>Earthing, Lightning Protection &amp; Safety Systems</li>
+      </ul>
+    </div>
+
+    <div class="svc">
+      <div class="svc-top"><span class="svc-num">02</span><h3>🔋 Power Backup &amp; Renewable Energy</h3></div>
+      <ul>
+        <li>DG Set Installation, Testing &amp; O&amp;M</li>
+        <li>Solar Power Plants (Rooftop &amp; Ground-Mount EPC)</li>
+        <li>Battery Energy Storage Systems (BESS)</li>
+        <li>Hybrid Energy Systems — Solar + DG + Grid</li>
+        <li>Energy Optimization, Monitoring &amp; Audits</li>
+      </ul>
+    </div>
+
+    <div class="svc">
+      <div class="svc-top"><span class="svc-num">03</span><h3>🖥️ Data Centre Development &amp; HVAC</h3></div>
+      <ul>
+        <li>Greenfield / Retrofit Data Centre Design &amp; Build</li>
+        <li>Precision Cooling, Raised Flooring, HAC/CAC Systems</li>
+        <li>N+1 / 2N Power Redundancy Planning</li>
+        <li>HT Power Infrastructure for Data Centres</li>
+        <li>Data Centre Operations &amp; Maintenance</li>
+      </ul>
+    </div>
+
+    <div class="svc">
+      <div class="svc-top"><span class="svc-num">04</span><h3>🏗️ Civil &amp; Structural Infrastructure</h3></div>
+      <ul>
+        <li>Industrial, Commercial &amp; Institutional Construction</li>
+        <li>Site Development, Excavation &amp; Earthwork</li>
+        <li>Structural Design, Engineering &amp; Execution</li>
+        <li>Turnkey EPC Projects with O&amp;M Support</li>
+      </ul>
+    </div>
+
+    <div class="svc">
+      <div class="svc-top"><span class="svc-num">05</span><h3>🚗 EV Charging Infrastructure</h3></div>
+      <ul>
+        <li>EV Charging Hubs — Public &amp; Private Networks</li>
+        <li>Fleet Charging Solutions &amp; Depot Electrification</li>
+        <li>Smart Charging with Grid / Solar / BESS Integration</li>
+        <li>Site Survey, Civil Works &amp; Commissioning</li>
+      </ul>
+    </div>
+
+    <div class="svc">
+      <div class="svc-top"><span class="svc-num">06</span><h3>🌿 Environmental &amp; Sustainability Solutions</h3></div>
+      <ul>
+        <li>ETP / STP / WTP / ZLD Systems — Design &amp; Build</li>
+        <li>OCEMS Integration &amp; Real-Time Regulatory Monitoring</li>
+        <li>Pollution Control Board (PCB) Compliance</li>
+        <li>Integrated Waste Management &amp; ESG Consulting</li>
+      </ul>
+    </div>
+
+    <div class="svc">
+      <div class="svc-top"><span class="svc-num">07</span><h3>🔥 Fire Safety &amp; Surveillance</h3></div>
+      <ul>
+        <li>Fire Detection &amp; Alarm Systems (FDAS)</li>
+        <li>Hydrant, Sprinkler &amp; Gas Suppression Systems</li>
+        <li>CCTV &amp; Intelligent Video Surveillance</li>
+        <li>Fire Safety Audits &amp; Regulatory Compliance</li>
+      </ul>
+    </div>
+
+    <div class="svc">
+      <div class="svc-top"><span class="svc-num">08</span><h3>🤖 Automation &amp; Smart Infrastructure</h3></div>
+      <ul>
+        <li>Industrial Automation — PLC / SCADA Systems</li>
+        <li>IoT-Based Smart Monitoring &amp; Control</li>
+        <li>GIS &amp; Satellite-Based Infrastructure Mapping</li>
+        <li>Smart City &amp; Intelligent Infrastructure Solutions</li>
+      </ul>
+    </div>
+
+    <div class="svc">
+      <div class="svc-top"><span class="svc-num">09</span><h3>📋 Project Management &amp; Regulatory Approvals</h3></div>
+      <ul>
+        <li>Project Management Consultancy (PMC)</li>
+        <li>Environmental Clearances — CTE / CTO</li>
+        <li>Statutory Approvals, Licenses &amp; NOCs</li>
+        <li>EHS Compliance &amp; Authority Coordination</li>
+      </ul>
+    </div>
+
+    <div class="svc">
+      <div class="svc-top"><span class="svc-num">10</span><h3>🌐 IT Infrastructure &amp; OFC</h3></div>
+      <ul>
+        <li>Structured Cabling — LAN / WAN</li>
+        <li>Optical Fiber Cable (OFC) Network Deployment</li>
+        <li>Server &amp; Networking Infrastructure</li>
+        <li>Telecom Infrastructure Development</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ FLAGSHIP PROJECTS ══ -->
+<div class="sec">
+  <div class="sec-hd"><div class="sec-bar"></div><div class="sec-title">Flagship Projects</div></div>
+  <div class="sec-rule"></div>
+  <div class="proj-grid">
+
+    <div class="proj">
+      <div class="proj-top">
+        <div class="proj-badge" style="background:#fff3e0;color:#c2410c;border:1px solid #fdba74;">Power Transmission</div>
+        <h4>1250 kVA Package Substation (PSS) Installation</h4>
+        <div class="proj-meta"><span>📍 Meerut, Uttar Pradesh</span><span>👤 Vodafone Idea Limited</span></div>
+      </div>
+      <div class="proj-outcome">Successfully commissioned a 1250 kVA Package Substation for Vi — ensuring reliable, uninterrupted power supply for critical telecom infrastructure operations, with full CEIG compliance and utility approvals.</div>
+    </div>
+
+    <div class="proj">
+      <div class="proj-top">
+        <div class="proj-badge" style="background:#fff3e0;color:#c2410c;border:1px solid #fdba74;">HT Line</div>
+        <h4>12 km, 11 kV HT Line Installation</h4>
+        <div class="proj-meta"><span>📍 Dudu, Jaipur, Rajasthan</span><span>👤 Indus Towers</span></div>
+      </div>
+      <div class="proj-outcome">Designed and commissioned 12 km of 11 kV HT overhead line across challenging terrain in Rajasthan — enabling backbone power supply for Indus Towers' telecom network with full statutory compliance.</div>
+    </div>
+
+    <div class="proj">
+      <div class="proj-top">
+        <div class="proj-badge" style="background:#eff6ff;color:#1d4ed8;border:1px solid #93c5fd;">Data Centre</div>
+        <h4>HT Express Feeder — Nxtra Data Centre</h4>
+        <div class="proj-meta"><span>📍 Varanasi, Uttar Pradesh</span><span>👤 Nxtra by Airtel</span></div>
+      </div>
+      <div class="proj-outcome">Executed a dedicated HT Express Feeder for Nxtra (Airtel) hyperscale data centre — delivering high-availability power infrastructure for mission-critical data centre operations with zero-downtime commissioning.</div>
+    </div>
+
+    <div class="proj">
+      <div class="proj-top">
+        <div class="proj-badge" style="background:#f5f3ff;color:#6d28d9;border:1px solid #c4b5fd;">Statutory Compliance</div>
+        <h4>4000+ CEIG &amp; PCB Statutory Approvals</h4>
+        <div class="proj-meta"><span>📍 Pan India</span><span>👤 Airtel, Tata Projects, Vi &amp; others</span></div>
+      </div>
+      <div class="proj-outcome">Secured 4000+ CEIG, PCB, CTE/CTO and Fire NOC approvals across telecom, data centre, hospitality and industrial projects Pan India — ensuring timely regulatory compliance and uninterrupted project commissioning.</div>
+    </div>
+
+    <div class="proj">
+      <div class="proj-top">
+        <div class="proj-badge" style="background:#ecfeff;color:#0e7490;border:1px solid #67e8f9;">EV Infrastructure</div>
+        <h4>EV Charging Station Network — Rajasthan</h4>
+        <div class="proj-meta"><span>📍 Rajasthan</span><span>👤 Statiq EV</span></div>
+      </div>
+      <div class="proj-outcome">Designed, supplied and commissioned EV charging infrastructure across multiple locations in Rajasthan for Statiq — supporting India's fast-growing EV mobility network with civil, electrical and smart charging integration.</div>
+    </div>
+
+    <div class="proj">
+      <div class="proj-top">
+        <div class="proj-badge" style="background:#f0fdf4;color:#15803d;border:1px solid #86efac;">Environmental</div>
+        <h4>4 KLD Effluent Treatment Plant (ETP)</h4>
+        <div class="proj-meta"><span>📍 Jaipur, Rajasthan</span><span>👤 Manor &amp; Mews</span></div>
+      </div>
+      <div class="proj-outcome">Installed and commissioned a 4 KLD ETP for Manor &amp; Mews — achieving full PCB environmental compliance with robust wastewater treatment, OCEMS integration and complete handover documentation.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ LEADERSHIP TEAM ══ -->
+<div class="sec">
+  <div class="sec-hd"><div class="sec-bar"></div><div class="sec-title">Leadership Team</div></div>
+  <div class="sec-rule"></div>
+  <div class="team-grid">
+
+    <div class="tc">
+      <div class="tc-avatar">Y</div>
+      <div>
+        <h4>Yogyata</h4>
+        <div class="tc-role">Director</div>
+        <div class="tc-creds">B.C.A</div>
+        <p>Dynamic professional with 5+ years in education and computer training, complemented by 2+ years in data centre operations and automation. Leads operations with a technology-driven approach and strong analytical acumen.</p>
+      </div>
+    </div>
+
+    <div class="tc">
+      <div class="tc-avatar">VK</div>
+      <div>
+        <h4>Vivek Kumar</h4>
+        <div class="tc-role">Director</div>
+        <div class="tc-creds">Diploma (Electrical) | ITI Fitter</div>
+        <p>Seasoned technical expert with 15+ years in electrical systems, power transmission, O&amp;M and civil infrastructure. Drives field execution, quality control and large-scale project delivery across all verticals.</p>
+      </div>
+    </div>
+
+    <div class="tc">
+      <div class="tc-avatar">PC</div>
+      <div>
+        <h4>Prince Chaudhary</h4>
+        <div class="tc-role">Management, Planning &amp; Execution</div>
+        <div class="tc-creds">B.Tech | MBA (Marketing &amp; Finance)</div>
+        <p>Financial and strategic planning expert with 12+ years in banking, specialising in working capital and project financing for MSME and mid-corporate sectors. Leads business strategy, financial structuring and project planning.</p>
+      </div>
+    </div>
+
+
+  </div>
+</div>
+
+<!-- ══ CLIENTS ══ -->
+<div class="sec">
+  <div class="sec-hd"><div class="sec-bar"></div><div class="sec-title">Our Clients</div></div>
+  <div class="sec-rule"></div>
+  <div class="clients">
+    <span class="ctag">Bharti Airtel</span>
+    <span class="ctag">Nxtra Data (Airtel)</span>
+    <span class="ctag">Tata Teleservices</span>
+    <span class="ctag">Tata Communications</span>
+    <span class="ctag">Vodafone Idea (Vi)</span>
+    <span class="ctag">Indus Towers</span>
+    <span class="ctag">CtrlS Data Centers</span>
+    <span class="ctag">Statiq EV</span>
+    <span class="ctag">JLL (Jones Lang LaSalle)</span>
+    <span class="ctag">Bharti Foundation</span>
+    <span class="ctag">Sudhir Power Ltd</span>
+    <span class="ctag">Cosmo Infra</span>
+    <span class="ctag">Paswara Paper Limited</span>
+    <span class="ctag">Manor &amp; Mews</span>
+    <span class="ctag">Green Power</span>
+  </div>
+</div>
+
+<!-- ══ FOOTER ══ -->
+<div class="foot">
+  <div class="foot-l">
+    <strong>IndusVertex Private Limited</strong><br/>
+    CIN: U82990UP2025PTC238382 &nbsp;·&nbsp; GSTIN: 09AAICI5630B1ZS<br/>
+    IndusVertex House, Plot No. 8, Kh. No. 579, Avantika Phase 2, Shastri Nagar, Ghaziabad, UP – 201002
+  </div>
+  <div class="foot-r">
+    <a href="mailto:business@indusvertex.com">business@indusvertex.com</a><br/>
+    <a href="mailto:info@indusvertex.com">info@indusvertex.com</a><br/>
+    +91 8859-596939 &nbsp;·&nbsp; +91 120-4756019<br/>
+    <a href="https://www.indusvertex.com">www.indusvertex.com</a>
+  </div>
+</div>
+
+</div><!-- /doc -->
 </body>
 </html>
