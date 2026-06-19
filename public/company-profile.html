@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap');
-@page { size:A4; margin:14mm 16mm; }
+@page { size:A4; margin:0; }
 *{box-sizing:border-box;margin:0;padding:0;}
 :root{
   --navy:#050e1c; --navy2:#0d2042; --gold:#d4af37; --gold2:#b8960f;
@@ -22,7 +22,7 @@ body{font-family:'Inter',sans-serif;color:var(--text);background:#fff;font-size:
 /* ══════════════════════════════════════════
    PAGE WRAPPER
 ══════════════════════════════════════════ */
-.doc{max-width:900px;margin:0 auto;padding:36px 40px 48px;}
+.doc{max-width:900px;margin:0 auto;padding:14mm 16mm;}
 
 /* ── COVER ── */
 .cover{background:linear-gradient(150deg,var(--navy) 0%,#0b1e3a 55%,#112d50 100%);border-radius:14px;padding:36px 40px 0;margin-bottom:24px;overflow:hidden;position:relative;}
@@ -117,12 +117,12 @@ body{font-family:'Inter',sans-serif;color:var(--text);background:#fff;font-size:
 .ctag{background:var(--bg);border:1px solid var(--border);border-radius:20px;padding:5px 15px;font-size:12px;font-weight:600;color:var(--text);}
 
 /* ── FOOTER ── */
-.foot{margin-top:24px;border-top:2px solid var(--gold);padding-top:14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
+.foot{margin-top:24px;border-top:2px solid var(--gold);padding-top:14px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px;}
 .foot-l{font-size:11px;color:var(--muted);line-height:1.7;}
 .foot-l strong{color:var(--text);font-size:12px;display:block;margin-bottom:2px;}
-.foot-r{text-align:right;font-size:11px;color:var(--muted);line-height:1.7;}
+.foot-r{text-align:right;font-size:11px;color:var(--muted);line-height:1.8;}
 .foot-r a{color:var(--gold2);text-decoration:none;font-weight:600;}
-.foot-r .contact-row{display:flex;gap:14px;justify-content:flex-end;flex-wrap:wrap;}
+.foot-r div{white-space:nowrap;}
 </style>
 </head>
 <body>
@@ -452,12 +452,8 @@ body{font-family:'Inter',sans-serif;color:var(--text);background:#fff;font-size:
     IndusVertex House, Plot No. 8, Kh. No. 579, Avantika Phase 2, Shastri Nagar, Ghaziabad, UP – 201002
   </div>
   <div class="foot-r">
-    <div class="contact-row">
-      <a href="mailto:business@indusvertex.com">business@indusvertex.com</a>
-      <a href="mailto:info@indusvertex.com">info@indusvertex.com</a>
-      <span>+91 8859-596939 &nbsp;·&nbsp; +91 120-4756019</span>
-      <a href="https://www.indusvertex.com">www.indusvertex.com</a>
-    </div>
+    <div><a href="mailto:business@indusvertex.com">business@indusvertex.com</a> &nbsp;·&nbsp; <a href="mailto:info@indusvertex.com">info@indusvertex.com</a></div>
+    <div>+91 8859-596939 &nbsp;·&nbsp; +91 120-4756019 &nbsp;·&nbsp; <a href="https://www.indusvertex.com">www.indusvertex.com</a></div>
   </div>
 </div>
 
