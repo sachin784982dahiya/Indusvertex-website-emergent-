@@ -17,7 +17,21 @@ body{font-family:'Inter',sans-serif;color:var(--text);background:#fff;font-size:
 
 /* ── PRINT BUTTON ── */
 .pbt{position:fixed;top:18px;right:18px;background:var(--gold);color:var(--navy);padding:9px 20px;border-radius:6px;font-weight:700;font-size:12px;border:none;cursor:pointer;box-shadow:0 4px 18px rgba(0,0,0,.18);z-index:999;letter-spacing:.03em;}
-@media print{.pbt{display:none;}body{-webkit-print-color-adjust:exact;print-color-adjust:exact;}}
+@media print{
+  .pbt{display:none;}
+  #print-tip{display:none!important;}
+  body{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  /* keep headings with their content */
+  .sec-hd,.sec-rule{break-after:avoid;page-break-after:avoid;}
+  /* never break inside these containers */
+  .lifecycle,.strengths,.info-strip,.cover{break-inside:avoid;page-break-inside:avoid;}
+  /* never break inside individual cards */
+  .str,.svc,.proj,.tc,.lc,.lc-step,.ctag{break-inside:avoid;page-break-inside:avoid;}
+  /* for grids: let the grid break but not individual items */
+  .svc-grid .svc,.proj-grid .proj,.team-grid .tc{break-inside:avoid;page-break-inside:avoid;}
+  /* start these sections fresh if they'd otherwise split badly */
+  .sec{break-inside:avoid;page-break-inside:avoid;}
+}
 
 /* ══════════════════════════════════════════
    PAGE WRAPPER
