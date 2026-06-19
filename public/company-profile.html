@@ -63,10 +63,15 @@ body{font-family:'Inter',sans-serif;color:var(--text);background:#fff;font-size:
 .about-body{color:#2d3e53;line-height:1.8;font-size:13px;}
 
 /* ── LIFECYCLE ── */
-.lifecycle{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-top:4px;}
-.lc{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:11px 6px;text-align:center;}
-.lc-n{display:block;font-size:16px;font-weight:800;color:var(--gold);line-height:1;margin-bottom:5px;}
-.lc-t{font-size:9px;text-transform:uppercase;letter-spacing:.07em;font-weight:700;color:var(--muted);}
+.lifecycle{display:flex;align-items:stretch;gap:0;margin-top:8px;position:relative;}
+.lc{flex:1;display:flex;flex-direction:column;align-items:center;position:relative;}
+.lc-step{background:linear-gradient(135deg,var(--navy) 0%,#1a3a6a 100%);border-radius:10px;padding:14px 6px 12px;text-align:center;width:100%;position:relative;z-index:1;}
+.lc-n{display:block;font-size:20px;font-weight:800;color:var(--gold);line-height:1;margin-bottom:6px;}
+.lc-t{font-size:8.5px;text-transform:uppercase;letter-spacing:.1em;font-weight:700;color:rgba(255,255,255,.75);}
+.lc-arrow{position:absolute;right:-10px;top:50%;transform:translateY(-50%);width:20px;height:20px;z-index:2;display:flex;align-items:center;justify-content:center;}
+.lc-arrow::after{content:'';width:0;height:0;border-top:8px solid transparent;border-bottom:8px solid transparent;border-left:10px solid var(--gold);opacity:.7;}
+.lc:last-child .lc-arrow{display:none;}
+.lc-connector{height:2px;background:linear-gradient(to right,var(--gold),rgba(212,175,55,.3));position:absolute;top:50%;left:calc(50% + 32px);right:-50%;z-index:0;}
 
 /* ── STRENGTHS ── */
 .strengths{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
@@ -174,13 +179,13 @@ body{font-family:'Inter',sans-serif;color:var(--text);background:#fff;font-size:
   <div class="sec-hd"><div class="sec-bar"></div><div class="sec-title">Single-Window Project Lifecycle</div></div>
   <div class="sec-rule"></div>
   <div class="lifecycle">
-    <div class="lc"><span class="lc-n">01</span><span class="lc-t">Concept</span></div>
-    <div class="lc"><span class="lc-n">02</span><span class="lc-t">Feasibility</span></div>
-    <div class="lc"><span class="lc-n">03</span><span class="lc-t">Approvals</span></div>
-    <div class="lc"><span class="lc-n">04</span><span class="lc-t">Design</span></div>
-    <div class="lc"><span class="lc-n">05</span><span class="lc-t">Execution</span></div>
-    <div class="lc"><span class="lc-n">06</span><span class="lc-t">Compliance</span></div>
-    <div class="lc"><span class="lc-n">07</span><span class="lc-t">O&amp;M</span></div>
+    <div class="lc"><div class="lc-step"><span class="lc-n">01</span><span class="lc-t">Concept</span></div><div class="lc-arrow"></div></div>
+    <div class="lc"><div class="lc-step"><span class="lc-n">02</span><span class="lc-t">Feasibility</span></div><div class="lc-arrow"></div></div>
+    <div class="lc"><div class="lc-step"><span class="lc-n">03</span><span class="lc-t">Approvals</span></div><div class="lc-arrow"></div></div>
+    <div class="lc"><div class="lc-step"><span class="lc-n">04</span><span class="lc-t">Design</span></div><div class="lc-arrow"></div></div>
+    <div class="lc"><div class="lc-step"><span class="lc-n">05</span><span class="lc-t">Execution</span></div><div class="lc-arrow"></div></div>
+    <div class="lc"><div class="lc-step"><span class="lc-n">06</span><span class="lc-t">Compliance</span></div><div class="lc-arrow"></div></div>
+    <div class="lc"><div class="lc-step"><span class="lc-n">07</span><span class="lc-t">O&amp;M</span></div><div class="lc-arrow"></div></div>
   </div>
 </div>
 
