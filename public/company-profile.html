@@ -131,7 +131,23 @@ body{font-family:'Inter',sans-serif;color:var(--text);background:#fff;font-size:
 </style>
 </head>
 <body>
-<button class="pbt" onclick="window.print()">⬇ Save as PDF</button>
+<div id="print-tip" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:14px;padding:32px 36px;max-width:400px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.3);font-family:'Inter',sans-serif;">
+    <div style="font-size:22px;margin-bottom:6px;">🖨️</div>
+    <div style="font-size:15px;font-weight:700;color:#0a1628;margin-bottom:6px;">Before saving as PDF</div>
+    <div style="font-size:12.5px;color:#5a6a80;line-height:1.8;margin-bottom:18px;">
+      In the print dialog:<br/>
+      1. Click <strong style="color:#0a1628;">More settings</strong><br/>
+      2. <strong style="color:#0a1628;">Uncheck</strong> "Headers and footers"<br/>
+      3. Click <strong style="color:#0a1628;">Save</strong>
+    </div>
+    <button onclick="document.getElementById('print-tip').style.display='none';window.print();"
+      style="background:#d4af37;color:#0a1628;border:none;padding:10px 24px;border-radius:7px;font-weight:700;font-size:13px;cursor:pointer;width:100%;">
+      Got it — Open Print Dialog
+    </button>
+  </div>
+</div>
+<button class="pbt" onclick="document.getElementById('print-tip').style.display='flex'">⬇ Save as PDF</button>
 
 <div class="doc">
 
