@@ -9,9 +9,6 @@ export function middleware(request) {
 
   const { pathname } = request.nextUrl;
 
-  // Allow /legal and its assets through
-  if (pathname.startsWith('/legal')) return NextResponse.next();
-
   // Allow API routes, Next.js internals, and static assets
   if (
     pathname.startsWith('/api') ||
@@ -24,8 +21,13 @@ export function middleware(request) {
     return NextResponse.next();
   }
 
-  // Redirect everything else to /legal
-  return NextResponse.redirect(new URL('/legal', request.url));
+  // If someone directly visits /legal, redirect to root (hide /legal from URL)
+  if (pathname.startsWith('/legal')) {
+    return NextResponse.redirect(new URL('/', request.url));
+  }
+
+  // Rewrite root and all other paths to /legal — URL stays clean (indusvertex.com)
+  return NextResponse.rewrite(new URL('/legal', request.url));
 }
 
 export const config = {

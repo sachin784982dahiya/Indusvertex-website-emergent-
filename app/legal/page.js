@@ -11,7 +11,7 @@ import { Scale, Gavel, Building, ShieldCheck, AlertTriangle, CheckCircle2, Arrow
 const DEFAULT_LEGAL_TEAM = [
   {
     name: 'Adv. Pradeep Kumar',
-    role: 'Director & Associate Legal Counsel',
+    role: 'Partner',
     creds: 'B.Tech (IT) | LL.B | LL.M (Silver Medalist)',
     imageUrl: '/assets/adv-pradeep.png',
     bio: 'A legal and compliance specialist with 10+ years of experience in IT and electrical infrastructure, along with 3+ years of expertise in regulatory and environmental compliance. He is actively engaged in civil and criminal practice, supporting corporate and public sector matters.',
@@ -19,7 +19,7 @@ const DEFAULT_LEGAL_TEAM = [
   },
   {
     name: 'Adv. Kapil',
-    role: 'Senior Counsel — Banking & SARFAESI',
+    role: 'Partner',
     creds: 'LL.M | Bar Council of India',
     imageUrl: '/assets/adv-kapil.png',
     bio: 'Leads banking, financial recovery and SARFAESI matters for the firm — representing leading banks and NBFCs in commercial litigation and asset recovery proceedings across India.',
@@ -27,7 +27,7 @@ const DEFAULT_LEGAL_TEAM = [
   },
   {
     name: 'Adv. Davesh',
-    role: 'Litigation Counsel — Real Estate & RERA',
+    role: 'Partner',
     creds: 'LL.M | Property Law Specialist',
     imageUrl: '/assets/adv-davesh.png',
     bio: 'Specialises in property due diligence, RERA matters, land acquisition and real-estate dispute resolution — supporting both corporate and individual clients with end-to-end advisory.',
