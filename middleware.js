@@ -27,7 +27,11 @@ export function middleware(request) {
   }
 
   // Rewrite root and all other paths to /legal — URL stays clean (indusvertex.com)
-  return NextResponse.rewrite(new URL('/legal', request.url));
+  const reqHeaders = new Headers(request.headers);
+  reqHeaders.set('x-legal-mode', '1');
+  return NextResponse.rewrite(new URL('/legal', request.url), {
+    request: { headers: reqHeaders },
+  });
 }
 
 export const config = {
