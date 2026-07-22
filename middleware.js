@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 // Set to true to redirect all traffic to /legal (legal-only mode)
 // Set to false to restore the full website
-const LEGAL_ONLY_MODE = true;
+const LEGAL_ONLY_MODE = false;
 
 export function middleware(request) {
   if (!LEGAL_ONLY_MODE) return NextResponse.next();
