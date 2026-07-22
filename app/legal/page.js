@@ -102,6 +102,35 @@ export default function Legal() {
     'Infrastructure, EPC & Project Legal Consultancy',
     'End-to-End Liaisoning & Regulatory Coordination Services'
   ];
+  const stats = [
+    { value: "10+", label: "Years of Legal Excellence" },
+    { value: "500+", label: "Consultations Delivered" },
+    { value: "100+", label: "Satisfied Clients" },
+    { value: "24×7", label: "Legal Assistance" },
+  ];
+  
+  const practiceAreas = [
+    {
+      icon: Building,
+      title: "Corporate & Commercial Law",
+      text: "Corporate advisory, compliance, governance and commercial documentation."
+    },
+    {
+      icon: Gavel,
+      title: "Civil & Criminal Litigation",
+      text: "Representation before courts, tribunals and statutory authorities."
+    },
+    {
+      icon: ShieldCheck,
+      title: "Regulatory Compliance",
+      text: "Environmental, labour, industrial and statutory compliance."
+    },
+    {
+      icon: Scale,
+      title: "Infrastructure & EPC Contracts",
+      text: "Legal support for infrastructure, EPC and government projects."
+    }
+  ];
 
   return (
     <div id="top">
@@ -311,3 +340,8 @@ export default function Legal() {
     </div>
   );
 }
+
+
+
+
+
