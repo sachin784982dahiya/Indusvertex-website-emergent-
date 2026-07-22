@@ -1,5 +1,5 @@
 'use client';
-import { useParams, notFound } from 'next/navigation';
+import { useParams, notFound, redirect } from 'next/navigation';
 import Link from 'next/link';
 import { Card } from '@/components/ui/card';
 import { Zap, BatteryCharging, Server, Building2, Cpu, Plug, ShieldAlert, Leaf, ClipboardCheck, Network, Scale, CheckCircle2, ArrowRight, ArrowLeft } from 'lucide-react';
@@ -12,6 +12,10 @@ export default function ServiceDetail() {
   const service = SERVICES.find(s => s.slug === slug);
 
   if (!service) return notFound();
+  // Redirect Legal Consultancy to the existing Legal page
+if (slug === "legal-consultancy") {
+    redirect("/legal");
+}
 
   const Ic = ICONS[service.icon] || Zap;
   const related = SERVICES.filter(s => s.slug !== slug).slice(0, 3);
