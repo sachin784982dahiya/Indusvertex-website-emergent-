@@ -6,7 +6,7 @@ import { COMPANY, SERVICES } from '@/lib/services-data';
 
 export default function Footer() {
   const pathname = usePathname();
-  if (pathname?.startsWith('/admin') || pathname?.startsWith('/legal')) return null;
+  if (pathname?.startsWith('/admin')) return null;
   return (
     <footer className="gradient-navy text-white relative overflow-hidden">
       <div className="absolute inset-0 grid-pattern opacity-30" />
@@ -61,7 +61,7 @@ export default function Footer() {
           <div>
             <h4 className="text-xs uppercase tracking-[0.18em] text-gold mb-4 font-semibold">Connect</h4>
             <ul className="space-y-2.5 text-sm text-white/70">
-              {/* <li><Link href="/legal" className="hover:text-white">IndusVertex Law Firm</Link></li> */}
+              <li><Link href="/legal" className="hover:text-white">IndusVertex Law Firm</Link></li>
               <li><a href={`mailto:${COMPANY.emails.business}`} className="hover:text-white">Business Inquiry</a></li>
               <li><Link href="/admin" className="hover:text-white">Admin Login</Link></li>
             </ul>

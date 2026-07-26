@@ -3,8 +3,10 @@ import { useEffect, useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import PersonAvatar from '@/components/PersonAvatar';
-import LegalNavbar from '@/components/LegalNavbar';
-import { Scale, Gavel, Building, ShieldCheck, AlertTriangle, CheckCircle2, ArrowRight, Award, Briefcase, Mail, Linkedin, X, Phone, User, MessageSquare, MapPin } from 'lucide-react';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { Checkbox } from '@/components/ui/checkbox';
+import { COMPANY } from '@/lib/services-data';
+import { Scale, Gavel, Building, ShieldCheck, AlertTriangle, CheckCircle2, ArrowRight, Award, Briefcase, Mail, Linkedin, X, Phone, User, MessageSquare, MapPin, HelpCircle, Search } from 'lucide-react';
 
 // Default legal team displayed on the legal page. Admin can override / add more via team CRUD
 // by giving role containing "Legal" or "Counsel".
@@ -41,6 +43,9 @@ export default function Legal() {
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({ name: '', email: '', phone: '', message: '' });
   const [formStatus, setFormStatus] = useState('idle'); // idle | sending | sent | error
+  const [serviceSearch, setServiceSearch] = useState('');
+  const [checkedDocs, setCheckedDocs] = useState({});
+  const [activeChecklistCategory, setActiveChecklistCategory] = useState(0);
 
   async function handleFormSubmit(e) {
     e.preventDefault();
@@ -102,6 +107,9 @@ export default function Legal() {
     'Infrastructure, EPC & Project Legal Consultancy',
     'End-to-End Liaisoning & Regulatory Coordination Services'
   ];
+  const filteredServices = serviceSearch.trim()
+    ? services.filter(s => s.toLowerCase().includes(serviceSearch.trim().toLowerCase()))
+    : services;
   const stats = [
     { value: "10+", label: "Years of Legal Excellence" },
     { value: "500+", label: "Consultations Delivered" },
@@ -132,9 +140,47 @@ export default function Legal() {
     }
   ];
 
+  const processSteps = [
+    { step: '01', title: 'Initial Consultation', text: 'Share your matter with our team — by call, email or the form below — for a confidential first assessment.' },
+    { step: '02', title: 'Case Assessment', text: 'Our advocates review documents, evaluate merits and identify the applicable legal framework.' },
+    { step: '03', title: 'Strategy & Action', text: 'We draft a clear plan of action — drafting, filing, negotiation or representation — and keep you informed at every step.' },
+    { step: '04', title: 'Resolution & Follow-up', text: 'We pursue resolution through litigation, settlement or compliance closure, with continued support post-resolution.' },
+  ];
+
+  const faqs = [
+    { q: 'Does the firm handle matters outside Uttar Pradesh / NCR?', a: 'Yes. While our office is based in Ghaziabad, we represent clients — industries, corporates, banks, NBFCs and individuals — across India, particularly where a matter connects to infrastructure, telecom or industrial projects our engineering teams already work on.' },
+    { q: 'What does an initial consultation cost?', a: 'The first consultation is a confidential discussion to understand your matter and scope of engagement. Fees for representation or advisory work are agreed transparently before any billable work begins, based on the nature and complexity of the matter.' },
+    { q: 'How quickly will I hear back after submitting a query?', a: 'Our legal team aims to respond to every consultation request within 24 hours on business days.' },
+    { q: 'Is the information on this website legal advice?', a: 'No. As per Bar Council of India rules, this website is for informational purposes only and does not constitute legal advice, solicitation or an advocate-client relationship. Please schedule a consultation to discuss your specific matter.' },
+    { q: 'Can IndusVertex Law Firm support both corporate and individual clients?', a: 'Yes — we advise industries, corporates, banks and NBFCs on compliance, contracts and recovery matters, while also supporting individuals with property, civil, criminal and dispute-resolution needs.' },
+  ];
+
+  const documentChecklist = [
+    {
+      category: 'Property & Real Estate',
+      items: ['Sale deed / title documents', 'Encumbrance certificate', 'Property tax receipts', 'Building approval / occupancy certificate', 'Identity & address proof of all parties'],
+    },
+    {
+      category: 'Banking & Recovery (SARFAESI)',
+      items: ['Loan agreement & sanction letter', 'Demand notice / SARFAESI notice copy', 'Security documents (mortgage / hypothecation)', 'Latest account statements', 'Correspondence with the bank / NBFC'],
+    },
+    {
+      category: 'Corporate & Contracts',
+      items: ['Company incorporation documents (COI, MOA/AOA)', 'Board resolutions', 'Draft or executed contract copy', 'Correspondence relevant to the matter', 'GST & PAN details'],
+    },
+    {
+      category: 'Civil / Criminal Litigation',
+      items: ['FIR copy / complaint copy (if any)', 'Relevant evidence or correspondence', 'Prior legal notices sent or received', 'Identity proof', 'Any court orders already passed'],
+    },
+  ];
+
+  function toggleDoc(catIdx, itemIdx) {
+    const key = `${catIdx}-${itemIdx}`;
+    setCheckedDocs(prev => ({ ...prev, [key]: !prev[key] }));
+  }
+
   return (
     <div id="top">
-      <LegalNavbar />
       {/* CONSULTATION MODAL */}
       {showForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
@@ -213,7 +259,7 @@ export default function Legal() {
           </div>
         </div>
       )}
-      <section id="legal-about" className="pt-20 pb-24 relative overflow-hidden section-dark">
+      <section id="legal-about" className="pt-24 pb-24 relative overflow-hidden section-dark">
 
         <div className="absolute inset-0 grid-pattern opacity-20" />
         <div className="relative max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6 text-white">
@@ -229,6 +275,16 @@ export default function Legal() {
           <div className="mt-8 flex flex-wrap gap-4">
             <Button size="lg" className="font-semibold" style={{backgroundColor:'#d4af37', color:'#0a1628', height:'52px'}} onClick={() => setShowForm(true)}>Schedule a Consultation <ArrowRight className="ml-2 w-4 h-4" /></Button>
             <a href="mailto:legal@indusvertex.com"><Button size="lg" variant="outline" className="border-white/30 text-white bg-white/5 hover:bg-white/15 hover:text-white" style={{height:'52px'}}>legal@indusvertex.com</Button></a>
+          </div>
+
+          {/* STATS STRIP */}
+          <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6 pt-10 border-t border-white/10">
+            {stats.map(s => (
+              <div key={s.label}>
+                <div className="text-3xl lg:text-4xl font-bold text-gold">{s.value}</div>
+                <div className="text-white/60 text-sm mt-1">{s.label}</div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -250,7 +306,7 @@ export default function Legal() {
           </div>
 
           {/* LEGAL TEAM */}
-          <div id="legal-team" className="mb-8" style={{scrollMarginTop:'88px'}}>
+          <div id="legal-team" className="mb-8" style={{scrollMarginTop:'124px'}}>
             <div className="text-xs uppercase tracking-[0.2em] text-accent font-semibold mb-3">Our Legal Counsel</div>
             <h2 className="text-3xl lg:text-4xl font-bold">Meet the lawyers behind IndusVertex Law Firm</h2>
             <p className="text-foreground/70 mt-3 max-w-3xl">Multi-disciplinary legal expertise across corporate, banking, real estate, regulatory and litigation matters.</p>
@@ -289,30 +345,137 @@ export default function Legal() {
           </div>
 
           {/* PRACTICE AREAS */}
-          <div className="text-xs uppercase tracking-[0.2em] text-accent font-semibold mb-3">Practice Areas</div>
-          <h2 className="text-3xl lg:text-4xl font-bold mb-8">Full-spectrum legal services</h2>
-          <div className="grid md:grid-cols-2 gap-3">
-            {services.map(s => (
-              <div key={s} className="flex items-start gap-3 p-4 rounded-lg bg-card border border-border hover:border-accent transition-colors">
-                <CheckCircle2 className="w-5 h-5 text-accent mt-0.5 flex-shrink-0" />
-                <span className="text-foreground/85">{s}</span>
-              </div>
+          <div id="legal-services" className="mb-8" style={{scrollMarginTop:'124px'}}>
+            <div className="text-xs uppercase tracking-[0.2em] text-accent font-semibold mb-3">Practice Areas</div>
+            <h2 className="text-3xl lg:text-4xl font-bold">Full-spectrum legal services</h2>
+            <p className="text-foreground/70 mt-3 max-w-3xl">From corporate compliance to courtroom representation — advisory backed by our infrastructure and engineering domain expertise.</p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+            {practiceAreas.map(p => (
+              <Card key={p.title} className="p-6 hover:shadow-xl transition-shadow border-border/60">
+                <div className="w-11 h-11 rounded-lg gradient-navy flex items-center justify-center mb-4"><p.icon className="w-5 h-5 text-gold" /></div>
+                <h3 className="font-bold text-base mb-2">{p.title}</h3>
+                <p className="text-foreground/70 text-sm leading-relaxed">{p.text}</p>
+              </Card>
             ))}
+          </div>
+
+          <div className="relative max-w-md mb-6">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <input
+              type="text"
+              value={serviceSearch}
+              onChange={e => setServiceSearch(e.target.value)}
+              placeholder="Search practice areas — e.g. RERA, SARFAESI, contracts..."
+              className="w-full pl-9 pr-4 py-2.5 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-accent"
+            />
+          </div>
+          {filteredServices.length > 0 ? (
+            <div className="grid md:grid-cols-2 gap-3">
+              {filteredServices.map(s => (
+                <div key={s} className="flex items-start gap-3 p-4 rounded-lg bg-card border border-border hover:border-accent transition-colors">
+                  <CheckCircle2 className="w-5 h-5 text-accent mt-0.5 flex-shrink-0" />
+                  <span className="text-foreground/85">{s}</span>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-10 text-muted-foreground text-sm">
+              No practice areas match "{serviceSearch}" — try a different term, or <button onClick={() => setShowForm(true)} className="text-accent underline underline-offset-2">ask us directly</button>.
+            </div>
+          )}
+
+          {/* PROCESS / HOW WE WORK */}
+          <div className="mt-20">
+            <div className="text-xs uppercase tracking-[0.2em] text-accent font-semibold mb-3">How We Work</div>
+            <h2 className="text-3xl lg:text-4xl font-bold mb-10">A clear, structured engagement process</h2>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {processSteps.map(p => (
+                <div key={p.step} className="relative p-6 rounded-xl border border-border bg-card">
+                  <div className="text-4xl font-bold text-accent/25 mb-2">{p.step}</div>
+                  <h3 className="font-bold text-lg mb-2">{p.title}</h3>
+                  <p className="text-foreground/70 text-sm leading-relaxed">{p.text}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* FAQ */}
+          <div className="mt-20 max-w-4xl mx-auto" id="legal-faq" style={{scrollMarginTop:'124px'}}>
+            <div className="text-xs uppercase tracking-[0.2em] text-accent font-semibold mb-3 text-center">FAQ</div>
+            <h2 className="text-3xl lg:text-4xl font-bold mb-10 text-center">Frequently asked questions</h2>
+            <Accordion type="single" collapsible className="w-full">
+              {faqs.map((f, i) => (
+                <AccordionItem key={i} value={`faq-${i}`}>
+                  <AccordionTrigger className="text-left font-semibold hover:no-underline">
+                    <span className="flex items-start gap-3"><HelpCircle className="w-5 h-5 text-accent mt-0.5 flex-shrink-0" />{f.q}</span>
+                  </AccordionTrigger>
+                  <AccordionContent className="text-foreground/70 leading-relaxed pl-8">{f.a}</AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </div>
+
+          {/* CONSULTATION PREP CHECKLIST */}
+          <div className="mt-20 max-w-3xl mx-auto" id="legal-checklist" style={{scrollMarginTop:'124px'}}>
+            <div className="text-xs uppercase tracking-[0.2em] text-accent font-semibold mb-3 text-center">Get Ready</div>
+            <h2 className="text-3xl lg:text-4xl font-bold mb-3 text-center">Consultation prep checklist</h2>
+            <p className="text-foreground/70 text-center max-w-xl mx-auto mb-8">Pick the category closest to your matter and check off what you already have — it'll make your first consultation faster and more productive.</p>
+
+            <div>
+              <div className="flex flex-wrap justify-center gap-2 mb-6">
+                {documentChecklist.map((c, i) => (
+                  <button key={c.category} onClick={() => setActiveChecklistCategory(i)}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-colors border ${
+                      activeChecklistCategory === i
+                        ? 'bg-accent text-accent-foreground border-accent'
+                        : 'bg-card border-border text-foreground/70 hover:border-accent'
+                    }`}>
+                    {c.category}
+                  </button>
+                ))}
+              </div>
+
+              {documentChecklist.map((c, catIdx) => {
+                if (catIdx !== activeChecklistCategory) return null;
+                const checkedCount = c.items.filter((_, itemIdx) => checkedDocs[`${catIdx}-${itemIdx}`]).length;
+                return (
+                  <Card key={c.category} className="p-6">
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="font-bold text-lg">{c.category}</h3>
+                      <span className="text-xs font-medium text-muted-foreground">{checkedCount}/{c.items.length} ready</span>
+                    </div>
+                    <div className="space-y-3">
+                      {c.items.map((item, itemIdx) => {
+                        const key = `${catIdx}-${itemIdx}`;
+                        return (
+                          <label key={key} className="flex items-start gap-3 cursor-pointer group">
+                            <Checkbox checked={!!checkedDocs[key]} onCheckedChange={() => toggleDoc(catIdx, itemIdx)} className="mt-0.5" />
+                            <span className={`text-sm leading-relaxed ${checkedDocs[key] ? 'text-muted-foreground line-through' : 'text-foreground/85'}`}>{item}</span>
+                          </label>
+                        );
+                      })}
+                    </div>
+                  </Card>
+                );
+              })}
+            </div>
           </div>
         </div>
       </section>
 
       {/* CONTACT SECTION */}
-      <section id="legal-contact" className="py-20 section-dark" style={{scrollMarginTop:'88px'}}>
+      <section id="legal-contact" className="py-20 section-dark" style={{scrollMarginTop:'124px'}}>
         <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6">
           <div className="text-xs uppercase tracking-[0.2em] text-[#d4af37] font-semibold mb-3 text-center">Get In Touch</div>
           <h2 className="text-3xl lg:text-4xl font-bold text-white text-center mb-3">Contact IndusVertex Law Firm</h2>
           <p className="text-white/60 text-center max-w-xl mx-auto mb-12">Reach out for a confidential consultation. Our legal team will respond within 24 hours.</p>
           <div className="grid md:grid-cols-3 gap-6 mb-12">
             {[
-              { icon: Mail,    label: 'Email Us',     value: 'legal@indusvertex.com',  href: 'mailto:legal@indusvertex.com' },
-              { icon: Phone,   label: 'Call Us',      value: '+91-120-4567890',         href: 'tel:+911204567890' },
-              { icon: MapPin,  label: 'Office',       value: 'IndusVertex House, Plot No 8, Kh No 579, Avantika Phase 2, Shastri Nagar, Ghaziabad, Uttar Pradesh – 201002', href: null },
+              { icon: Mail,    label: 'Email Us',     value: COMPANY.emails.legal,     href: `mailto:${COMPANY.emails.legal}` },
+              { icon: Phone,   label: 'Call Us',      value: COMPANY.phone,             href: `tel:${COMPANY.phoneRaw}` },
+              { icon: MapPin,  label: 'Office',       value: COMPANY.address, href: null },
             ].map(c => (
               <div key={c.label} className="flex flex-col items-center text-center p-7 rounded-2xl border border-[#d4af37]/20 bg-white/5 hover:bg-white/10 transition-colors">
                 <div className="w-12 h-12 rounded-xl bg-[#d4af37]/10 border border-[#d4af37]/30 flex items-center justify-center mb-4">

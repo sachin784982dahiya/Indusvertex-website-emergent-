@@ -14,7 +14,7 @@ const nav = [
   { href: '/services', label: 'Services', icon: Briefcase, mega: true },
   { href: '/projects', label: 'Projects', icon: FolderOpen },
   { href: '/clients', label: 'Clients', icon: Users },
-  // { href: '/legal', label: 'Legal', icon: Scale }, // temporarily hidden
+  // 'Legal' isn't a separate tab — it's the 'Legal Consultancy' card inside the Services mega-menu.
   { href: '/team', label: 'Team', icon: UserCircle },
   { href: '/contact', label: 'Contact', icon: Phone },
 ];
@@ -38,8 +38,8 @@ export default function Navbar() {
 
   useEffect(() => { setOpen(false); setServicesOpen(false); setWorkOpen(false); }, [pathname]);
 
-  // Hide on admin and legal routes
-  if (pathname?.startsWith('/admin') || pathname?.startsWith('/legal')) return null;
+  // Hide on admin routes only — legal is now a normal page within the main site
+  if (pathname?.startsWith('/admin')) return null;
 
   const onHome = pathname === '/';
   const transparent = onHome && !scrolled;
@@ -119,14 +119,17 @@ export default function Navbar() {
                           'civil-structural': Landmark,
                           'automation-smart-infrastructure': Cpu,
                           'it-infrastructure-ofc': Network,
+                          'legal-consultancy': Scale,
                         };
                         return (
                           <div className="absolute top-full left-1/2 -translate-x-1/2 pt-3 w-[680px]">
                             <div className="bg-popover border border-border rounded-xl shadow-2xl p-4 grid grid-cols-2 gap-1">
-                              {SERVICES.filter(s => s.slug !== 'legal-advisory').map(s => {
+                              {SERVICES.map(s => {
                                 const Icon = serviceIcons[s.slug] || Briefcase;
+                                // Legal Consultancy has its own dedicated page (with team, FAQ, consultation form) instead of the generic service template.
+                                const href = s.slug === 'legal-consultancy' ? '/legal' : `/services/${s.slug}`;
                                 return (
-                                  <Link key={s.slug} href={`/services/${s.slug}`}
+                                  <Link key={s.slug} href={href}
                                     className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-muted transition-colors group">
                                     <div className="w-7 h-7 rounded-md bg-[#0a1628] flex items-center justify-center flex-shrink-0 group-hover:bg-[#d4af37] transition-colors">
                                       <Icon className="w-3.5 h-3.5 text-[#d4af37] group-hover:text-[#0a1628] transition-colors" />
