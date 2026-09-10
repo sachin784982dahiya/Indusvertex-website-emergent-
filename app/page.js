@@ -163,7 +163,7 @@ export default function Home() {
               }}>
               {[
                 { label: '1250 kVA PSS Installation', client: 'Vodafone Idea', location: 'Meerut, UP' },
-                { label: '12 km 11 kV HT Line', client: 'Indus Towers', location: 'Dudu, Jaipur' },
+                { label: '12 km 11 kV HT Line', client: 'Leading Telecom Infrastructure Provider', location: 'Dudu, Jaipur' },
                 { label: 'HT Express Feeder', client: 'Nxtra by Airtel', location: 'Varanasi, UP' },
                 { label: 'EV Charging Infrastructure', client: 'Statiq', location: 'Rajasthan' },
                 { label: '4 KLD ETP Installation', client: 'Manor & Mews', location: 'Jaipur, Rajasthan' },
@@ -171,7 +171,7 @@ export default function Home() {
                 { label: '4000+ CEIG & PCB Approvals', client: 'Bharti Airtel & others', location: 'Pan India' },
               ].concat([
                 { label: '1250 kVA PSS Installation', client: 'Vodafone Idea', location: 'Meerut, UP' },
-                { label: '12 km 11 kV HT Line', client: 'Indus Towers', location: 'Dudu, Jaipur' },
+                { label: '12 km 11 kV HT Line', client: 'Leading Telecom Infrastructure Provider', location: 'Dudu, Jaipur' },
                 { label: 'HT Express Feeder', client: 'Nxtra by Airtel', location: 'Varanasi, UP' },
                 { label: 'EV Charging Infrastructure', client: 'Statiq', location: 'Rajasthan' },
                 { label: '4 KLD ETP Installation', client: 'Manor & Mews', location: 'Jaipur, Rajasthan' },
@@ -214,7 +214,7 @@ export default function Home() {
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-3">
             {[
               { img: '/images/projects/ht-panel-vi-meerut.jpg',      title: '1250 kVA PSS',         client: 'Vodafone Idea', location: 'Meerut, UP',       badge: 'Power',      color: '#ea580c' },
-              { img: '/images/projects/11KVA_HT_LINE.png',           title: '11 kV HT Line',        client: 'Indus Towers',  location: 'Dudu, Jaipur',    badge: 'HT Line',    color: '#ea580c', fit: 'contain' },
+              { img: '/images/projects/11KVA_HT_LINE.png',           title: '11 kV HT Line',        client: 'Leading Telecom Infrastructure Provider',  location: 'Dudu, Jaipur',    badge: 'HT Line',    color: '#ea580c', fit: 'contain' },
               { img: '/images/projects/EXPRESS_FEEDER_AIRTEL.png',   title: 'HT Express Feeder',    client: 'Nxtra Airtel',  location: 'Varanasi',        badge: 'Data Centre',color: '#0891b2', fit: 'contain' },
               { img: '/images/projects/EV_STATION _IMAGE.png',       title: 'EV Charging Infra',    client: 'Statiq',        location: 'Rajasthan',       badge: 'EV',         color: '#0891b2', fit: 'contain' },
               { img: '/images/projects/4KLD_image.png',              title: '4 KLD ETP',            client: 'Manor & Mews',  location: 'Jaipur',          badge: 'ETP',        color: '#059669', fit: 'contain' },

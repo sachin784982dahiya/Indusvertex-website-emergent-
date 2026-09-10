@@ -8,13 +8,13 @@ import { Button } from '@/components/ui/button';
 const TRACK_RECORD = [
   { value: '150+', label: 'Projects Delivered', sub: 'Across HT power, EV, ETP & compliance' },
   { value: '1500+', label: 'Statutory Approvals', sub: 'CEIG, PCB, CTE/CTO — Pan India' },
-  { value: '50+', label: 'Enterprise Clients', sub: 'Airtel, Tata, VI, Indus Towers & more' },
+  { value: '50+', label: 'Enterprise Clients', sub: 'Airtel, Tata, VI, Nxtra & more' },
   { value: '40+', label: 'Years Combined Experience', sub: 'Engineering, compliance & legal' },
 ];
 
 const REAL_PROJECTS = [
   { tag: 'Power Transmission', title: '1250 kVA Package Substation', client: 'Vodafone Idea Limited', location: 'Meerut, UP', detail: 'Full HT/LT installation, cable laying, earthing, lightning protection, testing & energization.', color: '#ea580c' },
-  { tag: 'HT Infrastructure', title: '12 km 11 kV HT Line', client: 'Indus Towers', location: 'Dudu, Jaipur, Rajasthan', detail: 'Route survey, pole erection, conductor stringing, earthing & utility coordination for telecom backbone.', color: '#ea580c' },
+  { tag: 'HT Infrastructure', title: '12 km 11 kV HT Line', client: 'Leading Telecom Infrastructure Provider', location: 'Dudu, Jaipur, Rajasthan', detail: 'Route survey, pole erection, conductor stringing, earthing & utility coordination for telecom backbone.', color: '#ea580c' },
   { tag: 'Data Centre', title: 'HT Express Feeder', client: 'Nxtra by Airtel', location: 'Varanasi, UP', detail: 'Dedicated HT express feeder — cable laying, termination, panel interfacing & energization for critical DC ops.', color: '#0891b2' },
   { tag: 'EV Infrastructure', title: 'EV Charging Station Network', client: 'Statiq', location: 'Rajasthan', detail: 'Site assessment, HT/LT power distribution, charger installation, earthing, network monitoring & handover.', color: '#0891b2' },
   { tag: 'Environmental', title: '4 KLD ETP Installation', client: 'Manor & Mews', location: 'Jaipur, Rajasthan', detail: 'Design, supply & commissioning of 4 KLD ETP with PCB compliance, electrical panels & O&M handover.', color: '#059669' },
@@ -122,7 +122,7 @@ export default function About() {
               IndusVertex Private Limited is a multi-discipline engineering, infrastructure and compliance company headquartered in India. We specialize in HT/LT power infrastructure, transformer testing & maintenance, EV charging networks, environmental treatment plants (ETP/STP/WTP/ZLD), data centre power systems, fire safety and statutory regulatory approvals.
             </p>
             <p>
-              Our project portfolio spans 150+ executed assignments for some of India's leading enterprises — including Bharti Airtel, Vodafone Idea, Tata Projects, Indus Towers, Nxtra Data (Airtel), Statiq EV and Manor & Mews. Whether it is a 12 km 11 kV HT line for telecom backbone power in Rajasthan, a 1250 kVA Package Substation for Vi in Uttar Pradesh, a dedicated HT express feeder for a hyperscale data centre in Varanasi, or 1500+ CEIG and PCB statutory approvals across telecom and data centre sectors — IndusVertex has delivered it, on ground, with zero compromise on quality or compliance.
+              Our project portfolio spans 150+ executed assignments for some of India's leading enterprises — including Bharti Airtel, Vodafone Idea, Tata Projects, Nxtra Data (Airtel), Statiq EV and Manor & Mews. Whether it is a 12 km 11 kV HT line for telecom backbone power in Rajasthan, a 1250 kVA Package Substation for Vi in Uttar Pradesh, a dedicated HT express feeder for a hyperscale data centre in Varanasi, or 1500+ CEIG and PCB statutory approvals across telecom and data centre sectors — IndusVertex has delivered it, on ground, with zero compromise on quality or compliance.
             </p>
             <p>
               What sets us apart is our integrated model. Engineering, procurement, statutory compliance, environmental solutions and legal advisory — all under one roof, with one accountable team. No fragmented sub-contracting, no handoff gaps. Our clients get a single point of contact from site survey to final commissioning and handover documentation.
