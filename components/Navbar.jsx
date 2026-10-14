@@ -83,12 +83,12 @@ export default function Navbar() {
               <div className="relative w-12 h-12 bg-white rounded-xl shadow-md flex items-center justify-center p-1 ring-1 ring-black/5 flex-shrink-0">
                 <img src="/assets/logo-symbol.png" alt="IndusVertex" className="w-full h-full object-contain" />
               </div>
-              <div className="flex flex-col leading-tight">
-                <span className="font-bold text-lg tracking-tight">
-                  <span className={transparent ? 'text-white' : 'text-[#0a1628] dark:text-white'}>Indus</span><span className="text-[#16a34a]">Vertex</span>
+              <div className="flex flex-col leading-tight" style={transparent ? { textShadow: '0 1px 2px rgba(0,0,0,0.85), 0 2px 10px rgba(0,0,0,0.55)' } : {}}>
+                <span className="font-bold text-[21px] tracking-tight">
+                  <span className={transparent ? 'text-white' : 'text-[#0a1628] dark:text-white'}>Indus</span><span className={transparent ? 'text-[#3ecf7f]' : 'text-[#16a34a]'}>Vertex</span>
                 </span>
-                <span className={cn('text-[10px] uppercase tracking-[0.18em]', transparent ? 'text-white/70' : 'text-muted-foreground')}>Private Limited</span>
-                <span className={cn('hidden lg:block text-[11px] tracking-[0.06em] font-medium mt-0.5', transparent ? 'text-[#d4af37]' : 'text-[#b8860b]')}>Transforming Vision into Infrastructure Reality</span>
+                <span className={cn('text-[12px] font-semibold uppercase tracking-[0.16em] mt-0.5', transparent ? 'text-white' : 'text-[#16324f]')}>Private Limited</span>
+                <span className={cn('hidden lg:block text-[13px] tracking-[0.02em] font-semibold mt-1', transparent ? 'text-[#ffd966]' : 'text-[#9a6b00]')}>Transforming Vision into Infrastructure Reality</span>
               </div>
             </Link>
 
