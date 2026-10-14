@@ -2,8 +2,7 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
-import { Menu, X, Moon, Sun, ChevronDown, Home, Info, Briefcase, FolderOpen, Users, Scale, UserCircle, Phone, ArrowRight, Handshake, Building2, Zap, Wrench, Battery, ClipboardCheck, Server, Car, ShieldAlert, Leaf, Landmark, Cpu, Network } from 'lucide-react';
-import { useTheme } from 'next-themes';
+import { Menu, X, ChevronDown, Home, Info, Briefcase, FolderOpen, Users, Scale, UserCircle, Phone, ArrowRight, Handshake, Building2, Zap, Wrench, Battery, ClipboardCheck, Server, Car, ShieldAlert, Leaf, Landmark, Cpu, Network } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { SERVICES } from '@/lib/services-data';
@@ -25,7 +24,6 @@ export default function Navbar() {
   const [mounted, setMounted] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
   const [workOpen, setWorkOpen] = useState(false);
-  const { theme, setTheme } = useTheme();
   const pathname = usePathname();
 
   useEffect(() => {
@@ -54,7 +52,7 @@ export default function Navbar() {
           <div className="flex items-center h-full">
             <div className="flex-shrink-0 flex items-center gap-2 px-4 bg-[#d4af37] h-full">
               <span className="w-2 h-2 rounded-full bg-[#0a1628] animate-pulse" />
-              <span className="text-[#0a1628] text-xs font-bold uppercase tracking-widest whitespace-nowrap">Latest</span>
+              <span className="text-[#0a1628] text-[13px] font-bold uppercase tracking-widest whitespace-nowrap">Latest</span>
             </div>
             <div className="relative flex-1 overflow-hidden h-full flex items-center group">
               <div className="flex whitespace-nowrap" style={{ animation: 'ticker-scroll 30s linear infinite' }}
@@ -77,7 +75,7 @@ export default function Navbar() {
           ? 'border-b border-white/10'
           : 'bg-background/85 backdrop-blur-xl border-b border-border shadow-sm'
       )}
-        style={transparent ? { background: 'linear-gradient(to bottom, rgba(5,14,28,0.92) 0%, rgba(5,14,28,0.4) 80%, rgba(5,14,28,0.0) 100%)' } : {}}
+        style={transparent ? { background: 'linear-gradient(to bottom, rgba(5,14,28,0.55) 0%, rgba(5,14,28,0.15) 80%, rgba(5,14,28,0.0) 100%)' } : {}}
       >
         <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6">
           <div className="flex items-center justify-between h-20">
@@ -100,7 +98,7 @@ export default function Navbar() {
                   return (
                     <div key={item.href} className="relative" onMouseEnter={() => setServicesOpen(true)} onMouseLeave={() => setServicesOpen(false)}>
                       <Link href={item.href} className={cn(
-                        'inline-flex items-center gap-1 px-3 py-2 text-sm font-medium rounded-md transition-colors',
+                        'inline-flex items-center gap-1 px-3 py-2 text-[15px] font-medium rounded-md transition-colors',
                         transparent ? 'text-white hover:text-white/80' : 'text-foreground/80 hover:text-foreground',
                         pathname.startsWith('/services') && (transparent ? 'text-white' : 'text-primary')
                       )}>
@@ -147,7 +145,7 @@ export default function Navbar() {
                 }
                 return (
                   <Link key={item.href} href={item.href} className={cn(
-                    'px-3 py-2 text-sm font-medium rounded-md transition-colors',
+                    'px-3 py-2 text-[15px] font-medium rounded-md transition-colors',
                     transparent ? 'text-white hover:text-white/80' : 'text-foreground/80 hover:text-foreground',
                     pathname === item.href && (transparent ? 'text-white' : 'text-primary')
                   )}>{item.label}</Link>
@@ -156,14 +154,11 @@ export default function Navbar() {
             </nav>
 
             <div className="flex items-center gap-1">
-              <button onClick={() => mounted && setTheme(theme === 'dark' ? 'light' : 'dark')} className={cn('p-2 rounded-md transition-colors', transparent ? 'text-white hover:bg-white/10' : 'text-foreground hover:bg-muted')} aria-label="Toggle theme">
-                {mounted && theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-              </button>
 
               {/* Work With Us dropdown */}
               <div className="relative hidden md:block" onMouseEnter={() => setWorkOpen(true)} onMouseLeave={() => setWorkOpen(false)}>
                 <button className={cn(
-                  'inline-flex items-center gap-1.5 px-3 py-2 text-sm font-semibold rounded-md transition-colors',
+                  'inline-flex items-center gap-1.5 px-3 py-2 text-[15px] font-semibold rounded-md transition-colors',
                   'bg-[#d4af37] text-[#0a1628] hover:bg-[#c9a430]'
                 )}>
                   <Handshake className="w-4 h-4" /> Work With Us <ChevronDown className="w-3.5 h-3.5" />
@@ -244,7 +239,7 @@ export default function Navbar() {
             return (
               <Link key={item.href} href={item.href} onClick={() => setOpen(false)}
                 className={cn(
-                  'flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all',
+                  'flex items-center gap-3 px-4 py-3 rounded-xl text-[15px] font-medium transition-all',
                   active
                     ? 'bg-[#d4af37] text-[#0a1628] font-semibold shadow-lg'
                     : 'text-white/70 hover:bg-white/10 hover:text-white'

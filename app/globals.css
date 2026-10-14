@@ -1,3 +1,21 @@
+/* Fonts (same family set as nandengineering.com) — self-hosted in public/fonts */
+@font-face{font-family:'Krub';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/krub-latin-400-normal.woff2') format('woff2');}
+@font-face{font-family:'Krub';font-style:normal;font-weight:500;font-display:swap;src:url('/fonts/krub-latin-500-normal.woff2') format('woff2');}
+@font-face{font-family:'Krub';font-style:normal;font-weight:600;font-display:swap;src:url('/fonts/krub-latin-600-normal.woff2') format('woff2');}
+@font-face{font-family:'Krub';font-style:normal;font-weight:700;font-display:swap;src:url('/fonts/krub-latin-700-normal.woff2') format('woff2');}
+@font-face{font-family:'Rubik';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/rubik-latin-400-normal.woff2') format('woff2');}
+@font-face{font-family:'Rubik';font-style:normal;font-weight:500;font-display:swap;src:url('/fonts/rubik-latin-500-normal.woff2') format('woff2');}
+@font-face{font-family:'Rubik';font-style:normal;font-weight:600;font-display:swap;src:url('/fonts/rubik-latin-600-normal.woff2') format('woff2');}
+@font-face{font-family:'Rubik';font-style:normal;font-weight:700 900;font-display:swap;src:url('/fonts/rubik-latin-700-normal.woff2') format('woff2');}
+@font-face{font-family:'Poppins';font-style:normal;font-weight:700;font-display:swap;src:url('/fonts/poppins-latin-700-normal.woff2') format('woff2');}
+@font-face{font-family:'Poppins';font-style:normal;font-weight:800 900;font-display:swap;src:url('/fonts/poppins-latin-800-normal.woff2') format('woff2');}
+
+:root {
+  --font-body: 'Krub', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+  --font-head: 'Rubik', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+  --font-display: 'Poppins', 'Rubik', sans-serif;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -50,8 +68,11 @@
 
 @layer base {
   * { @apply border-border; }
-  body { @apply bg-background text-foreground; font-feature-settings: 'rlig' 1, 'calt' 1; }
-  h1, h2, h3, h4 { font-family: var(--font-playfair), Georgia, serif; letter-spacing: -0.02em; }
+  body { @apply bg-background text-foreground; font-family: var(--font-body); font-size: 16px; line-height: 1.65; font-feature-settings: 'rlig' 1, 'calt' 1; }
+  h1, h2, h3, h4, h5, h6 { font-family: var(--font-head); letter-spacing: -0.01em; line-height: 1.25; }
+  button, nav a, label, input, select, textarea { font-family: var(--font-head); }
+  .font-head { font-family: var(--font-head); }
+  .font-display { font-family: var(--font-display); }
 }
 
 @layer utilities {

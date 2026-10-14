@@ -1,5 +1,4 @@
 import './globals.css';
-import { Inter, Playfair_Display } from 'next/font/google';
 import { ThemeProvider } from 'next-themes';
 import { Toaster } from '@/components/ui/sonner';
 import Navbar from '@/components/Navbar';
@@ -7,8 +6,6 @@ import Footer from '@/components/Footer';
 import FloatingButtons from '@/components/FloatingButtons';
 import { headers } from 'next/headers';
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
-const playfair = Playfair_Display({ subsets: ['latin'], variable: '--font-playfair', display: 'swap' });
 
 export const viewport = {
   width: 'device-width',
@@ -32,9 +29,9 @@ export default async function RootLayout({ children }) {
   const isLegalMode = headersList.get('x-legal-mode') === '1';
 
   return (
-    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${playfair.variable}`}>
-      <body className="min-h-screen bg-background text-foreground antialiased font-sans">
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+    <html lang="en" suppressHydrationWarning>
+      <body className="min-h-screen bg-background text-foreground antialiased">
+        <ThemeProvider attribute="class" defaultTheme="light" forcedTheme="light" enableSystem={false}>
           {!isLegalMode && <Navbar />}
           <main className={`min-h-screen${isLegalMode ? '' : ' pt-9'}`}>{children}</main>
           {!isLegalMode && <Footer />}

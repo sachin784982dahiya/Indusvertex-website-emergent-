@@ -89,9 +89,9 @@ export default function Home() {
 
   const [heroSlide, setHeroSlide] = useState(0);
   const heroSlides = [
-    { src: '/images/hero-1.jpg',                       alt: 'Industrial construction site at sunset' },
-    { src: '/images/hero-nature-2.jpg',                alt: 'Sustainable industrial campus' },
-    { src: '/images/projects/EV_SERVICES.png',          alt: 'EV charging hub and stations' },
+    { src: '/images/hero-nature-2.jpg',                alt: 'Sustainable industrial campus',          filter: 'brightness(1.25) saturate(1.15) contrast(1.02)' },
+    { src: '/images/projects/EV_SERVICES.png',          alt: 'EV charging hub and stations',           filter: 'brightness(1.1) saturate(1.1)' },
+    { src: '/images/hero-1.jpg',                       alt: 'Industrial construction site at sunset', filter: 'brightness(1.45) saturate(1.1) contrast(0.95)' },
   ];
   useEffect(() => {
     const t = setInterval(() => setHeroSlide(s => (s + 1) % 3), 5500);
@@ -109,14 +109,16 @@ export default function Home() {
             style={{ opacity: i === heroSlide ? 1 : 0, zIndex: 0 }}>
             <img src={slide.src} alt={slide.alt}
               className="w-full h-full object-cover"
-              style={{ animation: i === heroSlide ? 'kenburns 7s ease-out forwards' : 'none' }}
+              style={{ filter: slide.filter, animation: i === heroSlide ? 'kenburns 7s ease-out forwards' : 'none' }}
               loading={i === 0 ? 'eager' : 'lazy'} />
           </div>
         ))}
 
-        {/* Dark overlay */}
+        {/* Light scrim — only enough shade on the left/bottom for the words to read; the photo stays bright */}
         <div className="absolute inset-0 z-10 pointer-events-none"
-          style={{ background: 'linear-gradient(to top, rgba(10,22,40,0.88) 0%, rgba(10,22,40,0.5) 55%, rgba(10,22,40,0.2) 100%)' }} />
+          style={{ background: 'linear-gradient(95deg, rgba(6,12,22,0.42) 0%, rgba(6,12,22,0.22) 35%, rgba(6,12,22,0) 60%)' }} />
+        <div className="absolute inset-x-0 bottom-0 h-56 z-10 pointer-events-none"
+          style={{ background: 'linear-gradient(to top, rgba(6,12,22,0.45), transparent)' }} />
 
         {/* Content */}
         <div className="absolute inset-0 z-20 flex flex-col justify-end px-6 sm:px-10 lg:px-16 pb-12">
@@ -124,16 +126,18 @@ export default function Home() {
 
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/20 bg-white/10 backdrop-blur-sm mb-5 w-fit">
               <span className="w-2 h-2 rounded-full bg-[#16a34a] animate-pulse" />
-              <span className="text-xs font-semibold text-white uppercase tracking-widest">Engineering · Infrastructure · Compliance</span>
+              <span className="text-[11px] sm:text-[13px] font-semibold text-white uppercase tracking-[0.14em] sm:tracking-[0.2em]">Engineering · Infrastructure · Compliance</span>
             </div>
 
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-[1.1] mb-1 text-white">Integrated Engineering.</h1>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-[1.1] mb-1 text-[#16a34a]">Sustainable Solutions.</h1>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-[1.1] mb-5 text-white">Approved to Operate.</h1>
+            <div style={{ textShadow: '0 3px 26px rgba(0,0,0,0.65), 0 1px 3px rgba(0,0,0,0.45)' }}>
+              <h1 className="font-display text-[38px] sm:text-[60px] xl:text-[76px] font-extrabold tracking-[-0.02em] leading-[1.04] mb-1 text-white">Integrated Engineering.</h1>
+              <h1 className="font-display text-[38px] sm:text-[60px] xl:text-[76px] font-extrabold tracking-[-0.02em] leading-[1.04] mb-1 text-[#3ecf7f]">Sustainable Solutions.</h1>
+              <h1 className="font-display text-[38px] sm:text-[60px] xl:text-[76px] font-extrabold tracking-[-0.02em] leading-[1.04] mb-5 text-white">Approved to Operate.</h1>
+            </div>
 
             <div className="w-24 h-1 rounded-full mb-5" style={{ background: 'linear-gradient(90deg, #d4af37, #f4d36b)' }} />
 
-            <p className="text-white/80 text-base lg:text-lg leading-relaxed max-w-2xl mb-7">
+            <p className="text-white text-[17px] lg:text-[20px] leading-relaxed max-w-2xl mb-7" style={{ textShadow: '0 2px 14px rgba(0,0,0,0.75)' }}>
               Empowering industries with end-to-end infrastructure, statutory approvals, and environmental compliance — built to last.
             </p>
 
@@ -153,9 +157,9 @@ export default function Home() {
       <style>{`@keyframes kenburns { 0% { transform: scale(1.05); } 100% { transform: scale(1.15); } }`}</style>
 
       {/* ── PROJECT TICKER ── */}
-      <div className="bg-[#0a1628] border-b border-white/10 overflow-hidden py-3">
+      <div className="bg-white dark:bg-[#0a1628] border-b border-gray-200 dark:border-white/10 overflow-hidden py-3 shadow-sm">
         <div className="flex items-center gap-0 animate-none">
-          <div className="flex-shrink-0 px-4 py-1 bg-[#16a34a] text-white text-xs font-black uppercase tracking-widest mr-4">Live Projects</div>
+          <div className="flex-shrink-0 px-4 py-1 bg-[#16a34a] text-white text-[13px] font-black uppercase tracking-widest mr-4">Live Projects</div>
           <div className="overflow-hidden flex-1">
             <div className="flex gap-8 whitespace-nowrap"
               style={{
@@ -178,14 +182,14 @@ export default function Home() {
                 { label: 'Transformer Testing & Maintenance', client: 'Multiple Clients', location: 'Pan India' },
                 { label: '4000+ CEIG & PCB Approvals', client: 'Bharti Airtel & others', location: 'Pan India' },
               ]).map((p, i) => (
-                <span key={i} className="inline-flex items-center gap-2 text-xs text-white/80 flex-shrink-0">
+                <span key={i} className="inline-flex items-center gap-2 text-[14px] text-[#16324f] dark:text-white/80 flex-shrink-0">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#16a34a] flex-shrink-0" />
                   <span className="font-bold text-[#16a34a]">{p.label}</span>
-                  <span className="text-white/40">·</span>
-                  <span className="text-[#d4af37]">{p.client}</span>
-                  <span className="text-white/40">·</span>
-                  <span className="text-white/60">{p.location}</span>
-                  <span className="ml-4 text-white/20">|</span>
+                  <span className="text-gray-400 dark:text-white/40">·</span>
+                  <span className="text-[#b8860b] dark:text-[#d4af37] font-medium">{p.client}</span>
+                  <span className="text-gray-400 dark:text-white/40">·</span>
+                  <span className="text-gray-500 dark:text-white/60">{p.location}</span>
+                  <span className="ml-4 text-gray-300 dark:text-white/20">|</span>
                 </span>
               ))}
             </div>
@@ -200,14 +204,14 @@ export default function Home() {
       </div>
 
       {/* ── PROJECT PROOF STRIP ── */}
-      <section className="py-10 bg-[#0a1628]">
+      <section className="py-14 bg-[#f3f6f9] dark:bg-[#0a1628]">
         <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <div className="text-[10px] uppercase tracking-[0.25em] text-[#16a34a] font-bold mb-1">Real Projects · Real Results</div>
-              <h2 className="text-xl font-black text-white">Our Work, On Ground</h2>
+              <div className="text-[13px] uppercase tracking-[0.2em] text-[#16a34a] font-bold mb-2">Real Projects · Real Results</div>
+              <h2 className="text-3xl lg:text-4xl font-bold text-[#0a1628] dark:text-white">Our Work, On Ground</h2>
             </div>
-            <Link href="/projects" className="inline-flex items-center gap-1.5 text-xs font-bold text-[#d4af37] hover:gap-2.5 transition-all">
+            <Link href="/projects" className="inline-flex items-center gap-1.5 text-[15px] font-bold text-[#16a34a] hover:gap-2.5 transition-all">
               View All Projects <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
@@ -227,22 +231,22 @@ export default function Home() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.4, delay: i * 0.06 }}
-                  className="relative rounded-xl overflow-hidden group cursor-pointer"
+                  className="relative rounded-xl overflow-hidden group cursor-pointer shadow-md hover:shadow-xl transition-shadow"
                   style={{ aspectRatio: '3/4' }}
                 >
                   <img
                     src={p.img} alt={p.title}
                     className={`w-full h-full ${p.fit === 'contain' ? 'object-contain bg-white' : 'object-cover'} group-hover:scale-105 transition-transform duration-500`}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent" />
                   <div className="absolute top-2 left-2">
-                    <span className="px-1.5 py-0.5 rounded text-[9px] font-black text-white"
+                    <span className="px-2 py-0.5 rounded text-[11px] font-bold text-white"
                       style={{ background: p.color }}>{p.badge}</span>
                   </div>
-                  <div className="absolute bottom-0 left-0 right-0 p-2.5">
-                    <div className="text-white font-black text-[11px] leading-tight mb-0.5">{p.title}</div>
-                    <div className="text-white/60 text-[9px]">{p.client}</div>
-                    <div className="text-[#d4af37] text-[9px]">{p.location}</div>
+                  <div className="absolute bottom-0 left-0 right-0 p-3">
+                    <div className="text-white font-bold text-[14px] leading-tight mb-1">{p.title}</div>
+                    <div className="text-white/85 text-[12px] leading-snug">{p.client}</div>
+                    <div className="text-[#f4d36b] text-[12px]">{p.location}</div>
                   </div>
                 </motion.div>
               </Link>
@@ -252,13 +256,13 @@ export default function Home() {
       </section>
 
       {/* ── STATS ── */}
-      <section className="py-16 bg-[#0a1628]">
+      <section className="py-16 bg-white dark:bg-[#0a1628] border-b border-gray-100 dark:border-white/10">
         <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
             {stats.map((s, i) => (
               <div key={s.label} className="text-center">
-                <div className="text-4xl lg:text-5xl font-bold text-[#d4af37] mb-1"><Counter end={s.value} suffix={s.suffix} /></div>
-                <div className="text-xs text-white/60 uppercase tracking-wider font-medium">{s.label}</div>
+                <div className="text-4xl lg:text-5xl font-bold text-[#16a34a] mb-2"><Counter end={s.value} suffix={s.suffix} /></div>
+                <div className="text-[14px] text-[#16324f] dark:text-white/60 uppercase tracking-wider font-semibold">{s.label}</div>
               </div>
             ))}
           </div>
@@ -269,7 +273,7 @@ export default function Home() {
       <section className="py-20 bg-gray-50 dark:bg-[#0d1f3c]">
         <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6">
           <div className="text-center max-w-3xl mx-auto mb-14">
-            <div className="text-xs uppercase tracking-[0.2em] text-[#16a34a] font-semibold mb-3">Why Choose IndusVertex</div>
+            <div className="text-[13px] uppercase tracking-[0.2em] text-[#16a34a] font-bold mb-3">Why Choose IndusVertex</div>
             <h2 className="text-4xl lg:text-5xl font-bold text-[#0a1628] dark:text-white leading-tight">A single, accountable partner from concept to commissioning.</h2>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -308,9 +312,9 @@ export default function Home() {
                   <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style={{ background: `${f.color}18` }}>
                     <f.icon className="w-6 h-6" style={{ color: f.color }} />
                   </div>
-                  <div className="text-[10px] font-black uppercase tracking-widest mb-1" style={{ color: f.color }}>{f.stat}</div>
-                  <h3 className="font-bold text-lg mb-2 text-[#0a1628] dark:text-white leading-snug">{f.title}</h3>
-                  <p className="text-sm text-gray-500 dark:text-white/60 leading-relaxed">{f.text}</p>
+                  <div className="text-[12px] font-bold uppercase tracking-widest mb-1.5" style={{ color: f.color }}>{f.stat}</div>
+                  <h3 className="font-bold text-xl mb-2 text-[#0a1628] dark:text-white leading-snug">{f.title}</h3>
+                  <p className="text-[16px] text-gray-600 dark:text-white/60 leading-relaxed">{f.text}</p>
                 </Card>
               </div>
             ))}
@@ -322,13 +326,13 @@ export default function Home() {
       <section className="py-20 bg-white dark:bg-[#081020]">
         <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6">
           <div className="text-center max-w-3xl mx-auto mb-12">
-            <div className="text-xs uppercase tracking-[0.2em] text-[#16a34a] font-semibold mb-3">Our Approach</div>
+            <div className="text-[13px] uppercase tracking-[0.2em] text-[#16a34a] font-bold mb-3">Our Approach</div>
             <h2 className="text-4xl lg:text-5xl font-bold text-[#0a1628] dark:text-white">From idea to operations — in seven disciplined stages.</h2>
           </div>
           <div className="flex flex-wrap justify-center gap-2 lg:gap-3">
             {['Concept','Feasibility','Approval','Design','Execution','Compliance','O&M'].map((step, i, arr) => (
               <div key={step} className="flex items-center">
-                <div className="px-5 py-3 rounded-full bg-white dark:bg-[#0a1628] border-2 border-gray-200 dark:border-white/10 font-semibold text-sm hover:border-[#16a34a] hover:text-[#16a34a] transition-colors text-[#0a1628] dark:text-white">
+                <div className="px-5 py-3 rounded-full bg-white dark:bg-[#0a1628] border-2 border-gray-200 dark:border-white/10 font-semibold text-[16px] hover:border-[#16a34a] hover:text-[#16a34a] transition-colors text-[#0a1628] dark:text-white">
                   <span className="text-[#d4af37] mr-2 font-mono font-bold">0{i+1}</span>{step}
                 </div>
                 {i < arr.length - 1 && <ArrowRight className="w-4 h-4 mx-1 text-gray-300 hidden sm:block" />}
@@ -339,16 +343,15 @@ export default function Home() {
       </section>
 
       {/* ── FEATURED SERVICES ── */}
-      <section className="py-20 bg-[#0a1628] relative overflow-hidden">
-        <div className="absolute inset-0 grid-pattern opacity-20" />
+      <section className="py-20 bg-[#f3f6f9] dark:bg-[#0a1628] relative overflow-hidden">
         <div className="relative max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-12 gap-6">
             <div>
-              <div className="text-xs uppercase tracking-[0.2em] text-[#16a34a] font-semibold mb-3">Featured Services</div>
-              <h2 className="text-4xl lg:text-5xl font-bold text-white max-w-2xl leading-tight">End-to-end engineering across critical infrastructure verticals.</h2>
+              <div className="text-[13px] uppercase tracking-[0.2em] text-[#16a34a] font-bold mb-3">Featured Services</div>
+              <h2 className="text-4xl lg:text-5xl font-bold text-[#0a1628] dark:text-white max-w-2xl leading-tight">End-to-end engineering across critical infrastructure verticals.</h2>
             </div>
             <Link href="/services">
-              <Button variant="outline" className="border-white/30 text-white bg-white/5 hover:bg-white/10 hover:text-white">
+              <Button className="bg-[#16a34a] hover:bg-[#0a1628] text-white text-[15px] h-11 px-6">
                 View All Services <ArrowRight className="ml-2 w-4 h-4" />
               </Button>
             </Link>
@@ -359,18 +362,18 @@ export default function Home() {
               return (
                 <div key={s.slug}>
                   <Link href={`/services/${s.slug}`} className="block group">
-                    <div className="rounded-xl overflow-hidden bg-white/5 border border-white/10 hover:bg-white/10 transition-all h-full">
+                    <div className="rounded-xl overflow-hidden bg-white dark:bg-white/5 border border-gray-100 dark:border-white/10 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all h-full">
                       <div className="relative h-44 overflow-hidden">
                         <img src={s.image} alt={s.title} loading="lazy" decoding="async" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
                         <div className="absolute top-4 left-4 w-10 h-10 rounded-lg bg-[#d4af37] flex items-center justify-center">
                           <Ic className="w-5 h-5" style={{ color: '#0a1628' }} />
                         </div>
                       </div>
                       <div className="p-5">
-                        <h3 className="font-bold text-base text-white mb-1.5 group-hover:text-[#16a34a] transition-colors">{s.title}</h3>
-                        <p className="text-sm text-white/60 leading-relaxed line-clamp-2">{s.short}</p>
-                        <div className="mt-3 text-sm text-[#16a34a] font-semibold inline-flex items-center gap-1">Learn more <ArrowRight className="w-3.5 h-3.5" /></div>
+                        <h3 className="font-bold text-xl text-[#0a1628] dark:text-white mb-2 group-hover:text-[#16a34a] transition-colors">{s.title}</h3>
+                        <p className="text-[16px] text-gray-600 dark:text-white/60 leading-relaxed line-clamp-2">{s.short}</p>
+                        <div className="mt-3 text-[15px] text-[#16a34a] font-semibold inline-flex items-center gap-1">Learn more <ArrowRight className="w-3.5 h-3.5" /></div>
                       </div>
                     </div>
                   </Link>
@@ -385,8 +388,8 @@ export default function Home() {
       <section className="py-16 bg-white dark:bg-[#0a1628] border-y border-gray-100 dark:border-white/10 overflow-hidden">
         <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6 mb-10">
           <div className="text-center">
-            <div className="text-xs uppercase tracking-[0.2em] text-[#16a34a] font-semibold mb-3">Trusted By Industry Leaders</div>
-            <h2 className="text-3xl lg:text-4xl font-bold text-[#0a1628]">Partnering with India's leading enterprises</h2>
+            <div className="text-[13px] uppercase tracking-[0.2em] text-[#16a34a] font-bold mb-3">Trusted By Industry Leaders</div>
+            <h2 className="text-3xl lg:text-4xl font-bold text-[#0a1628] dark:text-white">Partnering with India's leading enterprises</h2>
           </div>
         </div>
         <ClientsMarquee />
@@ -396,7 +399,7 @@ export default function Home() {
       <section className="py-20 bg-gray-50 dark:bg-[#0d1f3c]">
         <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-6">
           <div className="text-center mb-12">
-            <div className="text-xs uppercase tracking-[0.2em] text-[#16a34a] font-semibold mb-3">Client Voices</div>
+            <div className="text-[13px] uppercase tracking-[0.2em] text-[#16a34a] font-bold mb-3">Client Voices</div>
             <h2 className="text-4xl lg:text-5xl font-bold text-[#0a1628] dark:text-white">What our clients say</h2>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
@@ -408,7 +411,7 @@ export default function Home() {
               <div key={i}>
                 <Card className="p-7 h-full bg-white dark:bg-[#0a1628] border-gray-100 dark:border-white/10 shadow-sm hover:shadow-md transition-shadow">
                   <Quote className="w-8 h-8 text-[#16a34a] mb-4" />
-                  <p className="text-gray-600 dark:text-white/70 leading-relaxed mb-5 italic">"{t.quote}"</p>
+                  <p className="text-[17px] text-gray-600 dark:text-white/70 leading-relaxed mb-5 italic">"{t.quote}"</p>
                   <div className="flex gap-1 mb-3">{[...Array(5)].map((_,j)=><Star key={j} className="w-4 h-4 fill-[#d4af37] text-[#d4af37]" />)}</div>
                   <div className="border-t border-gray-100 dark:border-white/10 pt-3">
                     <div className="font-bold text-[#0a1628] dark:text-white">{t.initials} <span className="text-xs font-normal text-gray-400 dark:text-white/30">(name withheld — client confidentiality)</span></div>
@@ -422,30 +425,29 @@ export default function Home() {
       </section>
 
       {/* ── CTA ── */}
-      <section className="py-20 bg-[#0a1628] relative overflow-hidden">
-        <div className="absolute inset-0 grid-pattern opacity-20" />
-        <div className="absolute -top-20 -right-20 w-96 h-96 rounded-full opacity-10"
-          style={{ background: 'radial-gradient(circle, #16a34a, transparent 70%)' }} />
+      <section className="py-20 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #e9f7ef 0%, #eef4fb 55%, #e3edf8 100%)' }}>
+        <div className="absolute -top-20 -right-20 w-96 h-96 rounded-full opacity-30"
+          style={{ background: 'radial-gradient(circle, #16a34a33, transparent 70%)' }} />
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-6 text-center">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#16a34a]/40 bg-[#16a34a]/10 mb-6">
             <span className="w-2 h-2 rounded-full bg-[#16a34a] animate-pulse" />
-            <span className="text-xs uppercase tracking-widest text-[#16a34a] font-semibold">Let's Build Together</span>
+            <span className="text-[13px] uppercase tracking-widest text-[#16a34a] font-semibold">Let's Build Together</span>
           </div>
-          <h2 className="text-4xl lg:text-5xl font-bold text-white mb-5 leading-tight">
+          <h2 className="text-4xl lg:text-5xl font-bold text-[#0a1628] mb-5 leading-tight">
             Ready to transform your<br />
-            <span style={{ color: '#d4af37' }}>infrastructure vision?</span>
+            <span style={{ color: '#16a34a' }}>infrastructure vision?</span>
           </h2>
-          <p className="text-white/60 text-lg max-w-2xl mx-auto mb-10">
+          <p className="text-gray-600 text-[18px] max-w-2xl mx-auto mb-10">
             Connect with our engineering and compliance experts for a confidential consultation tailored to your project.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link href="/contact">
-              <Button size="lg" className="font-semibold px-8" style={{ backgroundColor: '#d4af37', color: '#0a1628', height: '52px' }}>
+              <Button size="lg" className="font-semibold px-8" style={{ backgroundColor: '#16a34a', color: '#fff', height: '52px' }}>
                 Request Consultation <ArrowRight className="ml-2 w-4 h-4" />
               </Button>
             </Link>
             <a href={`tel:${COMPANY.phoneRaw}`}>
-              <Button size="lg" variant="outline" className="border-white/30 text-white bg-white/5 hover:bg-white/10 hover:text-white" style={{ height: '52px' }}>
+              <Button size="lg" variant="outline" className="border-[#0a1628]/30 text-[#0a1628] bg-white hover:bg-[#0a1628] hover:text-white" style={{ height: '52px' }}>
                 Call {COMPANY.phone}
               </Button>
             </a>
